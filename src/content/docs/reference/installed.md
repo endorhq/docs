@@ -1,31 +1,31 @@
 ---
-title: Endor Reference
-description: Basic reference information about how to use Endor
+title: Installed Software
+description: Basic reference information about the included software
 ---
 
-# Reference
-
-## Available Software
-
-### Linux
+## Linux
 
 Alpine Linux x86 32 bit version 3.20 [https://alpinelinux.org/](https://alpinelinux.org/)
 
-### Apache
+## Apache
 
 Apache web server version 2.4.62 [https://httpd.apache.org/](https://httpd.apache.org/)
 
-How to start/stop/restart Apache
+How to manage Apache
 
 ```shell
 # Start the server
-$ service apache2 start
+service apache2 start
+```
 
+```shell
 # Stop the server
-$ service apache2 stop
+service apache2 stop
+```
 
+```shell
 # Restart the server
-$ service apache2 restart
+service apache2 restart
 ```
 
 Configuration files location
@@ -38,23 +38,27 @@ Log files
 
 `/var/log/apache2/`
 
-### MySQL
-
-MariaDB is a MySQL-compatible Open Source database.
+## MySQL
 
 MariaDB version 15.1 [https://mariadb.org/](https://mariadb.org/)
 
-How to start/stop/restart MariaDB
+MariaDB is a MySQL-compatible Open Source database.
+
+How to manage MariaDB
 
 ```shell
 # Start the server
-$ service mysql start
+service mysql start
+```
 
+```shell
 # Stop the server
-$ service mysql stop
+service mysql stop
+```
 
+```shell
 # Restart the server
-$ service mysql restart
+service mysql restart
 ```
 
 Configuration files location
@@ -67,24 +71,30 @@ Log file
 
 `/var/log/messages`
 
+Username: `root`
+Password: `root`
 
-### PHP
+## PHP
 
 PHP version 8.3.12 [https://www.php.net/](https://www.php.net/)
 
 PHP is configured using php-fpm. Static requests, such as CSS and images are served by Apache and php-fpm serves the PHP code.
 
-How to start/stop/restart php-fpm
+How to manage php-fpm
 
 ```shell
 # Start the server
-$ service php-fpm83 start
+service php-fpm83 start
+```
 
+```shell
 # Stop the server
-$ service php-fpm83 stop
+service php-fpm83 stop
+```
 
+```shell
 # Restart the server
-$ service php-fpm83 restart
+service php-fpm83 restart
 ```
 
 Configuration files location for PHP and php-fpm
@@ -98,3 +108,5 @@ In particular, you can enable/disable extensions in:
 Log file
 
 `/var/log/php83/`
+
+## phpMyAdmin
