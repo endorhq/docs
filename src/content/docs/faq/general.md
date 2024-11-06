@@ -49,7 +49,7 @@ If you mounted a directory on `app` then it will be available writing `/app` in 
 
 ## Is it safe?
 
-Pods run inside your browser and by default don't have access to any resources in your machine. You can optionally give permission to access certain directories in your machine to transfer files to the Pod. Once you are done with a Pod, you can simply close the tab and it will be deleted.
+Pods run inside your browser and by default don't have access to any resources in your machine. You can optionally give permission to access certain directories in your machine to transfer files to the Pod. Once you are done with a Pod, you can simply close the tab and it will be deleted. No files or code are transmitted to our servers, everything is local to your computer.
 
 ## What are the minimum requirements?
 
