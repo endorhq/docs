@@ -15,7 +15,7 @@ export default defineConfig({
         './src/tailwind.css'
       ],
       social: {
-        github: 'https://github.com/withastro/starlight',
+        github: 'https://github.com/endorhq',
       },
       sidebar: [
         {
