@@ -1,0 +1,6 @@
+name = "endor-docs"
+pages_build_output_dir = "dist"
+
+[vars]
+NODE_VERSION = "20.15.1"
+PNPM_VERSION = "9.7.0"
