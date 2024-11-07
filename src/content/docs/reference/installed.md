@@ -71,8 +71,19 @@ Log file
 
 `/var/log/messages`
 
+If your application needs to be configured for MySQL, you can use the following information:
+
 Username: `root`
 Password: `root`
+Port: `3306`
+Host: `127.0.0.1`
+
+You can access the database from the terminal line by typing:
+
+```shell
+mysql -u root -p
+```
+
 
 ## PHP
 
