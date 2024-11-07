@@ -78,7 +78,7 @@ Password: `root`
 Port: `3306`
 Host: `127.0.0.1`
 
-You can access the database from the terminal line by typing:
+You can access the database from the terminal command line by typing:
 
 ```shell
 mysql -u root -p
