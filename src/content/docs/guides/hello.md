@@ -16,7 +16,7 @@ echo '<?php echo "Hello World!"; ?>' > index.php
 
 Now you can enter `/example/` in the URL bar of the inline browser and should see the results
 
-![Hello World Example](../../../assets/images/guides/hello/hello-example.png)
+![Hello World Example](hello/hello-example.png)
 
 
 ## Adding files from your computer
