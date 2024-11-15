@@ -16,6 +16,9 @@ echo '<?php echo "Hello World!"; ?>' > index.php
 
 Now you can enter `/example/` in the URL bar of the inline browser and should see the results
 
+![Hello World Example](hello/hello-example.png)
+
+
 ## Adding files from your computer
 
 You can access local files from your computer by adding folders using the sidebar tool. By default, the first folder you add will be accessible from the terminal in the `/var/www/localhost/htdocs/app` and from the inline browser in the /app URL.
