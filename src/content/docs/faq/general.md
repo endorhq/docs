@@ -9,7 +9,7 @@ Endor is a website that allows you to run server software _inside_ your browser.
 
 ## What is a Pod?
 
-A pod is the name of the development sandboxes that you can create with Endor. The name is inspired by “coffee pods” and “escape pods”, and we aim to make them easy to use and self-contained. Think of them as a “computers that runs inside your browser”. There are three different types of pods at the moment:
+A pod is the name of the development sandboxes that you can create with Endor. The name is inspired by "coffee pods" and "escape pods", and we aim to make them easy to use and self-contained. Think of them as a "computers that runs inside your browser". There are three different types of pods at the moment:
 
 - Virtual Machines: Fully emulated x86 Linux environments. They provide the best compatibility but can be slow.
 - Containers: Similar to VMs, provide access to a large array of software distributed in this format.
@@ -47,7 +47,7 @@ We are starting with a LAMP stack (Linux, Apache, MySQL and PHP) but plan to add
 
 ## Can I install new software?
 
-Yes and no. Because there's not yet networking to the outside world the Alpine Linux package manager `apk` will not work normally. A work around is to download the package manually, upload it to the od and install it then.
+Yes and no. Because there's not yet networking to the outside world the Alpine Linux package manager `apk` will not work normally. A work around is to download the package manually, upload it to the pod and install it then.
 
 ## How can I upload my files?
 
