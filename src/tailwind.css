@@ -1,3 +1,128 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+	/* For tailwind */
+    :root {
+        --c-background: 33 37 41;
+        --c-text: 248 249 250;
+        --c-text-light: 173 181 189;
+        --c-primary: 19 170 101;
+        --c-accent: 141 47 205;
+        --c-light: 52 58 64;
+        --c-invert: 248 249 250;
+    }
+
+	:root[data-theme='light'],
+    [data-theme='light']::backdrop {
+		--c-background: 255 255 255;
+		--c-text: 11 11 11;
+		--c-text-light: 108 117 125;
+		--c-primary: 40 189 121;
+		--c-accent: 149 45 220;
+		--c-light: 233 236 239;
+        --c-invert: 33 37 41;
+	}
+
+	/* Starlight custom styles */
+	:root,
+	::backdrop {
+		/* Colors (dark mode) */
+		--sl-color-white: rgb(var(--c-text));
+		--sl-color-gray-1: rgb(var(--c-text-light));
+		--sl-color-gray-2: rgb(var(--c-text));
+		--sl-color-gray-3: rgb(var(--c-text-light));
+		--sl-color-gray-4: rgb(var(--c-light));
+		--sl-color-gray-5: rgb(var(--c-light));
+		--sl-color-gray-6: rgb(var(--c-background));
+		--sl-color-black: rgb(var(--c-background));
+
+		--sl-hue-orange: 41;
+		--sl-color-orange-low: hsl(var(--sl-hue-orange), 39%, 22%);
+		--sl-color-orange: hsl(var(--sl-hue-orange), 82%, 63%);
+		--sl-color-orange-high: hsl(var(--sl-hue-orange), 82%, 87%);
+		--sl-hue-green: 101;
+		--sl-color-green-low: hsl(var(--sl-hue-green), 39%, 22%);
+		--sl-color-green: hsl(var(--sl-hue-green), 82%, 63%);
+		--sl-color-green-high: hsl(var(--sl-hue-green), 82%, 80%);
+		--sl-hue-blue: 234;
+		--sl-color-blue-low: hsl(var(--sl-hue-blue), 54%, 20%);
+		--sl-color-blue: hsl(var(--sl-hue-blue), 100%, 60%);
+		--sl-color-blue-high: hsl(var(--sl-hue-blue), 100%, 87%);
+		--sl-hue-purple: 281;
+		--sl-color-purple-low: hsl(var(--sl-hue-purple), 39%, 22%);
+		--sl-color-purple: hsl(var(--sl-hue-purple), 82%, 63%);
+		--sl-color-purple-high: hsl(var(--sl-hue-purple), 82%, 89%);
+		--sl-hue-red: 339;
+		--sl-color-red-low: hsl(var(--sl-hue-red), 39%, 22%);
+		--sl-color-red: hsl(var(--sl-hue-red), 82%, 63%);
+		--sl-color-red-high: hsl(var(--sl-hue-red), 82%, 87%);
+
+		--sl-color-accent-low: rgb(var(--c-accent));
+		--sl-color-accent: rgb(var(--c-primary));
+		--sl-color-accent-high: rgb(var(--c-primary));
+
+		--sl-color-text: rgb(var(--c-text));
+		--sl-color-text-accent: var(--sl-color-accent-high);
+		--sl-color-text-invert: var(--c-white);
+		--sl-color-bg: rgb(var(--c-background));
+		--sl-color-bg-nav: var(--sl-color-gray-6);
+		--sl-color-bg-sidebar: var(--sl-color-gray-6);
+		--sl-color-bg-inline-code: var(--sl-color-gray-5);
+		--sl-color-bg-accent: var(--sl-color-accent-high);
+		--sl-color-hairline-light: var(--sl-color-gray-5);
+		--sl-color-hairline: var(--sl-color-gray-6);
+		--sl-color-hairline-shade: rgb(var(--c-light));
+
+		--sl-color-backdrop-overlay: hsla(223, 13%, 10%, 0.66);
+	}
+
+	/* Colors (light mode) */
+	:root[data-theme='light'],
+	[data-theme='light'] ::backdrop {
+		/* Colours (light mode) */
+		--sl-color-white: rgb(var(--c-text));
+		--sl-color-gray-1: rgb(var(--c-text-light));
+		--sl-color-gray-2: rgb(var(--c-text));
+		--sl-color-gray-3: rgb(var(--c-text-light));
+		--sl-color-gray-4: rgb(var(--c-light));
+		--sl-color-gray-5: rgb(var(--c-light));
+		--sl-color-gray-6: rgb(var(--c-background));
+		--sl-color-black: rgb(var(--c-background));
+
+		--sl-color-orange-high: hsl(var(--sl-hue-orange), 80%, 25%);
+		--sl-color-orange: hsl(var(--sl-hue-orange), 90%, 60%);
+		--sl-color-orange-low: hsl(var(--sl-hue-orange), 90%, 88%);
+		--sl-color-green-high: hsl(var(--sl-hue-green), 80%, 22%);
+		--sl-color-green: hsl(var(--sl-hue-green), 90%, 46%);
+		--sl-color-green-low: hsl(var(--sl-hue-green), 85%, 90%);
+		--sl-color-blue-high: hsl(var(--sl-hue-blue), 80%, 30%);
+		--sl-color-blue: hsl(var(--sl-hue-blue), 90%, 60%);
+		--sl-color-blue-low: hsl(var(--sl-hue-blue), 88%, 90%);
+		--sl-color-purple-high: hsl(var(--sl-hue-purple), 90%, 30%);
+		--sl-color-purple: hsl(var(--sl-hue-purple), 90%, 60%);
+		--sl-color-purple-low: hsl(var(--sl-hue-purple), 80%, 90%);
+		--sl-color-red-high: hsl(var(--sl-hue-red), 80%, 30%);
+		--sl-color-red: hsl(var(--sl-hue-red), 90%, 60%);
+		--sl-color-red-low: hsl(var(--sl-hue-red), 80%, 90%);
+
+        --sl-color-accent-low: rgb(var(--c-accent));
+		--sl-color-accent: rgb(var(--c-primary));
+		--sl-color-accent-high: rgb(var(--c-primary));
+
+        --sl-color-hairline-shade: rgb(var(--c-light));
+	}
+}
+
+body {
+	background: rgb(var(--c-background));
+	color: rgb(var(--c-text));
+	margin: 0;
+	padding: 0;
+}
+
+/* Fix the stroke-width for tabler icons */
+.ti path {
+	stroke-width: 1;
+}

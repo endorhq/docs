@@ -23,13 +23,24 @@ if (isProd) {
 export default defineConfig({
   integrations: [
     starlight({
-      title: 'Endor Docs',
+      title: 'Endor Documentation',
       head,
       customCss: [
         './src/tailwind.css'
       ],
+      logo: {
+        dark: './src/assets/logo-text-dark.png',
+        light: './src/assets/logo-text.png',
+        alt: 'Endor Logo',
+        replacesTitle: true,
+      },
       social: {
         github: 'https://github.com/endorhq',
+        mastodon: 'https://mastodon.social/@endorhq',
+        twitter: 'https://x.com/endorhq',
+        blueSky: 'https://bsky.app/profile/endorhq.bsky.social',
+        youtube: 'https://www.youtube.com/@endorhq',
+        linkedin: 'https://www.linkedin.com/company/endorhq',
       },
       sidebar: [
         {
