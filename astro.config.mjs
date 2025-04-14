@@ -10,7 +10,16 @@ import { posthogCode } from './posthog.mjs';
 const isProd = import.meta.env.PROD;
 
 // Head tags for the site
-let head = [];
+let head = [
+  // OG image
+  {
+    tag: 'meta',
+    attrs: {
+      property: 'og:image',
+      content: 'https://docs.endor.dev/og.webp'
+    }
+  },
+];
 
 if (isProd) {
   head.push({
