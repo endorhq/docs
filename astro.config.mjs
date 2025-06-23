@@ -62,16 +62,12 @@ export default defineConfig({
             {
               label: 'Setup',
               link: '/cli/setup',
-            },
-            {
-              label: 'MCP',
-              link: '/cli/mcp',
-            },
-            {
-              label: "MCP Guides",
-              autogenerate: { directory: '/cli/clients' }
             }
           ],
+        },
+        {
+          label: 'MCP',
+          autogenerate: { directory: 'mcp' }
         },
         {
           label: 'FAQ',
