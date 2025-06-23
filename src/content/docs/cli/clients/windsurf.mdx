@@ -1,0 +1,48 @@
+---
+title: Configure Windsurf
+description: Set up Endor MCP integration with Windsurf IDE
+sidebar:
+  order: 5
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+
+Configure Endor with Windsurf IDE to provide your AI agents with instant development environments. Windsurf offers team-level MCP server management for enterprise environments.
+
+## Setup
+
+<StepList title="Configure Endor in Windsurf">
+  <StepItem step={1}>Open Windsurf Settings → Advanced Settings → Cascade section</StepItem>
+  <StepItem step={2}>
+    Click "Add custom server +" or edit `~/.codeium/windsurf/mcp_config.json` directly:
+
+    ```json
+    {
+      "mcpServers": {
+        "endor": {
+          "command": "endor",
+          "args": ["mcp"],
+          "env": {}
+        }
+      }
+    }
+    ```
+  </StepItem>
+  <StepItem step={3}>Save the configuration file</StepItem>
+  <StepItem step={4}>In the Cascade panel, tap the hammer (MCP) icon → Refresh to apply changes</StepItem>
+  <StepItem step={5}>Verify the green active status in the MCP section</StepItem>
+</StepList>
+
+## Team Configuration
+
+For team environments, admins can whitelist Endor as an approved MCP server for the entire team. This enables consistent development environments across all team members without individual setup.
+
+## Usage
+
+Once configured, Windsurf's AI agents can:
+- Automatically provision database services for team projects
+- Create consistent testing environments
+- Manage shared development resources
+
+The AI integration works seamlessly with team workflows, allowing natural language requests like "set up the database stack for our new microservice" to automatically provision the required Endor services.

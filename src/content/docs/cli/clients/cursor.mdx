@@ -1,0 +1,44 @@
+---
+title: Configure Cursor
+description: Set up Endor MCP integration with Cursor IDE
+sidebar:
+  order: 2
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+
+Configure Endor with Cursor IDE to give your AI agents access to instant development environments. The Composer Agent will automatically use Endor when relevant to your development tasks.
+
+## Setup
+
+<StepList title="Configure Endor in Cursor">
+  <StepItem step={1}>Create `.cursor/mcp.json` file in your project root</StepItem>
+  <StepItem step={2}>
+    Add the Endor configuration:
+
+    ```json
+    {
+      "mcpServers": {
+        "endor": {
+          "command": "endor",
+          "args": ["mcp"],
+          "env": {}
+        }
+      }
+    }
+    ```
+  </StepItem>
+  <StepItem step={3}>Save the file and navigate to Cursor Settings → MCP</StepItem>
+  <StepItem step={4}>Verify the green active status indicating successful connection</StepItem>
+  <StepItem step={5}>Enable auto-run in settings to allow automatic tool execution without approval prompts</StepItem>
+</StepList>
+
+## Usage
+
+Once configured, Cursor's Composer Agent will automatically suggest using Endor when you need:
+- Database services for development or testing
+- Quick isolated environments for experiments
+- Pre-configured services without local installation
+
+The AI agent can start, stop, and manage services through natural language commands like "start a MariaDB database" or "create a Redis instance for testing".

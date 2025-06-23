@@ -54,7 +54,24 @@ export default defineConfig({
       sidebar: [
         {
           label: 'CLI',
-          autogenerate: { directory: 'cli' },
+          items: [
+            {
+              label: 'Overview',
+              link: '/cli/overview',
+            },
+            {
+              label: 'Setup',
+              link: '/cli/setup',
+            },
+            {
+              label: 'MCP',
+              link: '/cli/mcp',
+            },
+            {
+              label: "MCP Guides",
+              autogenerate: { directory: '/cli/clients' }
+            }
+          ],
         },
         {
           label: 'FAQ',

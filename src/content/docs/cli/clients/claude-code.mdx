@@ -1,0 +1,60 @@
+---
+title: Configure Claude Code
+description: Set up Endor MCP integration with Claude Code CLI
+sidebar:
+  order: 1
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import videoRef from "./videos/claude-install.mp4"
+
+Configure Endor with Claude Code to access instant development environments directly from your terminal. Claude Code supports both global and project-scoped MCP configurations.
+
+## Setup
+
+<div style="text-align: center">
+    <video width="720" controls autoplay class="rounded-lg shadow-lg">
+        <source src={videoRef} type="video/mp4"></source>
+    </video>
+</div>
+
+<StepList title="Configure Endor in Claude Code">
+  <StepItem step={1}>Install [Claude Code](https://docs.anthropic.com/en/docs/claude-code/setup)</StepItem>
+  <StepItem step={2}>
+    Add MCP server using the command line: 
+    
+    ```sh
+    claude mcp add endor -- endor mcp
+    ```
+  </StepItem>
+  <StepItem step={3}>
+    For project-scoped configuration, create `.mcp.json` in your project root:
+
+    ```json
+    {
+      "mcpServers": {
+        "endor": {
+          "command": "endor",
+          "args": ["mcp"],
+          "env": {}
+        }
+      }
+    }
+    ```
+  </StepItem>
+  <StepItem step={4}>Check MCP server status with `/mcp` command in Claude Code</StepItem>
+</StepList>
+
+## Security
+
+For security, Claude Code will prompt for approval before using project-scoped servers from `.mcp.json` files. This ensures you maintain control over which MCP servers can access your project.
+
+## Usage
+
+Once configured, you can ask Claude Code to:
+- Start database services for your development work
+- Create isolated testing environments
+- Manage services without complex local configuration
+
+Use natural language like "start a PostgreSQL database for this project" or "spin up a Redis instance for caching tests."

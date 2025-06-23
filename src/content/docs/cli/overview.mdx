@@ -1,27 +1,23 @@
 ---
 title: Overview
-description: Introduction to the Endor CLI and how it works
+description: Quick introduction to Endor CLI for running services in seconds
 sidebar:
-    order: 1
+  order: 1
 ---
 
-import videoRef from "./overview/run-mariadb.mp4"
+import videoRef from "./videos/run-mariadb.mp4"
 
-Learn about Endor CLI, the tool for you and your AI agents to run common services like MariaDB or Valkey in an isolated sandbox. Run any service your project needs in seconds!
-
-By integrating directly with your AI agents, Endor provides a controlled environment to avoid unexpected issues and token-consuming setup processes.
-
-With Endor, you get access to a **set of pre-configured applications that boot in less than 5 seconds**.
+Endor CLI lets you and your AI agents run services like MariaDB or Valkey in isolated sandboxes. Get pre-configured applications that boot in less than 5 seconds, with direct AI agent integration for instant development and testing environments.
 
 <div style="text-align: center">
-    <video width="720" controls autoplay>
+    <video width="720" controls autoplay class="rounded-lg shadow-lg">
         <source src={videoRef} type="video/mp4"></source>
     </video>
 </div>
 
-## Get Started
+## Quick Start
 
-### CLI
+### Install Endor CLI
 
 To install Endor CLI, use `npm`:
 
@@ -29,26 +25,35 @@ To install Endor CLI, use `npm`:
 npm install -g @endorhq/cli
 ```
 
-For more detailed instructions, see the Installation section.
+See the [Setup guide](./setup) for detailed installation instructions.
 
-To run a MariaDB database, simply run the `endor` CLI:
+### Run Your First Service
+
+To start MariaDB, simply run the `endor` CLI:
 
 ```sh
 endor run mariadb
 ```
 
-To check the list of available applications, call the `run` command without any parameter:
+List all available services:
 
 ```sh
 endor run
 ```
 
-### Model Context Protocol (MCP)
+## AI Agent Integration
 
-Your AI agents can control the `endor` CLI through the MCP protocol. To get started, just install the `endor` CLI and set the MCP command to:
+Connect your AI agents to Endor through Model Context Protocol (MCP). After installing Endor CLI, run `endor` in MCP mode:
 
 ```sh
 endor mcp
 ```
 
-Check out our MCP guides for step-by-step setup instructions for common clients like Claude Desktop and Cursor.
+Check our [MCP integration guides](./mcp) for step-by-step setup with Claude Desktop, Cursor, and other AI tools.
+
+## Why Endor?
+
+- **Instant**: Services boot in under 5 seconds
+- **Safe**: Isolated sandboxes prevent conflicts with your local environment
+- **AI-Ready**: Direct integration with your AI development workflow
+- **Simple**: No complex configuration or setup required

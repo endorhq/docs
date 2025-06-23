@@ -1,0 +1,52 @@
+---
+title: Configure VSCode
+description: Set up Endor MCP integration with Visual Studio Code
+sidebar:
+  order: 4
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+
+Configure Endor with Visual Studio Code to enable AI agents to manage development environments directly from your editor. VSCode provides built-in MCP server management tools.
+
+## Setup
+
+<StepList title="Configure Endor in VSCode">
+  <StepItem step={1}>Ensure you have the MCP extension installed and agent mode enabled</StepItem>
+  <StepItem step={2}>
+    Create `.vscode/mcp.json` in your workspace folder:
+
+    ```json
+    {
+      "mcp": {
+        "servers": {
+          "endor": {
+            "command": "endor",
+            "args": ["mcp"],
+            "env": {}
+          }
+        }
+      }
+    }
+    ```
+  </StepItem>
+  <StepItem step={3}>Use the Command Palette → "MCP: List Servers" to view configured servers</StepItem>
+  <StepItem step={4}>Start, stop, or restart the Endor server from the server list</StepItem>
+</StepList>
+
+## Management
+
+VSCode will show commands to manage the server directly from the editor when you open the `.vscode/mcp.json` file. This provides convenient access to:
+- Server status monitoring
+- Start/stop controls
+- Configuration validation
+
+## Usage
+
+With Endor configured, your AI agents in VSCode can:
+- Start database services for your current project
+- Create isolated environments for testing
+- Manage services without leaving the editor
+
+Use the integrated AI tools to request services like "start a PostgreSQL database for this workspace" and the agent will handle the Endor integration automatically.
