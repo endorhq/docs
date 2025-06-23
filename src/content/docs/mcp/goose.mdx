@@ -13,17 +13,26 @@ Configure Endor with Goose CLI to provide your AI agent with instant access to d
 <iframe width="720" height="450" class="rounded-lg shadow-lg h-full" style="height: 450px" src="https://www.youtube-nocookie.com/embed/erC9JH_UcqU?si=i5ktOAKRFqWMgp4q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 <StepList title="Configure Endor in Goose CLI">
-  <StepItem step={1}>Install [Goose CLI](https://block.github.io/goose/docs/getting-started/installation/)</StepItem>
-  <StepItem step={2}>
+  <StepItem step={1}>
+    Install Endor CLI on your system:
+    
+    ```sh
+    npm install -g @endorhq/cli
+    ```
+    
+    For detailed instructions, see the [Setup guide](../cli/setup)
+  </StepItem>
+  <StepItem step={2}>Install [Goose CLI](https://block.github.io/goose/docs/getting-started/installation/)</StepItem>
+  <StepItem step={3}>
     Run the configuration command:
 
     ```sh
     goose configure
     ```
   </StepItem>
-  <StepItem step={3}>Select "Add Extension"</StepItem>
-  <StepItem step={4}>Select "Command-line Extension"</StepItem>
-  <StepItem step={5}>
+  <StepItem step={4}>Select "Add Extension"</StepItem>
+  <StepItem step={5}>Select "Command-line Extension"</StepItem>
+  <StepItem step={6}>
     Set the following parameters: 
 
     ```toml
@@ -32,15 +41,15 @@ Configure Endor with Goose CLI to provide your AI agent with instant access to d
     Timeout: 60
     ```
   </StepItem>
-  <StepItem step={6}>
+  <StepItem step={7}>
     Add the following description:
 
     ```plain
     Instant development and testing environments for databases and services. Run MariaDB, PostgreSQL, Redis, Valkey, and other pre-configured services in isolated sandboxes.
     ```
   </StepItem>
-  <StepItem step={7}>Skip the "Environment Variables" step</StepItem>
-  <StepItem step={8}>
+  <StepItem step={8}>Skip the "Environment Variables" step</StepItem>
+  <StepItem step={9}>
     Alternatively, edit `~/.config/goose/config.yaml` to add the Endor MCP server configuration:
 
     ```yaml

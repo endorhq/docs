@@ -13,8 +13,17 @@ Configure Endor with Windsurf IDE to provide your AI agents with instant develop
 <iframe width="720" height="490" class="rounded-lg shadow-lg h-full" style="height: 490px" src="https://www.youtube-nocookie.com/embed/wOCjFWkZqDA?si=CBBHp3LEiYo2DWdG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 <StepList title="Configure Endor in Windsurf">
-  <StepItem step={1}>Open Windsurf Settings → Advanced Settings → Cascade section</StepItem>
-  <StepItem step={2}>
+  <StepItem step={1}>
+    Install Endor CLI on your system:
+    
+    ```sh
+    npm install -g @endorhq/cli
+    ```
+    
+    For detailed instructions, see the [Setup guide](../cli/setup)
+  </StepItem>
+  <StepItem step={2}>Open Windsurf Settings → Advanced Settings → Cascade section</StepItem>
+  <StepItem step={3}>
     Click "Add custom server +" or edit `~/.codeium/windsurf/mcp_config.json` directly:
 
     ```json
@@ -29,9 +38,9 @@ Configure Endor with Windsurf IDE to provide your AI agents with instant develop
     }
     ```
   </StepItem>
-  <StepItem step={3}>Save the configuration file</StepItem>
-  <StepItem step={4}>In the Cascade panel, tap the hammer (MCP) icon → Refresh to apply changes</StepItem>
-  <StepItem step={5}>Verify the green active status in the MCP section</StepItem>
+  <StepItem step={4}>Save the configuration file</StepItem>
+  <StepItem step={5}>In the Cascade panel, tap the hammer (MCP) icon → Refresh to apply changes</StepItem>
+  <StepItem step={6}>Verify the green active status in the MCP section</StepItem>
 </StepList>
 
 ## Team Configuration

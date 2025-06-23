@@ -13,15 +13,24 @@ Configure Endor with Claude Code to access instant development environments dire
 <iframe width="720" height="450" class="rounded-lg shadow-lg h-full" style="height: 450px" src="https://www.youtube-nocookie.com/embed/Q7MbrRmv4go?si=FqJ4fyIStAoKmsAf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 <StepList title="Configure Endor in Claude Code">
-  <StepItem step={1}>Install [Claude Code](https://docs.anthropic.com/en/docs/claude-code/setup)</StepItem>
-  <StepItem step={2}>
+  <StepItem step={1}>
+    Install Endor CLI on your system:
+    
+    ```sh
+    npm install -g @endorhq/cli
+    ```
+    
+    For detailed instructions, see the [Setup guide](../cli/setup)
+  </StepItem>
+  <StepItem step={2}>Install [Claude Code](https://docs.anthropic.com/en/docs/claude-code/setup)</StepItem>
+  <StepItem step={3}>
     Add MCP server using the command line: 
     
     ```sh
     claude mcp add endor -- endor mcp
     ```
   </StepItem>
-  <StepItem step={3}>
+  <StepItem step={4}>
     For project-scoped configuration, create `.mcp.json` in your project root:
 
     ```json
@@ -36,7 +45,7 @@ Configure Endor with Claude Code to access instant development environments dire
     }
     ```
   </StepItem>
-  <StepItem step={4}>Check MCP server status with `/mcp` command in Claude Code</StepItem>
+  <StepItem step={5}>Check MCP server status with `/mcp` command in Claude Code</StepItem>
 </StepList>
 
 ## Security

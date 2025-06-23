@@ -13,8 +13,17 @@ Configure Endor with Visual Studio Code to enable AI agents to manage developmen
 <iframe width="720" height="490" class="rounded-lg shadow-lg h-full" style="height: 490px" src="https://www.youtube-nocookie.com/embed/Ikrn72UPFyY?si=RePJ-drwqTSaYbn5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 <StepList title="Configure Endor in VSCode">
-  <StepItem step={1}>Ensure you have the [MCP extension installed and agent mode enabled](https://code.visualstudio.com/docs/copilot/chat/mcp-servers#_enable-mcp-support-in-vs-code)</StepItem>
-  <StepItem step={2}>
+  <StepItem step={1}>
+    Install Endor CLI on your system:
+    
+    ```sh
+    npm install -g @endorhq/cli
+    ```
+    
+    For detailed instructions, see the [Setup guide](../cli/setup)
+  </StepItem>
+  <StepItem step={2}>Ensure you have the [MCP extension installed and agent mode enabled](https://code.visualstudio.com/docs/copilot/chat/mcp-servers#_enable-mcp-support-in-vs-code)</StepItem>
+  <StepItem step={3}>
     Create `.vscode/mcp.json` in your workspace folder:
 
     ```json
@@ -31,8 +40,8 @@ Configure Endor with Visual Studio Code to enable AI agents to manage developmen
     }
     ```
   </StepItem>
-  <StepItem step={3}>Use the Command Palette → "MCP: List Servers" to view configured servers</StepItem>
-  <StepItem step={4}>Try Endor using Copilot in "Agent Mode"</StepItem>
+  <StepItem step={4}>Use the Command Palette → "MCP: List Servers" to view configured servers</StepItem>
+  <StepItem step={5}>Try Endor using Copilot in "Agent Mode"</StepItem>
 </StepList>
 
 ## Management
