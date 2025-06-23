@@ -53,6 +53,10 @@ export default defineConfig({
       },
       sidebar: [
         {
+          label: 'CLI',
+          autogenerate: { directory: 'cli' },
+        },
+        {
           label: 'FAQ',
           autogenerate: { directory: 'faq' },
         },

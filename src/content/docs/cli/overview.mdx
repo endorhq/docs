@@ -1,0 +1,54 @@
+---
+title: Overview
+description: Introduction to the Endor CLI and how it works
+sidebar:
+    order: 1
+---
+
+import videoRef from "./overview/run-mariadb.mp4"
+
+Learn about Endor CLI, the tool for you and your AI agents to run common services like MariaDB or Valkey in an isolated sandbox. Run any service your project needs in seconds!
+
+By integrating directly with your AI agents, Endor provides a controlled environment to avoid unexpected issues and token-consuming setup processes.
+
+With Endor, you get access to a **set of pre-configured applications that boot in less than 5 seconds**.
+
+<div style="text-align: center">
+    <video width="720" controls autoplay>
+        <source src={videoRef} type="video/mp4"></source>
+    </video>
+</div>
+
+## Get Started
+
+### CLI
+
+To install Endor CLI, use `npm`:
+
+```sh
+npm install -g @endorhq/cli
+```
+
+For more detailed instructions, see the Installation section.
+
+To run a MariaDB database, simply run the `endor` CLI:
+
+```sh
+endor run mariadb
+```
+
+To check the list of available applications, call the `run` command without any parameter:
+
+```sh
+endor run
+```
+
+### Model Context Protocol (MCP)
+
+Your AI agents can control the `endor` CLI through the MCP protocol. To get started, just install the `endor` CLI and set the MCP command to:
+
+```sh
+endor mcp
+```
+
+Check out our MCP guides for step-by-step setup instructions for common clients like Claude Desktop and Cursor.
