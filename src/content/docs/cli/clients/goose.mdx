@@ -7,10 +7,17 @@ sidebar:
 
 import StepList from '../../../../components/StepList.svelte';
 import StepItem from '../../../../components/StepItem.svelte';
+import videoRef from "./videos/goose-cli-install.mp4"
 
 Configure Endor with Goose CLI to provide your AI agent with instant access to development environments. Goose runs locally and connects to different LLM providers while using Endor's MCP integration.
 
 ## Setup
+
+<div style="text-align: center">
+    <video width="720" controls autoplay class="rounded-lg shadow-lg">
+        <source src={videoRef} type="video/mp4"></source>
+    </video>
+</div>
 
 <StepList title="Configure Endor in Goose CLI">
   <StepItem step={1}>Install [Goose CLI](https://block.github.io/goose/docs/getting-started/installation/)</StepItem>
