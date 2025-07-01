@@ -1,0 +1,53 @@
+---
+title: Configure Cursor
+description: Set up Endor MCP integration with Cursor IDE
+---
+
+import StepList from '../../../components/StepList.svelte';
+import StepItem from '../../../components/StepItem.svelte';
+
+Configure Endor with Cursor IDE to give your AI agents access to instant development environments. The Composer Agent will automatically use Endor when relevant to your development tasks.
+
+## Setup
+
+<iframe width="720" height="490" class="rounded-lg shadow-lg h-full" style="height: 490px" src="https://www.youtube-nocookie.com/embed/jeKhln66Cfg?si=GzVLK-zHXbrBi2Y-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<StepList title="Configure Endor in Cursor">
+  <StepItem step={1}>
+    Install Endor CLI on your system:
+    
+    ```sh
+    npm install -g @endorhq/cli
+    ```
+    
+    For detailed instructions, see the [Setup guide](../cli/setup)
+  </StepItem>
+  <StepItem step={2}>Create `.cursor/mcp.json` file in your project root</StepItem>
+  <StepItem step={3}>
+    Add the Endor configuration:
+
+    ```json
+    {
+      "mcpServers": {
+        "endor": {
+          "command": "endor",
+          "args": ["mcp"],
+          "env": {}
+        }
+      }
+    }
+    ```
+  </StepItem>
+  <StepItem step={4}>Save the file and navigate to Cursor Settings → MCP</StepItem>
+  <StepItem step={5}>Verify the green active status indicating successful connection</StepItem>
+  <StepItem step={6}>Enable auto-run in settings to allow automatic tool execution without approval prompts</StepItem>
+</StepList>
+
+## Usage
+
+Once configured, Cursor's Composer Agent will automatically suggest using Endor when you need:
+- Database services for development or testing
+- Quick isolated environments for experiments
+- Pre-configured services without local installation
+
+The AI agent can start, stop, and manage services through natural language commands like "start a MariaDB database" or "create a Redis instance for testing".

@@ -1,0 +1,80 @@
+---
+title: Configure Goose CLI
+description: Set up Endor MCP integration with Goose CLI
+---
+
+import StepList from '../../../components/StepList.svelte';
+import StepItem from '../../../components/StepItem.svelte';
+
+Configure Endor with Goose CLI to provide your AI agent with instant access to development environments. Goose runs locally and connects to different LLM providers while using Endor's MCP integration.
+
+## Setup
+
+<iframe width="720" height="450" class="rounded-lg shadow-lg h-full" style="height: 450px" src="https://www.youtube-nocookie.com/embed/erC9JH_UcqU?si=i5ktOAKRFqWMgp4q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<StepList title="Configure Endor in Goose CLI">
+  <StepItem step={1}>
+    Install Endor CLI on your system:
+    
+    ```sh
+    npm install -g @endorhq/cli
+    ```
+    
+    For detailed instructions, see the [Setup guide](../cli/setup)
+  </StepItem>
+  <StepItem step={2}>Install [Goose CLI](https://block.github.io/goose/docs/getting-started/installation/)</StepItem>
+  <StepItem step={3}>
+    Run the configuration command:
+
+    ```sh
+    goose configure
+    ```
+  </StepItem>
+  <StepItem step={4}>Select "Add Extension"</StepItem>
+  <StepItem step={5}>Select "Command-line Extension"</StepItem>
+  <StepItem step={6}>
+    Set the following parameters: 
+
+    ```toml
+    Name: endor
+    Command: endor mcp
+    Timeout: 60
+    ```
+  </StepItem>
+  <StepItem step={7}>
+    Add the following description:
+
+    ```plain
+    Instant development and testing environments for databases and services. Run MariaDB, PostgreSQL, Redis, Valkey, and other pre-configured services in isolated sandboxes.
+    ```
+  </StepItem>
+  <StepItem step={8}>Skip the "Environment Variables" step</StepItem>
+  <StepItem step={9}>
+    Alternatively, edit `~/.config/goose/config.yaml` to add the Endor MCP server configuration:
+
+    ```yaml
+    extensions:
+      endor:
+        args:
+        - mcp
+        bundled: null
+        cmd: endor
+        description: Instant development and testing environments for databases and services. Run MariaDB, PostgreSQL, Redis, Valkey, and other pre-configured services in isolated sandboxes.
+        enabled: true
+        env_keys: []
+        envs: {}
+        name: endor
+        timeout: 60
+        type: stdio
+    ```
+  </StepItem>
+</StepList>
+
+## Usage
+
+Once configured, Goose can automatically use Endor to:
+- Spin up databases for development tasks
+- Create isolated testing environments
+- Provide pre-configured services without local setup
+
+Ask Goose to help with tasks like "set up a MariaDB database for this Laravel project" and it will automatically use Endor to provide the required services.

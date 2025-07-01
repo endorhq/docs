@@ -1,0 +1,53 @@
+---
+title: Overview
+description: Quick introduction to Endor CLI for running services in seconds
+sidebar:
+  order: 1
+---
+
+Endor CLI lets you and your AI agents run services like MariaDB or Valkey in isolated sandboxes. Get pre-configured applications that boot in less than 5 seconds, with direct AI agent integration for instant development and testing environments.
+
+<iframe width="720" height="450" class="rounded-lg shadow-lg h-full" style="height: 450px" src="https://www.youtube.com/embed/xF4ScndYv_o?si=nRHQz_OyjhVlJvZg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+## Quick Start
+
+### Install Endor CLI
+
+To install Endor CLI, use `npm`:
+
+```sh
+npm install -g @endorhq/cli
+```
+
+See the [Setup guide](./setup) for detailed installation instructions.
+
+### Run Your First Service
+
+To start MariaDB, simply run the `endor` CLI:
+
+```sh
+endor run mariadb
+```
+
+List all available services:
+
+```sh
+endor run
+```
+
+## AI Agent Integration
+
+Connect your AI agents to Endor through Model Context Protocol (MCP). After installing Endor CLI, run `endor` in MCP mode:
+
+```sh
+endor mcp
+```
+
+Check our [MCP integration guides](../mcp/overview) for step-by-step setup with Claude Code, Cursor, and other AI tools.
+
+## Why Endor?
+
+- **Instant**: Services boot in under 5 seconds
+- **Safe**: Isolated sandboxes prevent conflicts with your local environment
+- **AI-Ready**: Direct integration with your AI development workflow
+- **Simple**: No complex configuration or setup required

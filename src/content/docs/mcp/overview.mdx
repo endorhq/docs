@@ -1,0 +1,68 @@
+---
+title: Overview
+description: Integrate Endor with AI tools using Model Context Protocol
+sidebar:
+  order: 1
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+Endor integrates with AI tools using the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction). This enables AI agents to run isolated services and recreate development environments instantly.
+
+Endor provides a foundation layer for AI tools, **providing isolated services that run in seconds**.
+
+## Quick Setup
+
+After [installing Endor CLI](../../cli/setup), run it in MCP mode:
+
+```sh
+endor mcp
+```
+
+Endor will start listening using the [`STDIO` transport](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#stdio).
+
+## AI Tool Configuration
+
+Choose your AI tool for detailed setup instructions:
+
+<CardGrid>
+  <Card title="Claude Code" icon="forward-slash">
+    Configure Endor with Claude Code CLI for terminal-based AI development.
+    
+    [Setup Guide →](./claude-code)
+  </Card>
+
+  <Card title="Goose CLI" icon="forward-slash">
+    Connect Endor with Goose CLI for local AI agent development.
+    
+    [Setup Guide →](./goose)
+  </Card>
+  
+  <Card title="Cursor" icon="document">
+    Integrate Endor with Cursor IDE's Composer Agent for seamless development.
+    
+    [Setup Guide →](./cursor)
+  </Card>
+  
+  <Card title="VSCode" icon="document">
+    Enable Endor in Visual Studio Code with built-in MCP management.
+    
+    [Setup Guide →](./vscode)
+  </Card>
+  
+  <Card title="Windsurf" icon="document">
+    Set up Endor with Windsurf IDE for team-based AI development.
+    
+    [Setup Guide →](./windsurf)
+  </Card>
+</CardGrid>
+
+## What AI Agents Can Do
+
+Once configured, your AI agents can:
+- **Start services instantly**: MariaDB, PostgreSQL, Redis, Valkey, and more
+- **Create isolated environments**: Each service runs in its own sandbox
+- **Manage databases**: Create, query, and modify data for development
+- **Test integrations**: Spin up services for testing without local installation
+
+AI agents automatically identify when to use Endor based on your development needs, making database and service management seamless.

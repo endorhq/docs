@@ -1,0 +1,51 @@
+---
+title: Setup
+description: Get Endor CLI running on your machine in minutes
+sidebar:
+  order: 2
+---
+
+import StepList from '../../../components/StepList.svelte';
+import StepItem from '../../../components/StepItem.svelte';
+
+Get Endor CLI up and running on your machine to create quick, disposable development environments.
+
+## System Requirements
+
+Before installing Endor, make sure your system meets these requirements:
+
+- **Memory**: 2GB RAM minimum
+- **Node.js**: Version 20 or higher ([download here](https://nodejs.org))
+- **Network**: Internet connection for downloading service images
+
+## Installation
+
+<StepList title="Install Endor CLI">
+  <StepItem step={1}>
+    Install Endor globally with npm:
+
+    ```sh
+    npm install -g @endorhq/cli
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Verify installation by checking available services:
+
+    ```sh
+    endor run
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Start your first service:
+
+    ```sh
+    endor run mariadb
+    ```
+  </StepItem>
+</StepList>
+
+## Next Steps
+
+Ready to integrate Endor with AI agents? Check out the [MCP integration guide](../mcp/overview) to connect Endor with your favorite AI tools.
