@@ -1,0 +1,53 @@
+---
+title: Networking
+description: Configure your Endor services to access a public network
+---
+
+By default, all Endor services run in an isolated environment. Running services cannot connect to public networks.
+
+However, many times you want services to connect to public services to install other software, clone repositories, or fetch websites. For that, you can configure Endor to grant access to public networks.
+
+## Run a service
+
+Pass the `--allow-net` flag when running your service:
+
+```sh
+endor run alpine --allow-net
+```
+
+The command output will inform you that public network access is allowed:
+
+```plain
+$ endor run alpine --allow-net
+🚀 Endor
+Launching the Alpine environment
+
+✅ Mission ready
+
+✅ Connection established  • Ready in 2.6s
+
+╭──────────────────────────────────────────────────────────────────────────╮
+│  Alpine Connection Details                                               │
+│                                                                          │
+│  Host: 127.0.0.1                                                         │
+│  Ports:                                                                  │
+│   - 2222 (host) <-> 2222 (guest)                                         │
+│  Public network access: allowed                                          │
+╰──────────────────────────────────────────────────────────────────────────╯
+
+Press Ctrl+C to terminate mission
+```
+
+## MCP for AI Agents
+
+The Model Context Protocol (MCP) integration allows AI powered clients and editors to use Endor. You have more information about this on the [MCP documentation](../mcp/overview/).
+
+Endor services are isolated when running MCP services too. To allow them connecting to external network, pass the same `--allow-net` option to the `mcp` command when configuring it in your MCP client.
+
+Here you have several guides to configure Endor with popular MCP clients:
+
+- [Claude Code](../mcp/claude-code/)
+- [Goose CLI](../mcp/goose/)
+- [VSCode](../mcp/vscode/)
+- [Cursor](../mcp/cursor/)
+- [Windsurf](../mcp/windsurf/)

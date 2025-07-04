@@ -1,0 +1,83 @@
+---
+title: Alpine
+description: Run Alpine Linux container with Endor CLI for lightweight development environments
+sidebar:
+  order: 1
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+
+Launch a minimal Alpine Linux container in seconds with Endor CLI. Get a clean, lightweight Linux environment for development and testing.
+
+## Quick Start
+
+Start Alpine with Endor:
+
+```sh
+endor run alpine
+```
+
+Or using npx without installing:
+
+```sh
+npx @endorhq/cli run alpine
+```
+
+## Connection Details
+
+Once running, Alpine will be available on:
+
+- **Host**: `localhost`
+- **Port**: SSH access (port 2222)
+- **User**: `root`
+- **Shell**: `/bin/sh`
+
+## What's Included
+
+The Alpine service provides:
+
+- **Alpine Linux**: Latest stable version
+- **Minimal footprint**: Small, secure base image
+- **Package manager**: `apk` for installing additional packages
+- **Shell access**: Direct command-line interface
+
+## Usage Examples
+
+<StepList title="Using Alpine Container">
+  <StepItem step={1}>
+    Start the Alpine service with public network access (See [Networking](../networking/)):
+
+    ```sh
+    endor run alpine
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Access the container shell (specific connection details will be shown in the output):
+
+    ```sh
+    # Connection details displayed when service starts
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@localhost -p 2222
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Run any command you need. You can install new packages too:
+
+    ```sh
+    apk add curl
+    ```
+  </StepItem>
+</StepList>
+
+## AI Agent Integration
+
+This Alpine instance integrates seamlessly with AI agents through Endor's MCP interface. Your AI assistant can:
+
+- Execute system commands
+- Install and configure packages
+- Set up development environments
+- Run scripts and automation
+
+Learn more about [MCP integration](../../mcp/overview).

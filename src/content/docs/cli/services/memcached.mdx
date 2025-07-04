@@ -1,0 +1,83 @@
+---
+title: Memcached
+description: Run Memcached cache server in an isolated sandbox with Endor CLI
+sidebar:
+  order: 20
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+
+Launch a Memcached cache server in seconds with Endor CLI. Get a fully configured Memcached instance running in an isolated Alpine Linux container.
+
+## Quick Start
+
+Start Memcached with Endor:
+
+```sh
+endor run memcached
+```
+
+Or using npx without installing:
+
+```sh
+npx @endorhq/cli run memcached
+```
+
+## Connection Details
+
+Once running, Memcached will be available on:
+
+- **Host**: `localhost`
+- **Port**: `11211` (default Memcached port)
+- **Protocol**: TCP/UDP
+- **Memory**: 64MB default cache size
+
+## What's Included
+
+The Memcached service runs on Alpine Linux and includes:
+
+- **Memcached Server**: Latest stable version
+- **High performance**: Optimized for caching operations
+- **Memory management**: Efficient LRU eviction
+- **Network protocol**: Standard Memcached protocol support
+
+## Usage Examples
+
+<StepList title="Connect to Memcached">
+  <StepItem step={1}>
+    Start the Memcached service:
+
+    ```sh
+    endor run memcached
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Connect using telnet for testing:
+
+    ```sh
+    telnet localhost 11211
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Or connect from your application using a Memcached client library:
+
+    ```javascript
+    // Node.js example
+    const memcached = new Memcached('localhost:11211');
+    ```
+  </StepItem>
+</StepList>
+
+## AI Agent Integration
+
+This Memcached instance integrates seamlessly with AI agents through Endor's MCP interface. Your AI assistant can:
+
+- Store and retrieve cached data
+- Monitor cache performance
+- Test caching strategies
+- Configure cache settings
+
+Learn more about [MCP integration](../../mcp/overview).

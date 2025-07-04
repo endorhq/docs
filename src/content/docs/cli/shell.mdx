@@ -1,0 +1,60 @@
+---
+title: Open a Service Shell
+description: Connect to an running service and open an interactive shell using SSH
+---
+
+import StepList from '../../../components/StepList.svelte';
+import StepItem from '../../../components/StepItem.svelte';
+
+Endor services come with a SSH server you can connect to and open an interactive shell. Sometimes you might need to open an interactive shell to check files, download new software, or change configuration.
+
+## Connect through SSH
+
+<StepList title="Connect to an Endor service:">
+  <StepItem step={1}>
+    Run your service exposing all the ports (`-P` option). You might want to enable public network access with the `--allow-net` flag too (See [Networking](./networking/)):
+
+    ```sh
+    endor run alpine -P --allow-net
+    ```
+
+    The output message shows you the SSH port. To avoid collisions, Endor services use `2222` by default:
+
+    ```plain
+    $ endor run alpine --allow-net -P
+    🚀 Endor
+    Launching the Alpine environment
+
+    ✅ Mission ready
+
+    ✅ Connection established  • Ready in 4.5s
+
+    ╭──────────────────────────────────────────────────────────────────────────╮
+    │  Alpine Connection Details                                               │
+    │                                                                          │
+    │  Host: 127.0.0.1                                                         │
+    │  Ports:                                                                  │
+    │   - 2222 (host) <-> 2222 (guest)                                         │
+    │  Public network access: allowed                                          │
+    ╰──────────────────────────────────────────────────────────────────────────╯
+
+    Press Ctrl+C to terminate mission
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Connect to the service with `ssh`:
+
+    ```sh
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@localhost -p 2222
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Run any command in the service:
+
+    ```sh
+    apk add curl && curl https://docs.endor.dev > /dev/null
+    ```
+  </StepItem>
+</StepList>

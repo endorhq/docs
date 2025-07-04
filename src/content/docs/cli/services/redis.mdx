@@ -1,0 +1,87 @@
+---
+title: Redis
+description: Run Redis cache server in an isolated sandbox with Endor CLI
+sidebar:
+  order: 40
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+
+Launch a Redis cache server in seconds with Endor CLI. Get a fully configured Redis instance running in an isolated Alpine Linux container.
+
+## Quick Start
+
+Start Redis with Endor:
+
+```sh
+endor run redis
+```
+
+Or using npx without installing:
+
+```sh
+npx @endorhq/cli run redis
+```
+
+## Connection Details
+
+Once running, Redis will be available on:
+
+- **Host**: `localhost`
+- **Port**: `6379` (default Redis port)
+- **Protocol**: Redis protocol (RESP)
+- **Authentication**: No password required
+
+## What's Included
+
+The Redis service runs on Alpine Linux and includes:
+
+- **Redis Server**: Latest stable version
+- **In-memory storage**: High-performance key-value store
+- **Data structures**: Strings, hashes, lists, sets, sorted sets
+- **Persistence**: Configurable data persistence options
+
+## Usage Examples
+
+<StepList title="Connect to Redis">
+  <StepItem step={1}>
+    Start the Redis service:
+
+    ```sh
+    endor run redis
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Connect using the Redis CLI:
+
+    ```sh
+    redis-cli -h localhost -p 6379
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Or connect from your application using a Redis client library:
+
+    ```javascript
+    // Node.js example
+    const redis = require('redis');
+    const client = redis.createClient({
+      host: 'localhost',
+      port: 6379
+    });
+    ```
+  </StepItem>
+</StepList>
+
+## AI Agent Integration
+
+This Redis instance integrates seamlessly with AI agents through Endor's MCP interface. Your AI assistant can:
+
+- Store and retrieve cached data
+- Manage session data
+- Implement pub/sub messaging
+- Configure data expiration
+
+Learn more about [MCP integration](../../mcp/overview).

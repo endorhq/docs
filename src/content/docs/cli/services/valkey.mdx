@@ -1,0 +1,86 @@
+---
+title: Valkey
+description: Run Valkey cache server in an isolated sandbox with Endor CLI
+sidebar:
+  order: 50
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+
+Launch a Valkey cache server in seconds with Endor CLI. Get a fully configured Valkey instance running in an isolated Alpine Linux container.
+
+## Quick Start
+
+Start Valkey with Endor:
+
+```sh
+endor run valkey
+```
+
+Or using npx without installing:
+
+```sh
+npx @endorhq/cli run valkey
+```
+
+## Connection Details
+
+Once running, Valkey will be available on:
+
+- **Host**: `localhost`
+- **Port**: `6379` (default Valkey port)
+- **Protocol**: Redis-compatible protocol (RESP)
+- **Authentication**: No password required
+
+## What's Included
+
+The Valkey service runs on Alpine Linux and includes:
+
+- **Valkey Server**: Latest stable version
+- **In-memory storage**: High-performance key-value store
+- **Data structures**: Strings, hashes, lists, sets, sorted sets
+
+## Usage Examples
+
+<StepList title="Connect to Valkey">
+  <StepItem step={1}>
+    Start the Valkey service:
+
+    ```sh
+    endor run valkey
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Connect using the Redis CLI (Valkey is Redis-compatible):
+
+    ```sh
+    redis-cli -h localhost -p 6379
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Or connect from your application using any Redis client library:
+
+    ```javascript
+    // Node.js example
+    const redis = require('redis');
+    const client = redis.createClient({
+      host: 'localhost',
+      port: 6379
+    });
+    ```
+  </StepItem>
+</StepList>
+
+## AI Agent Integration
+
+This Valkey instance integrates seamlessly with AI agents through Endor's MCP interface. Your AI assistant can:
+
+- Store and retrieve cached data
+- Manage session data
+- Implement pub/sub messaging
+- Configure data expiration
+
+Learn more about [MCP integration](../../mcp/overview).
