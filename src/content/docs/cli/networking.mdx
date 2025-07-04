@@ -1,53 +1,83 @@
 ---
 title: Networking
-description: Configure your Endor services to access a public network
+description: Configure your Endor services to access public networks for development tasks
+sidebar:
+  order: 3
 ---
 
-By default, all Endor services run in an isolated environment. Running services cannot connect to public networks.
+import StepList from '../../../components/StepList.svelte';
+import StepItem from '../../../components/StepItem.svelte';
 
-However, many times you want services to connect to public services to install other software, clone repositories, or fetch websites. For that, you can configure Endor to grant access to public networks.
+Endor services run in isolated sandboxes by default, preventing access to public networks. Enable network access when you need to install packages, clone repositories, or connect to external services.
 
-## Run a service
+## Security by Default
 
-Pass the `--allow-net` flag when running your service:
+All Endor services are isolated from public networks to ensure:
 
-```sh
-endor run alpine --allow-net
-```
+- **Safe execution**: No unintended external connections
+- **Reproducible environments**: Consistent behavior across runs
+- **Resource protection**: Prevents unauthorized network access
 
-The command output will inform you that public network access is allowed:
+## Enable Network Access
 
-```plain
-$ endor run alpine --allow-net
-🚀 Endor
-Launching the Alpine environment
+<StepList title="Allow Public Network Access">
+  <StepItem step={1}>
+    Start any service with the `--allow-net` flag:
 
-✅ Mission ready
+    ```sh
+    endor run alpine --allow-net
+    ```
+  </StepItem>
 
-✅ Connection established  • Ready in 2.6s
+  <StepItem step={2}>
+    Verify network access is enabled in the output:
 
-╭──────────────────────────────────────────────────────────────────────────╮
-│  Alpine Connection Details                                               │
-│                                                                          │
-│  Host: 127.0.0.1                                                         │
-│  Ports:                                                                  │
-│   - 2222 (host) <-> 2222 (guest)                                         │
-│  Public network access: allowed                                          │
-╰──────────────────────────────────────────────────────────────────────────╯
+    ```plain
+    🚀 Endor
+    Launching the Alpine environment
 
-Press Ctrl+C to terminate mission
-```
+    ✅ Mission ready
+    ✅ Connection established  • Ready in 2.6s
 
-## MCP for AI Agents
+    ╭──────────────────────────────────────────────────────────────────────────╮
+    │  Alpine Connection Details                                               │
+    │                                                                          │
+    │  Host: 127.0.0.1                                                         │
+    │  Ports:                                                                  │
+    │   - 2222 (host) <-> 2222 (guest)                                         │
+    │  Public network access: allowed                                          │
+    ╰──────────────────────────────────────────────────────────────────────────╯
+    ```
+  </StepItem>
 
-The Model Context Protocol (MCP) integration allows AI powered clients and editors to use Endor. You have more information about this on the [MCP documentation](../mcp/overview/).
+  <StepItem step={3}>
+    Test network connectivity from within the service:
 
-Endor services are isolated when running MCP services too. To allow them connecting to external network, pass the same `--allow-net` option to the `mcp` command when configuring it in your MCP client.
+    ```sh
+    # Inside the container
+    curl -I https://google.com
+    ```
+  </StepItem>
+</StepList>
 
-Here you have several guides to configure Endor with popular MCP clients:
+## Common Use Cases
+
+Enable network access when you need to:
+
+- **Install packages**: Download dependencies or tools
+- **Clone repositories**: Access Git repositories
+- **Fetch data**: Download files or connect to APIs
+
+## AI Agent Integration
+
+When using Endor with AI agents through MCP, services remain isolated by default. Enable network access for AI-managed services by configuring the `--allow-net` flag in your MCP client settings.
+
+See our MCP integration guides for specific setup instructions:
 
 - [Claude Code](../mcp/claude-code/)
 - [Goose CLI](../mcp/goose/)
 - [VSCode](../mcp/vscode/)
 - [Cursor](../mcp/cursor/)
 - [Windsurf](../mcp/windsurf/)
+
+Learn more about [MCP integration](../mcp/overview) and how AI agents can manage your development environments.

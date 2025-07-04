@@ -1,32 +1,49 @@
 ---
-title: Open a Service Shell
-description: Connect to an running service and open an interactive shell using SSH
+title: Shell Access
+description: Connect to running Endor services via SSH for interactive shell access
+sidebar:
+  order: 4
 ---
 
 import StepList from '../../../components/StepList.svelte';
 import StepItem from '../../../components/StepItem.svelte';
 
-Endor services come with a SSH server you can connect to and open an interactive shell. Sometimes you might need to open an interactive shell to check files, download new software, or change configuration.
+Access running Endor services directly through SSH to run commands, install packages, or debug applications. All Endor services include a built-in SSH server for interactive access.
 
-## Connect through SSH
+## SSH Server Built-in
 
-<StepList title="Connect to an Endor service:">
+Every Endor service includes:
+
+- **SSH server**: Pre-configured and ready to use
+- **Root access**: Full administrative privileges
+- **Port mapping**: Default SSH port 2222 to avoid conflicts
+- **No authentication**: Streamlined for development use
+
+## Connect to Services
+
+<StepList title="Access Service Shell">
   <StepItem step={1}>
-    Run your service exposing all the ports (`-P` option). You might want to enable public network access with the `--allow-net` flag too (See [Networking](./networking/)):
+    Start your service with port exposure using the `-P` flag:
+
+    ```sh
+    endor run alpine -P
+    ```
+
+    For network access, add the `--allow-net` flag ([see Networking](./networking)):
 
     ```sh
     endor run alpine -P --allow-net
     ```
+  </StepItem>
 
-    The output message shows you the SSH port. To avoid collisions, Endor services use `2222` by default:
+  <StepItem step={2}>
+    Note the SSH port in the connection details:
 
     ```plain
-    $ endor run alpine --allow-net -P
     🚀 Endor
     Launching the Alpine environment
 
     ✅ Mission ready
-
     ✅ Connection established  • Ready in 4.5s
 
     ╭──────────────────────────────────────────────────────────────────────────╮
@@ -37,24 +54,47 @@ Endor services come with a SSH server you can connect to and open an interactive
     │   - 2222 (host) <-> 2222 (guest)                                         │
     │  Public network access: allowed                                          │
     ╰──────────────────────────────────────────────────────────────────────────╯
-
-    Press Ctrl+C to terminate mission
     ```
   </StepItem>
 
-  <StepItem step={2}>
-    Connect to the service with `ssh`:
+  <StepItem step={3}>
+    Connect via SSH using the displayed port:
 
     ```sh
     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@localhost -p 2222
     ```
   </StepItem>
 
-  <StepItem step={3}>
-    Run any command in the service:
+  <StepItem step={4}>
+    Run commands directly in the service environment:
 
     ```sh
-    apk add curl && curl https://docs.endor.dev > /dev/null
+    # Install packages
+    apk add curl git
+
+    # Test connectivity
+    curl -I https://docs.endor.dev
     ```
   </StepItem>
 </StepList>
+
+## Common Use Cases
+
+Use shell access to:
+
+- **Debug applications**: Inspect logs and troubleshoot issues
+- **Install software**: Add packages not included in the base image
+- **Configure services**: Modify settings and configuration files
+- **Run scripts**: Execute custom automation or setup scripts
+- **File management**: Create, edit, or transfer files
+
+## AI Agent Integration
+
+AI agents can also access service shells through the MCP interface, enabling automated:
+
+- Package installation and configuration
+- File system operations
+- Service debugging and monitoring
+- Custom script execution
+
+Learn more about [MCP integration](../mcp/overview) and how AI agents can manage your Endor services.
