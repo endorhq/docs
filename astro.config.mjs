@@ -68,7 +68,7 @@ export default defineConfig({
               link: '/cli/networking',
             },
             {
-              label: 'Open a Service Shell',
+              label: 'Open a Shell',
               link: '/cli/shell',
             },
             { 
