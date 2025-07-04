@@ -21,6 +21,12 @@ endor mcp
 
 Endor will start listening using the [`STDIO` transport](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#stdio).
 
+You can pass the `--allow-net` option to enable public network access in the running services. By default, services are fully isolated and they cannot connect to public networks. Read more on [Networking](../cli/networking).
+
+```
+endor mcp --allow-net
+```
+
 ## AI Tool Configuration
 
 Choose your AI tool for detailed setup instructions:
@@ -60,9 +66,10 @@ Choose your AI tool for detailed setup instructions:
 ## What AI Agents Can Do
 
 Once configured, your AI agents can:
+
 - **Start services instantly**: MariaDB, PostgreSQL, Redis, Valkey, and more
 - **Create isolated environments**: Each service runs in its own sandbox
-- **Manage databases**: Create, query, and modify data for development
+- **Run commands**: run any Linux command in isolated environments
 - **Test integrations**: Spin up services for testing without local installation
 
 AI agents automatically identify when to use Endor based on your development needs, making database and service management seamless.

@@ -24,6 +24,12 @@ Or using npx without installing:
 npx @endorhq/cli run alpine
 ```
 
+You can allow public network access passing the `--allow-net` flag. See [Networking](../networking).
+
+```sh
+npx @endorhq/cli run alpine --allow-net
+```
+
 ## Connection Details
 
 Once running, Alpine will be available on:
@@ -49,7 +55,7 @@ The Alpine service provides:
     Start the Alpine service with public network access (See [Networking](../networking/)):
 
     ```sh
-    endor run alpine
+    endor run alpine --allow-net
     ```
   </StepItem>
 
