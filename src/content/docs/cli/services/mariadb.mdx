@@ -1,0 +1,83 @@
+---
+title: MariaDB
+description: Run MariaDB database server in an isolated sandbox with Endor CLI
+sidebar:
+  order: 10
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+
+Launch a MariaDB database server in seconds with Endor CLI. Get a fully configured MariaDB instance running in an isolated Alpine Linux container.
+
+## Quick Start
+
+Start MariaDB with Endor:
+
+```sh
+endor run mariadb
+```
+
+Or using npx without installing:
+
+```sh
+npx @endorhq/cli run mariadb
+```
+
+## Connection Details
+
+Once running, MariaDB will be available on:
+
+- **Host**: `localhost`
+- **Port**: `3306` (default MySQL/MariaDB port)
+- **Database**: `test`
+- **Username**: `root`
+- **Password**: `root`
+
+## What's Included
+
+The MariaDB service runs on Alpine Linux and includes:
+
+- **MariaDB Server**: Latest stable version
+- **Pre-configured database**: Ready-to-use `test` database
+- **Root access**: Full administrative privileges
+- **Optimized settings**: Tuned for development and testing
+
+## Usage Examples
+
+<StepList title="Connect to MariaDB">
+  <StepItem step={1}>
+    Start the MariaDB service:
+
+    ```sh
+    endor run mariadb
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Connect using the MySQL client:
+
+    ```sh
+    mysql -h localhost -u root -proot test
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Or connect from your application using the connection string:
+
+    ```
+    mysql://root:root@localhost:3306/test
+    ```
+  </StepItem>
+</StepList>
+
+## AI Agent Integration
+
+This MariaDB instance integrates seamlessly with AI agents through Endor's MCP interface. Your AI assistant can:
+
+- Create and manage databases
+- Execute SQL queries
+- Perform data analysis
+- Set up test data
+
+Learn more about [MCP integration](../../mcp/overview).

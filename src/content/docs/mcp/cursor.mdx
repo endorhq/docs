@@ -37,6 +37,20 @@ Configure Endor with Cursor IDE to give your AI agents access to instant develop
       }
     }
     ```
+
+    Add the `--allow-net` flag if you want to grant access to public networks. More information on [Networking](../cli/networking/).
+
+    ```json
+    {
+      "mcpServers": {
+        "endor": {
+          "command": "endor",
+          "args": ["mcp", "--allow-net"],
+          "env": {}
+        }
+      }
+    }
+    ```
   </StepItem>
   <StepItem step={4}>Save the file and navigate to Cursor Settings → MCP</StepItem>
   <StepItem step={5}>Verify the green active status indicating successful connection</StepItem>

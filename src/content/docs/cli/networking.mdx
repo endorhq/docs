@@ -1,0 +1,83 @@
+---
+title: Networking
+description: Configure your Endor services to access public networks for development tasks
+sidebar:
+  order: 3
+---
+
+import StepList from '../../../components/StepList.svelte';
+import StepItem from '../../../components/StepItem.svelte';
+
+Endor services run in isolated sandboxes by default, preventing access to public networks. Enable network access when you need to install packages, clone repositories, or connect to external services.
+
+## Security by Default
+
+All Endor services are isolated from public networks to ensure:
+
+- **Safe execution**: No unintended external connections
+- **Reproducible environments**: Consistent behavior across runs
+- **Resource protection**: Prevents unauthorized network access
+
+## Enable Network Access
+
+<StepList title="Allow Public Network Access">
+  <StepItem step={1}>
+    Start any service with the `--allow-net` flag:
+
+    ```sh
+    endor run alpine --allow-net
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Verify network access is enabled in the output:
+
+    ```plain
+    🚀 Endor
+    Launching the Alpine environment
+
+    ✅ Mission ready
+    ✅ Connection established  • Ready in 2.6s
+
+    ╭──────────────────────────────────────────────────────────────────────────╮
+    │  Alpine Connection Details                                               │
+    │                                                                          │
+    │  Host: 127.0.0.1                                                         │
+    │  Ports:                                                                  │
+    │   - 2222 (host) <-> 2222 (guest)                                         │
+    │  Public network access: allowed                                          │
+    ╰──────────────────────────────────────────────────────────────────────────╯
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Test network connectivity from within the service:
+
+    ```sh
+    # Inside the container
+    curl -I https://google.com
+    ```
+  </StepItem>
+</StepList>
+
+## Common Use Cases
+
+Enable network access when you need to:
+
+- **Install packages**: Download dependencies or tools
+- **Clone repositories**: Access Git repositories
+- **Fetch data**: Download files or connect to APIs
+
+## AI Agent Integration
+
+When using Endor with AI agents through MCP, services remain isolated by default. Enable network access for AI-managed services by configuring the `--allow-net` flag in your MCP client settings.
+
+See our MCP integration guides for specific setup instructions:
+
+- [Claude Code](../mcp/claude-code)
+- [Goose CLI](../mcp/goose)
+- [VSCode](../mcp/vscode)
+- [Cursor](../mcp/cursor)
+- [Windsurf](../mcp/windsurf)
+
+Learn more about [MCP integration](../mcp/overview) and how AI agents can manage your development environments.

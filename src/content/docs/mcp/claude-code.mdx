@@ -29,6 +29,12 @@ Configure Endor with Claude Code to access instant development environments dire
     ```sh
     claude mcp add endor -- endor mcp
     ```
+
+    Use the `--allow-net` flag if you want to grant access to public networks. More information on [Networking](../cli/networking/).
+
+    ```sh
+    claude mcp add endor -- endor mcp --allow-net
+    ```
   </StepItem>
   <StepItem step={4}>
     For project-scoped configuration, create `.mcp.json` in your project root:

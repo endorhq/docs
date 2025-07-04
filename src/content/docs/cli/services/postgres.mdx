@@ -1,0 +1,83 @@
+---
+title: PostgreSQL
+description: Run PostgreSQL database server in an isolated sandbox with Endor CLI
+sidebar:
+  order: 30
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+
+Launch a PostgreSQL database server in seconds with Endor CLI. Get a fully configured PostgreSQL instance running in an isolated Alpine Linux container.
+
+## Quick Start
+
+Start PostgreSQL with Endor:
+
+```sh
+endor run postgres
+```
+
+Or using npx without installing:
+
+```sh
+npx @endorhq/cli run postgres
+```
+
+## Connection Details
+
+Once running, PostgreSQL will be available on:
+
+- **Host**: `localhost`
+- **Port**: `5432` (default PostgreSQL port)
+- **Database**: `postgres`
+- **Username**: `<passwordless>`
+- **Password**: `postgres`
+
+## What's Included
+
+The PostgreSQL service runs on Alpine Linux and includes:
+
+- **PostgreSQL Server**: Latest stable version
+- **Pre-configured database**: Ready-to-use `postgres` database
+- **Superuser access**: Full administrative privileges
+- **Extensions**: Common PostgreSQL extensions available
+
+## Usage Examples
+
+<StepList title="Connect to PostgreSQL">
+  <StepItem step={1}>
+    Start the PostgreSQL service:
+
+    ```sh
+    endor run postgres
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Connect using the PostgreSQL client:
+
+    ```sh
+    psql -h localhost -U postgres -d postgres
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Or connect from your application using the connection string:
+
+    ```
+    postgresql://postgres@localhost:5432/postgres
+    ```
+  </StepItem>
+</StepList>
+
+## AI Agent Integration
+
+This PostgreSQL instance integrates seamlessly with AI agents through Endor's MCP interface. Your AI assistant can:
+
+- Create and manage databases
+- Execute SQL queries and transactions
+- Perform data analysis and reporting
+- Set up schemas and test data
+
+Learn more about [MCP integration](../../mcp/overview).

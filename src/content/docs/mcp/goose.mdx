@@ -40,6 +40,14 @@ Configure Endor with Goose CLI to provide your AI agent with instant access to d
     Command: endor mcp
     Timeout: 60
     ```
+
+    Add the `--allow-net` flag if you want to grant access to public networks. More information on [Networking](../cli/networking/).
+
+    ```toml
+    Name: endor
+    Command: endor mcp --allow-net
+    Timeout: 60
+    ```
   </StepItem>
   <StepItem step={7}>
     Add the following description:
@@ -57,6 +65,7 @@ Configure Endor with Goose CLI to provide your AI agent with instant access to d
       endor:
         args:
         - mcp
+        - --allow-net
         bundled: null
         cmd: endor
         description: Instant development and testing environments for databases and services. Run MariaDB, PostgreSQL, Redis, Valkey, and other pre-configured services in isolated sandboxes.

@@ -39,6 +39,23 @@ Configure Endor with Visual Studio Code to enable AI agents to manage developmen
       }
     }
     ```
+
+    Add the `--allow-net` flag if you want to grant access to public networks. More information on [Networking](../cli/networking/).
+
+    ```json
+    {
+      "servers": {
+        "endor": {
+          "type": "stdio",
+          "command": "endor",
+          "args": [
+            "mcp",
+            "--allow-net"
+          ]
+        }
+      }
+    }
+    ```
   </StepItem>
   <StepItem step={4}>Use the Command Palette → "MCP: List Servers" to view configured servers</StepItem>
   <StepItem step={5}>Try Endor using Copilot in "Agent Mode"</StepItem>

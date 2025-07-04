@@ -62,6 +62,18 @@ export default defineConfig({
             {
               label: 'Setup',
               link: '/cli/setup',
+            },
+            {
+              label: 'Networking',
+              link: '/cli/networking',
+            },
+            {
+              label: 'Open a Shell',
+              link: '/cli/shell',
+            },
+            { 
+              label: 'Services',
+              autogenerate: { directory: 'cli/services' },
             }
           ],
         },

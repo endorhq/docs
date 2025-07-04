@@ -1,0 +1,100 @@
+---
+title: Open a Shell
+description: Connect to running Endor services via SSH for interactive shell access
+sidebar:
+  order: 4
+---
+
+import StepList from '../../../components/StepList.svelte';
+import StepItem from '../../../components/StepItem.svelte';
+
+Access running Endor services directly through SSH to run commands, install packages, or debug applications. All Endor services include a built-in SSH server for interactive access.
+
+## SSH Server Built-in
+
+Every Endor service includes:
+
+- **SSH server**: Pre-configured and ready to use
+- **Root access**: Full administrative privileges
+- **Port mapping**: Default SSH port 2222 to avoid conflicts
+- **No authentication**: Streamlined for development use
+
+## Connect to Services
+
+<StepList title="Access Service Shell">
+  <StepItem step={1}>
+    Start your service with port exposure using the `-P` flag:
+
+    ```sh
+    endor run alpine -P
+    ```
+
+    For network access, add the `--allow-net` flag ([see Networking](./networking)):
+
+    ```sh
+    endor run alpine -P --allow-net
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Note the SSH port in the connection details:
+
+    ```plain
+    🚀 Endor
+    Launching the Alpine environment
+
+    ✅ Mission ready
+    ✅ Connection established  • Ready in 4.5s
+
+    ╭──────────────────────────────────────────────────────────────────────────╮
+    │  Alpine Connection Details                                               │
+    │                                                                          │
+    │  Host: 127.0.0.1                                                         │
+    │  Ports:                                                                  │
+    │   - 2222 (host) <-> 2222 (guest)                                         │
+    │  Public network access: allowed                                          │
+    ╰──────────────────────────────────────────────────────────────────────────╯
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Connect via SSH using the displayed port:
+
+    ```sh
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@localhost -p 2222
+    ```
+  </StepItem>
+
+  <StepItem step={4}>
+    Run commands directly in the service environment:
+
+    ```sh
+    # Install packages
+    apk add curl git
+
+    # Test connectivity
+    curl -I https://docs.endor.dev
+    ```
+  </StepItem>
+</StepList>
+
+## Common Use Cases
+
+Use shell access to:
+
+- **Debug applications**: Inspect logs and troubleshoot issues
+- **Install software**: Add packages not included in the base image
+- **Configure services**: Modify settings and configuration files
+- **Run scripts**: Execute custom automation or setup scripts
+- **File management**: Create, edit, or transfer files
+
+## AI Agent Integration
+
+AI agents can also access service shells through the MCP interface, enabling automated:
+
+- Package installation and configuration
+- File system operations
+- Service debugging and monitoring
+- Custom script execution
+
+Learn more about [MCP integration](../mcp/overview) and how AI agents can manage your Endor services.
