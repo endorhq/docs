@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightLinksValidator from 'starlight-links-validator';
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
 import starlightThemeRapide from 'starlight-theme-rapide'
@@ -32,7 +33,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Endor Documentation',
-      plugins: [starlightThemeRapide()],
+      plugins: [starlightLinksValidator(), tarlightThemeRapide()],
       head,
       customCss: [
         './src/styles/global.css'
