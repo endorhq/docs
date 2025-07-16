@@ -1,0 +1,74 @@
+---
+title: Volumes
+description: Configure your Endor services to access to the host filesystem
+sidebar:
+  order: 4
+---
+
+import StepList from '../../../components/StepList.svelte';
+import StepItem from '../../../components/StepItem.svelte';
+
+Endor isolates the sandbox filesystem from the host for security and privacy reasons.
+
+Sandboxes can get directories exposed from the host filesystem, so that they can act on certain data.
+
+:::note
+At this time, modifications in the volume performed within the sandbox are not synced back to the host.
+:::
+
+## Mount volumes
+
+<StepList title="Allow Host Filesystem Access">
+  <StepItem step={1}>
+    Start any service with the `--volume` flag. It has the form of `<hostPath>:<sandboxPath>`:
+
+    ```sh
+    endor run alpine --volume .:/app
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Verify access to the filesystem:
+
+    ```plain
+    🚀 Endor
+    Launching the Alpine environment
+
+    ✅ Mission ready
+
+    ╭─────────────────────────────────────────────────────╮
+    │  Volumes:                                           │
+    │   - /home/<user>/my-project (host) -> /app (guest)  │
+    ╰─────────────────────────────────────────────────────╯
+
+    ✅ Connection established  • Ready in 1.9s
+
+    ╭─────────────────────────────────────────────────────╮
+    │  Alpine Connection Details                          │
+    │                                                     │
+    │  Host: 127.0.0.1                                    │
+    │  Ports:                                             │
+    │   - 2222 (host) <-> 2222 (guest)                    │
+    │  Public network access: restricted                  │
+    ╰─────────────────────────────────────────────────────╯
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Test filesystem access from within the sandbox:
+
+    ```sh
+    # Inside the sandbox
+    ls -la /app
+    ```
+  </StepItem>
+</StepList>
+
+You can mount many volumes in the same invocation, if you have the need to expose multiple directories inside the sandbox.
+
+## Common Use Cases
+
+Mount volumes when you need to:
+
+- **Populate services**: you can populate database instances with existing SQL files in your host filesystem.
+- **Access files in your host filesystem**: reading files from your host filesystem enables you to pick what information is exposed to the sandbox.
