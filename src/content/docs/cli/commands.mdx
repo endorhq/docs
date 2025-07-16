@@ -170,49 +170,51 @@ Run initialization commands if you need to:
 
 - **Pre-install applications**: if you need certain applications to be started before your the main environment runs, or before your provided command executes, you can use initialization commands to make sure that these packages are installed in the system.
 
-<StepList title="Pre-install applications">
-  <StepItem step={1}>
-    Pre-install applications, and use them in the `-`command`:
+<div class="ml-20">
+  <StepList title="Pre-install applications">
+    <StepItem step={1}>
+      Pre-install applications, and use them in the `--command`:
 
-    ```sh
-    endor run alpine \
-      --allow-net \
-      --init-command 'apk update' \
-      --init-command 'apk add figlet' \
-      --command 'figlet "Hello, Endor!"'
-    ```
-  </StepItem>
+      ```sh
+      endor run alpine \
+        --allow-net \
+        --init-command 'apk update' \
+        --init-command 'apk add figlet' \
+        --command 'figlet "Hello, Endor!"'
+      ```
+    </StepItem>
 
-  <StepItem step={2}>
-    Check the result command execution:
+    <StepItem step={2}>
+      Check the result command execution:
 
-    ```plain
-    🚀 Endor
-    Launching the Alpine environment
+      ```plain
+      🚀 Endor
+      Launching the Alpine environment
 
-    💨 Environment stopped
+      💨 Environment stopped
+  re-in
+      ╭─────────────────────────────────────────────────────────────╮
+      │  Alpine Connection Details                                  │
+      │                                                             │
+      │  No active connection.                                      │
+      ╰─────────────────────────────────────────────────────────────╯
 
-    ╭─────────────────────────────────────────────────────────────╮
-    │  Alpine Connection Details                                  │
-    │                                                             │
-    │  No active connection.                                      │
-    ╰─────────────────────────────────────────────────────────────╯
+      Command Result:
 
-    Command Result:
-
-    ╭─────────────────────────────────────────────────────────────╮
-    │  Return Code: 0                                             │
-    │  Output:                                                    │
-    │   _   _      _ _          _____           _            _    │
-    │   | | | | ___| | | ___    | ____|_ __   __| | ___  _ __| |  │
-    │   | |_| |/ _ \ | |/ _ \   |  _| | '_ \ / _` |/ _ \| '__| |  │
-    │   |  _  |  __/ | | (_) |  | |___| | | | (_| | (_) | |  |_|  │
-    │   |_| |_|\___|_|_|\___( ) |_____|_| |_|\__,_|\___/|_|  (_)  │
-    │                       |/                                    │
-    ╰─────────────────────────────────────────────────────────────╯
-    ```
-  </StepItem>
-</StepList>
+      ╭─────────────────────────────────────────────────────────────╮
+      │  Return Code: 0                                             │
+      │  Output:                                                    │
+      │   _   _      _ _          _____           _            _    │
+      │   | | | | ___| | | ___    | ____|_ __   __| | ___  _ __| |  │
+      │   | |_| |/ _ \ | |/ _ \   |  _| | '_ \ / _` |/ _ \| '__| |  │
+      │   |  _  |  __/ | | (_) |  | |___| | | | (_| | (_) | |  |_|  │
+      │   |_| |_|\___|_|_|\___( ) |_____|_| |_|\__,_|\___/|_|  (_)  │
+      │                       |/                                    │
+      ╰─────────────────────────────────────────────────────────────╯
+      ```
+    </StepItem>
+  </StepList>
+</div>
 
 ## Initialization scripts
 
