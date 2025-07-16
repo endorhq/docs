@@ -5,6 +5,7 @@ sidebar:
   order: 4
 ---
 
+import { Aside } from '@astrojs/starlight/components';
 import StepList from '../../../components/StepList.svelte';
 import StepItem from '../../../components/StepItem.svelte';
 
@@ -15,6 +16,10 @@ Sandboxes can get directories exposed from the host filesystem, so that they can
 :::note
 At this time, modifications in the volume performed within the sandbox are not synced back to the host.
 :::
+
+<Aside type="caution">
+You might face difficulties if you try to mount a big volume. If you notice that you don't see the mounted volume in the sandbox, try again with a smaller volume. This limitation will be lifted as soon as possible.
+</Aside>
 
 ## Mount volumes
 
