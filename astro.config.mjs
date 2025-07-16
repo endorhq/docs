@@ -72,6 +72,10 @@ export default defineConfig({
               link: '/cli/volumes',
             },
             {
+              label: 'Commands',
+              link: '/cli/commands',
+            },
+            {
               label: 'Open a Shell',
               link: '/cli/shell',
             },
