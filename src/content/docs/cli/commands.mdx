@@ -164,6 +164,56 @@ Before the main service (or the command, if provided) is executed, multiple init
   </StepItem>
 </StepList>
 
+### Common Use Cases
+
+Run initialization commands if you need to:
+
+- **Pre-install applications**: if you need certain applications to be started before your the main environment runs, or before your provided command executes, you can use initialization commands to make sure that these packages are installed in the system.
+
+<StepList title="Pre-install applications">
+  <StepItem step={1}>
+    Pre-install applications, and use them in the `-`command`:
+
+    ```sh
+    endor run alpine \
+      --allow-net \
+      --init-command 'apk update' \
+      --init-command 'apk add figlet' \
+      --command 'figlet "Hello, Endor!"'
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Check the result command execution:
+
+    ```plain
+    🚀 Endor
+    Launching the Alpine environment
+
+    💨 Environment stopped
+
+    ╭─────────────────────────────────────────────────────────────╮
+    │  Alpine Connection Details                                  │
+    │                                                             │
+    │  No active connection.                                      │
+    ╰─────────────────────────────────────────────────────────────╯
+
+    Command Result:
+
+    ╭─────────────────────────────────────────────────────────────╮
+    │  Return Code: 0                                             │
+    │  Output:                                                    │
+    │   _   _      _ _          _____           _            _    │
+    │   | | | | ___| | | ___    | ____|_ __   __| | ___  _ __| |  │
+    │   | |_| |/ _ \ | |/ _ \   |  _| | '_ \ / _` |/ _ \| '__| |  │
+    │   |  _  |  __/ | | (_) |  | |___| | | | (_| | (_) | |  |_|  │
+    │   |_| |_|\___|_|_|\___( ) |_____|_| |_|\__,_|\___/|_|  (_)  │
+    │                       |/                                    │
+    ╰─────────────────────────────────────────────────────────────╯
+    ```
+  </StepItem>
+</StepList>
+
 ## Initialization scripts
 
 In the same way that it's possible to provide initialization commands, Endor also supports to provide a list of initialization scripts. Initialization scripts are files present in your host machine.
@@ -219,6 +269,12 @@ Initialization scripts are allowed to fail. Endor will continue with the followi
     ```
   </StepItem>
 </StepList>
+
+### Common Use Cases
+
+Run initialization scripts if you need to:
+
+- **Initialize environments from an existing script**: you can easily initialize environment with a provided script (e.g. lives inside your project repository). This is useful for teams that need to run common scripts before the environment initializes.
 
 ## Format
 
