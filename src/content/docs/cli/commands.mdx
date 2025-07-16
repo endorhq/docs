@@ -1,0 +1,318 @@
+---
+title: Commands
+description: Run a command inside an Endor sandbox
+sidebar:
+  order: 5
+---
+
+import StepList from '../../../components/StepList.svelte';
+import StepItem from '../../../components/StepItem.svelte';
+
+Endor allows you to run a command inside a sandbox and retrieve the result back. This command is executed when the sandbox is ready and has been succesfully started.
+
+If you have mounted [Volumes](/cli/volumes), or have allowed [Networking access](/cli/networking) to the sandbox, Volumes and Networking access are available when the command is executed.
+
+## Running a command
+
+<StepList title="Run a command that succeeds">
+  <StepItem step={1}>
+    Start any service with the `--command` flag:
+
+    ```sh
+    endor run alpine --command 'cat /etc/os-release'
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Check the result command execution:
+
+    ```plain
+    🚀 Endor
+    Launching the Alpine environment
+
+    💨 Environment stopped
+
+    ╭─────────────────────────────────────────────────────────────────────────────╮
+    │  Alpine Connection Details                                                  │
+    │                                                                             │
+    │  No active connection.                                                      │
+    ╰─────────────────────────────────────────────────────────────────────────────╯
+
+    Command Result:
+
+    ╭─────────────────────────────────────────────────────────────────────────────╮
+    │  Return Code: 0                                                             │
+    │  Output:                                                                    │
+    │   NAME="Alpine Linux"                                                       │
+    │   ID=alpine                                                                 │
+    │   VERSION_ID=3.22.0                                                         │
+    │   PRETTY_NAME="Alpine Linux v3.22"                                          │
+    │   HOME_URL="https://alpinelinux.org/"                                       │
+    │   BUG_REPORT_URL="https://gitlab.alpinelinux.org/alpine/aports/-/issues"    │
+    ╰─────────────────────────────────────────────────────────────────────────────╯
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Test that the exit code of the executed command has been propagated
+
+    ```sh
+    # In your host
+    echo $?
+    ```
+  </StepItem>
+</StepList>
+
+However, if you run a command that fails its execution, the exit code of that command will be forwarded to the Endor CLI exit code:
+
+<StepList title="Run a command that fails">
+  <StepItem step={1}>
+    Run a command that will fail:
+
+    ```sh
+    endor run alpine --command 'ls -la /does-not-exist'
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Check the result command execution:
+
+    ```plain
+    🚀 Endor
+    Launching the Alpine environment
+
+    💨 Environment stopped
+
+    ╭─────────────────────────────────────────────────────────────────────────────╮
+    │  Alpine Connection Details                                                  │
+    │                                                                             │
+    │  No active connection.                                                      │
+    ╰─────────────────────────────────────────────────────────────────────────────╯
+
+    Command Result:
+
+    ╭─────────────────────────────────────────────────────────────────────────────╮
+    │  Return Code: 1                                                             │
+    │  Error Output:                                                              │
+    │   ls: /does-not-exist: No such file or directory                            │
+    ╰────────────────────────────────────────────────────────────────────────────╯
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Test that the exit code of the executed command has been propagated
+
+    ```sh
+    # In your host
+    echo $?
+    ```
+  </StepItem>
+</StepList>
+
+## Initialization commands
+
+Before the main service (or the command, if provided) is executed, multiple initialization commands can be provided. They will run right after Volumes have been mounted (if any), and after Network access has been granted (if enabled.)
+
+<StepList title="Run an initialization command">
+  <StepItem step={1}>
+    Run any service with the `--init-command` flag.
+
+    ```sh
+    endor run alpine \
+      --init-command 'touch /opt/file-a' \
+      --init-command 'touch /opt/file-b' \
+      --command 'ls -la /opt'
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Check the result command execution:
+
+    ```plain
+    🚀 Endor
+    Launching the Alpine environment
+
+    💨 Environment stopped
+
+    ╭─────────────────────────────────────────────────────────────────────────────╮
+    │  Alpine Connection Details                                                  │
+    │                                                                             │
+    │  No active connection.                                                      │
+    ╰─────────────────────────────────────────────────────────────────────────────╯
+
+    Command Result:
+
+    ╭─────────────────────────────────────────────────────────────────────────────╮
+    │  Return Code: 0                                                             │
+    │  Output:                                                                    │
+    │   total 3                                                                   │
+    │   drwxr-xr-x    2 root     root             0 May 30 12:13 .                │
+    │   drwxrwxrwx   20 root     root             0 Jun 26 12:06 ..               │
+    │   -rw-r--r--    1 root     root             0 Jul 16 11:16 file-a           │
+    │   -rw-r--r--    1 root     root             0 Jul 16 11:16 file-b           │
+    ╰─────────────────────────────────────────────────────────────────────────────╯
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Test that the exit code of the executed command has been propagated
+
+    ```sh
+    # In your host
+    echo $?
+    ```
+  </StepItem>
+</StepList>
+
+### Common Use Cases
+
+Run initialization commands if you need to:
+
+- **Pre-install applications**: if you need certain applications to be started before your the main environment runs, or before your provided command executes, you can use initialization commands to make sure that these packages are installed in the system.
+
+<div class="ml-20">
+  <StepList title="Pre-install applications">
+    <StepItem step={1}>
+      Pre-install applications, and use them in the `--command`:
+
+      ```sh
+      endor run alpine \
+        --allow-net \
+        --init-command 'apk update' \
+        --init-command 'apk add figlet' \
+        --command 'figlet "Hello, Endor!"'
+      ```
+    </StepItem>
+
+    <StepItem step={2}>
+      Check the result command execution:
+
+      ```plain
+      🚀 Endor
+      Launching the Alpine environment
+
+      💨 Environment stopped
+
+      ╭─────────────────────────────────────────────────────────────╮
+      │  Alpine Connection Details                                  │
+      │                                                             │
+      │  No active connection.                                      │
+      ╰─────────────────────────────────────────────────────────────╯
+
+      Command Result:
+
+      ╭─────────────────────────────────────────────────────────────╮
+      │  Return Code: 0                                             │
+      │  Output:                                                    │
+      │   _   _      _ _          _____           _            _    │
+      │   | | | | ___| | | ___    | ____|_ __   __| | ___  _ __| |  │
+      │   | |_| |/ _ \ | |/ _ \   |  _| | '_ \ / _` |/ _ \| '__| |  │
+      │   |  _  |  __/ | | (_) |  | |___| | | | (_| | (_) | |  |_|  │
+      │   |_| |_|\___|_|_|\___( ) |_____|_| |_|\__,_|\___/|_|  (_)  │
+      │                       |/                                    │
+      ╰─────────────────────────────────────────────────────────────╯
+      ```
+    </StepItem>
+  </StepList>
+</div>
+
+## Initialization scripts
+
+In the same way that it's possible to provide initialization commands, Endor also supports to provide a list of initialization scripts. Initialization scripts are files present in your host machine.
+
+Initialization scripts are allowed to fail. Endor will continue with the following initialization scripts, and ultimately, will run the service normally, or the command that was provided, if any. If an initialization script fails, this event will be logged by Endor.
+
+<StepList title="Run an initialization script">
+  <StepItem step={1}>
+    Create a script that performs some initialization logic, and that resides in your host filesystem:
+
+    ```sh
+    cat <<EOF > init-sandbox.sh
+    touch /opt/file-a
+    touch /opt/file-b
+    EOF
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Run any service with the `--init-script` flag pointing to the path in your filesystem.
+
+    ```sh
+    endor run alpine --init-script ./init-sandbox.sh --command 'ls -la /opt'
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Check the result command execution:
+
+    ```plain
+    🚀 Endor
+    Launching the Alpine environment
+
+    💨 Environment stopped
+
+    ╭─────────────────────────────────────────────────────────────────────────────╮
+    │  Alpine Connection Details                                                  │
+    │                                                                             │
+    │  No active connection.                                                      │
+    ╰─────────────────────────────────────────────────────────────────────────────╯
+
+    Command Result:
+
+    ╭─────────────────────────────────────────────────────────────────────────────╮
+    │  Return Code: 0                                                             │
+    │  Output:                                                                    │
+    │   total 3                                                                   │
+    │   drwxr-xr-x    2 root     root             0 May 30 12:13 .                │
+    │   drwxrwxrwx   20 root     root             0 Jun 26 12:06 ..               │
+    │   -rw-r--r--    1 root     root             0 Jul 16 11:36 file-a           │
+    │   -rw-r--r--    1 root     root             0 Jul 16 11:36 file-b           │
+    ╰─────────────────────────────────────────────────────────────────────────────╯
+    ```
+  </StepItem>
+</StepList>
+
+### Common Use Cases
+
+Run initialization scripts if you need to:
+
+- **Initialize environments from an existing script**: you can easily initialize environment with a provided script (e.g. lives inside your project repository). This is useful for teams that need to run common scripts before the environment initializes.
+
+## Format
+
+If you prefer to have no decorations, you can use the `plain` format. The `plain` format will:
+  - Forward the sandbox `stdout` to the Endor CLI `stdout`.
+  - Forward the sandbox `stderr` to the Endor CLI `stderr`, along with Endor specific logging messages.
+  - Forward the exit code of the sandbox execution.
+
+<StepList title="Plain format output">
+  <StepItem step={1}>
+    Run any service with the `--format` flag set to `plain`.
+
+    ```sh
+    endor run alpine --format plain --command 'cat /etc/os-release' 2> /dev/null
+    ```
+  </StepItem>
+
+  <StepItem step={2}>
+    Check the result command execution:
+
+    ```plain
+    NAME="Alpine Linux"
+    ID=alpine
+    VERSION_ID=3.22.0
+    PRETTY_NAME="Alpine Linux v3.22"
+    HOME_URL="https://alpinelinux.org/"
+    BUG_REPORT_URL="https://gitlab.alpinelinux.org/alpine/aports/-/issues"
+    ```
+  </StepItem>
+
+  <StepItem step={3}>
+    Test that the exit code of the executed command has been propagated
+
+    ```sh
+    # In your host
+    echo $?
+    ```
+  </StepItem>
+</StepList>

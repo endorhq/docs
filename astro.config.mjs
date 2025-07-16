@@ -68,10 +68,18 @@ export default defineConfig({
               link: '/cli/networking',
             },
             {
+              label: 'Volumes',
+              link: '/cli/volumes',
+            },
+            {
+              label: 'Commands',
+              link: '/cli/commands',
+            },
+            {
               label: 'Open a Shell',
               link: '/cli/shell',
             },
-            { 
+            {
               label: 'Services',
               autogenerate: { directory: 'cli/services' },
             }
