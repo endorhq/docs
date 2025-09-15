@@ -1,0 +1,12 @@
+{
+  "version": "1.0",
+  "languages": [
+    "typescript",
+    "javascript"
+  ],
+  "packageManagers": [
+    "pnpm"
+  ],
+  "taskManagers": [],
+  "attribution": true
+}
