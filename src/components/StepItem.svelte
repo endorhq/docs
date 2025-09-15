@@ -2,15 +2,20 @@
   export let step = 1;
 </script>
 
-<li class="relative pl-12 pb-2 last:pb-0 {$$props.class || ''}">
+<li class="group relative pl-12 pb-2 last:pb-0 last: {$$props.class || ''}">
   <!-- Vertical line -->
-  <div class="absolute left-4 top-8 bottom-0 w-px bg-light last:hidden" aria-hidden="true"></div>
-  
+  <div
+    class="step-line absolute left-4 top-10 bottom-0 w-px mb-6 group-last:hidden"
+    aria-hidden="true"
+  ></div>
+
   <!-- Step number -->
-  <div class="step-number absolute left-0 w-8 h-8 rounded-full bg-light text-text-light flex items-center justify-center text-sm font-medium ring-2 ring-background">
+  <div
+    class="step-number absolute left-0 w-8 h-8 rounded-full flex items-center justify-center text-sm"
+  >
     {step}
   </div>
-  
+
   <!-- Step content -->
   <div class="step-content">
     <slot />
@@ -32,7 +37,6 @@
   }
 
   :global(.step-content pre) {
-    margin-top: 1rem;
     margin-bottom: 1rem;
   }
 
@@ -52,8 +56,15 @@
     }
   }
 
+  .step-line {
+    background-color: var(--sl-rapide-ui-border-color);
+  }
+
   .step-number {
     top: 0;
+    font-weight: bold;
     margin-top: 0 !important;
+    color: var(--sl-color-accent-high);
+    border: 2px solid var(--sl-color-accent);
   }
 </style>

@@ -20,6 +20,8 @@
     [data-theme='light']::backdrop {
         --sl-hue-accent: 186;
         --sl-hue-green: 186;
+
+        --sl-color-black: oklch(98% 0.002 var(--sl-hue-base));
     }
 }
 
