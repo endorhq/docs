@@ -52,8 +52,9 @@ docs/
 │   │       ├── guides/   # User guides
 │   │       ├── reference/ # Reference documentation
 │   │       └── index.mdx # Home page
-│   ├── env.d.ts         # TypeScript environment types
-│   └── tailwind.css     # Global Tailwind styles
+│   ├── styles/          # Documentation content
+│   │   └── global.css   # Global Tailwind styles
+│   └── env.d.ts         # TypeScript environment types
 ├── astro.config.mjs     # Astro configuration
 ├── tailwind.config.mjs  # Tailwind configuration
 ├── posthog.mjs          # Analytics configuration
@@ -227,7 +228,7 @@ sidebar:
 ```
 
 ### Add Custom Styling
-1. Edit `src/tailwind.css` for global styles
+1. Edit `./src/styles/global.css` for global styles
 2. Use Tailwind classes in components and MDX files
 3. Extend theme in `tailwind.config.mjs` for new design tokens
 

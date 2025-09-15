@@ -1,0 +1,36 @@
+@layer starlight, rapide, components, utilities, endor;
+
+/* @import '@astrojs/starlight-tailwind'; */
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@layer endor {
+
+    /* For tailwind */
+    :root {
+        --sl-hue-accent: 180;
+        --sl-hue-green: 180;
+
+        /* Direct override */
+        --sl-color-black: rgb(6, 10, 10);
+        --sl-rapide-ui-header-bg-color: var(--sl-color-black);
+    }
+
+    :root[data-theme='light'],
+    [data-theme='light']::backdrop {
+        --sl-hue-accent: 186;
+        --sl-hue-green: 186;
+
+        --sl-color-black: oklch(98% 0.002 var(--sl-hue-base));
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Fix the stroke-width for tabler icons */
+.ti path {
+    stroke-width: 1;
+}
