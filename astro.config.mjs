@@ -125,6 +125,10 @@ export default defineConfig({
           autogenerate: { directory: 'reference' },
         },
         {
+          label: 'Rover',
+          items: [],
+        },
+        {
           label: 'Guides',
           autogenerate: { directory: 'guides' },
         },
