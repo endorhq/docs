@@ -1,9 +1,8 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-
 import svelte from '@astrojs/svelte';
-
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
+import starlightThemeRapide from 'starlight-theme-rapide'
 
 import { posthogCode } from './posthog.mjs';
 
@@ -33,9 +32,10 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Endor Documentation',
+      plugins: [starlightThemeRapide()],
       head,
       customCss: [
-        './src/tailwind.css'
+        './src/styles/global.css'
       ],
       logo: {
         dark: './src/assets/logo-text-dark.png',
@@ -43,14 +43,14 @@ export default defineConfig({
         alt: 'Endor Logo',
         replacesTitle: true,
       },
-      social: {
-        github: 'https://github.com/endorhq',
-        mastodon: 'https://mastodon.social/@endorhq',
-        twitter: 'https://x.com/endorhq',
-        blueSky: 'https://bsky.app/profile/endorhq.bsky.social',
-        youtube: 'https://www.youtube.com/@endorhq',
-        linkedin: 'https://www.linkedin.com/company/endorhq',
-      },
+      social: [
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/endorhq' },
+        { icon: 'mastodon', label: 'Mastodon', href: 'https://mastodon.social/@endorhq' },
+        { icon: 'twitter', label: 'X', href: 'https://x.com/endorhq' },
+        { icon: 'blueSky', label: 'BlueSky', href: 'https://bsky.app/profile/endorhq.bsky.social' },
+        { icon: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/@endorhq' },
+        { icon: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/company/endorhq' },
+      ],
       sidebar: [
         {
           label: 'CLI',
@@ -104,8 +104,9 @@ export default defineConfig({
       ],
     }),
     svelte(),
-    tailwind({
-      applyBaseStyles: false
-    })
   ],
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
