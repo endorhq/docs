@@ -2,10 +2,48 @@
 title: Overview
 description: Rover overview
 ---
+
+import StepList from '../../../components/StepList.svelte';
+import StepItem from '../../../components/StepItem.svelte';
+
 # Rover Overview
 
 Rover is a comprehensive workspace management solution that enables developers to efficiently orchestrate multiple AI coding agents working simultaneously on different tasks. Built by the Endor team, Rover provides a local, secure, and isolated environment for AI agents to complete coding tasks without interfering with your primary development workflow.
 
+## Get started
+
+### Prerequisites
+- **Node.js 22.17.0** or newer
+- **npm 10.9.2** or newer
+- **Git**
+- **Docker**
+- **Supported AI Agent** ([Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview#get-started-in-30-seconds), [Codex](https://github.com/openai/codex?tab=readme-ov-file#installing-and-running-codex-cli), [Gemini](https://github.com/google-gemini/gemini-cli?tab=readme-ov-file#quick-install), or [Qwen](https://github.com/QwenLM/qwen-code?tab=readme-ov-file#installation))
+
+<StepList title="Installing rover">
+  <StepItem step={1}>
+    Install rover
+
+    ```sh
+    npm install -g @endorhq/rover@latest
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Visit your git tracked project
+
+    ```sh
+    cd ~/my-project
+    ```
+  </StepItem>
+  <StepItem step={3}>
+    Initialize rover
+
+    ```sh
+    rover init
+    ```
+
+    From there on, follow the tips that rover will give you to continue. You can also check the [quickstart guide](/rover/quickstart) and the [common workflows](/rover/common-workflows).
+  </StepItem>
+</StepList>
 
 ## What is Rover?
 
