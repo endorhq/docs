@@ -1,0 +1,75 @@
+---
+title: Quickstart
+description: Quickstart on how to install and run rover
+---
+
+import StepList from '../../../components/StepList.svelte';
+import StepItem from '../../../components/StepItem.svelte';
+
+Installing rover and getting it to work for you is straightforward, just follow the steps:
+
+<StepList title="Installing rover">
+  <StepItem step={1}>
+    Install rover
+
+    ```sh
+    npm install -g @endorhq/rover@latest
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Check that rover is installed
+
+    ```sh
+    rover --version
+    ```
+  </StepItem>
+  <StepItem step={3}>
+    Congratulations!, you are a step closer making those agents work for you
+  </StepItem>
+</StepList>
+
+
+From here on you are ready to enable rover on a project that you have
+on your filesystem:
+
+<StepList title="Initializing rover">
+  <StepItem step={1}>
+    Navigate to a project in which you want to enable rover.
+
+    ```sh
+    mkdir -p ~/rover-quickstart && cd ~/rover-quickstart
+    touch README.md && git add README.md && git commit -a -m 'Initial commit'
+    git init
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Init rover
+
+    ```sh
+    rover init
+    ```
+
+    Rover will detect all supported installed agents in your system. You can init rover in as many projects as you wish.
+  </StepItem>
+  <StepItem step={3}>
+    Now you are ready to ask rover its first task!
+  </StepItem>
+</StepList>
+
+<StepList title="Asking rover its first task">
+  <StepItem step={1}>
+    Navigate to the project in which you enabled rover
+
+    ```sh
+    cd ~/rover-quickstart
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    ```sh
+    rover task "Create a fizzbuzz bash program as a programming example"
+    ```
+  </StepItem>
+  <StepItem step={3}>
+    You can now read the Common Workflows document to see what are the common ways in which you can interact with rover.
+  </StepItem>
+</StepList>
