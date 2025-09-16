@@ -126,7 +126,7 @@ export default defineConfig({
         },
         {
           label: 'Rover',
-          items: [],
+          autogenerate: { directory: 'rover' },
         },
         {
           label: 'Guides',
