@@ -1,8 +1,9 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import starlightLinksValidator from 'starlight-links-validator';
+import starlightThemeRapide from 'starlight-theme-rapide';
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
-import starlightThemeRapide from 'starlight-theme-rapide'
 
 import { posthogCode } from './posthog.mjs';
 
@@ -32,7 +33,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Endor Documentation',
-      plugins: [starlightThemeRapide()],
+      plugins: [starlightLinksValidator(), starlightThemeRapide()],
       head,
       customCss: [
         './src/styles/global.css'

@@ -17,6 +17,7 @@
     "@tailwindcss/vite": "^4.1.13",
     "astro": "^5.13.7",
     "sharp": "^0.32.6",
+    "starlight-links-validator": "^0.17.0",
     "starlight-theme-rapide": "^0.5.1",
     "svelte": "^5.38.10",
     "tailwindcss": "^4.1.13",
