@@ -5,6 +5,7 @@ description: Quickstart on how to install and run rover
 
 import StepList from '../../../components/StepList.svelte';
 import StepItem from '../../../components/StepItem.svelte';
+import { Card, CardGrid } from '@astrojs/starlight/components';
 
 Installing rover and getting it to work for you is straightforward, just follow the steps:
 
@@ -34,11 +35,11 @@ on your filesystem:
 
 <StepList title="Initializing rover">
   <StepItem step={1}>
-    Navigate to a project in which you want to enable rover
+    Navigate to a project in which you want to enable rover. This project needs to have git initialized, and at least one commit has to exist in its history.
 
     ```sh
-    mkdir -p ~/rover-quickstart && cd ~/rover-quickstart && git init
-    touch README.md && git add README.md && git commit -a -m 'Initial commit'
+    mkdir -p ~/rover-quickstart && cd ~/rover-quickstart && git init && \
+      touch README.md && git add README.md && git commit -a -m 'Initial commit'
     ```
   </StepItem>
   <StepItem step={2}>

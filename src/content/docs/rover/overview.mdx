@@ -5,6 +5,7 @@ description: Rover overview
 
 import StepList from '../../../components/StepList.svelte';
 import StepItem from '../../../components/StepItem.svelte';
+import { Card, CardGrid } from '@astrojs/starlight/components';
 
 # Rover Overview
 
@@ -64,10 +65,36 @@ Rover provides:
 - **Agent Integration**: Unified interface for different AI coding agents
 - **Build System**: Single ES module bundle using tsdown
 
+## Next Steps
+
+<CardGrid>
+  <Card title="Quickstart" icon="forward-slash">
+    Experiment hands-on with rover on your own projects or start with an empty one.
+
+    [Quickstart →](/rover/quickstart)
+  </Card>
+
+  <Card title="Common Workflows" icon="forward-slash">
+    Read more about common workflows with rover and how they make you more productive. From initialization all the way down to debugging.
+
+    [Common Workflows →](/rover/common-workflows)
+  </Card>
+
+  <Card title="VSCode Extension" icon="document">
+    Integrate Endor with VSCode to never leave your favorite IDE in order to get agentic help.
+
+    [VSCode Extension →](/rover/vscode-extension)
+  </Card>
+
+  <Card title="Command Reference" icon="document">
+    Exhaustive rover command reference.
+
+    [Command Reference →](/rover/command-reference)
+  </Card>
+</CardGrid>
 
 ## Community and Support
 
 - **GitHub**: [github.com/endorhq/rover](https://github.com/endorhq/rover)
 - **Discord**: [Join our community](https://discord.gg/VGzGVWxrXz)
-- **Documentation**: Comprehensive guides and API references
 - **License**: Apache 2.0 - open source and commercially friendly
