@@ -80,6 +80,10 @@ export default defineConfig({
       ],
       sidebar: [
         {
+          label: 'Rover',
+          autogenerate: { directory: 'rover' },
+        },
+        {
           label: 'CLI',
           items: [
             {
@@ -123,10 +127,6 @@ export default defineConfig({
         {
           label: 'Reference',
           autogenerate: { directory: 'reference' },
-        },
-        {
-          label: 'Rover',
-          autogenerate: { directory: 'rover' },
         },
         {
           label: 'Guides',

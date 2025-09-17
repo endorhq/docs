@@ -1,6 +1,8 @@
 ---
 title: Common Workflows
 description: What are the Rover common workflows and how you can get benefit from them
+sidebar:
+  order: 3
 ---
 
 import StepList from '../../../components/StepList.svelte';
@@ -81,6 +83,8 @@ Had you cloned a rover pre-initialized repository, you just need to init it loca
 
 The main concept of rover are tasks. Tasks can be as complex and big as needed, however, if you request smaller tasks or concise ones and with pointers, it will be easier for the agent to figure out how to implement them, but they can be whatever you want, so... try them out and experiment to find out how they best fit your needs!
 
+Every task in rover has its own git worktree. By doing this, rover is able to work on multiple tasks in parallel without them conflicting with each other, or with your own work.
+
 ### Task creation
 
 Let's ask rover to create a simple task from scratch on an empty repository:
@@ -109,8 +113,86 @@ Let's ask rover to create a simple task from scratch on an empty repository:
   </StepItem>
 </StepList>
 
+You might be happy with the first implementation of this task made by the agent, but in most situations, you will want to refine what it did. In order to accomplish this, rover has iterations of a task.
+
 ## Inspecting, testing, trying and debugging
 
+### Iterations
+
+Iterations are another core concept of rover: you can have as many iterations as you need as part of one task. They reflect the interaction between you, and the agent with regards to a specific task. Whenever you ask rover to create a new iteration on a task, the rest of the iterations will be took into account and will be part of the context of the overall task, leading to the final result -- the last iteration.
+
 ### Inspect agent proposed changes
+
+Besides listing the current tasks, or watching the listing, you can also inspect tasks and their iterations.
+
+<StepList title="Inspecting tasks">
+  <StepItem step={1}>
+    Inspect a task. This will provide you some information about the task, the iterations, and the files that describe the iteration.
+
+    ```sh
+    rover inspect 1
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    If the previous step lists a `plan.md` file in the iteration details, we can check its contents
+
+    ```sh
+    rover inspect 1 --file plan.md
+    ```
+  </StepItem>
+</StepList>
+
+### Merge, push
+
+Rover does not dictate how you should work with git, it just tries to help you with your own workflow. Following this principle, you might want to:
+
+#### Merge proposed changes directly to a branch
+
+<StepList title="Merge proposed changes to the current branch">
+  <StepItem step={1}>
+  You can merge a task branch in completed status by using `rover merge`
+
+  ```sh
+  rover list
+  ```
+  </StepItem>
+  <StepItem step={2}>
+  ```sh
+  rover merge 1
+  ```
+  </StepItem>
+</StepList>
+
+#### Push branch to a remote
+
+
 ### Test, try and debug
 ### Improve and complete agent
+
+# Other Resources
+
+<CardGrid>
+  <Card title="VSCode Extension" icon="document">
+    Integrate Endor with VSCode to never leave your favorite IDE in order to get agentic help.
+
+    [VSCode Extension →](/rover/vscode-extension)
+  </Card>
+
+  <Card title="Command Reference" icon="document">
+    Exhaustive rover command reference.
+
+    [Command Reference →](/rover/command-reference)
+  </Card>
+
+  <Card title="Overview" icon="forward-slash">
+    Rover Overview.
+
+    [Overview →](/rover/overview)
+  </Card>
+
+  <Card title="Quickstart" icon="forward-slash">
+    Experiment hands-on with rover on your own projects or start with an empty one.
+
+    [Quickstart →](/rover/quickstart)
+  </Card>
+</CardGrid>
