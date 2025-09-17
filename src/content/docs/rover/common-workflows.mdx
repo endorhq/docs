@@ -3,48 +3,114 @@ title: Common Workflows
 description: What are the Rover common workflows and how you can get benefit from them
 ---
 
-## How Rover Works
+import StepList from '../../../components/StepList.svelte';
+import StepItem from '../../../components/StepItem.svelte';
+import { Card, CardGrid } from '@astrojs/starlight/components';
 
-### 1. Initialization
-```bash
-rover init .
-```
-- Analyzes your project structure and requirements
-- Detects available AI agents and development tools
-- Creates Rover configuration without modifying your codebase
+In this page you can find what are the most common workflows with rover, and how you can take advantage of them. There are three main kind of workflows at this time:
 
-### 2. Task Creation
-```bash
-rover task
-```
-- Creates isolated Git worktree for the task
-- Spins up containerized environment
-- Configures selected AI agent with project context
-- Executes predefined workflow until completion
+- Initialization: initializing a repository with rover is the prerequisite for the rest of the workflows.
+- Task creation and iteration: the core features of rover when it comes to implementing new functionalities, or refining existing ones.
+- Inspection and debugging: for changeset inspection, testing and debugging.
 
-### 3. Task Management
-```bash
-rover ls -w          # List tasks with watch mode
-rover inspect 1      # Inspect task results
-rover iterate 1      # Add new instructions
-rover shell 1        # Access task environment
-rover merge 1        # Merge changes to main branch
-```
+## Initialization
 
-### 4. Parallel Execution
+Initializing rover in a repository is the first step and a prerequisite to use it.
 
-Multiple tasks can run simultaneously, each in complete isolation:
+### Configuration and state files
 
-```mermaid
-graph TD
-    A[Your Repository] --> B[Rover Manager]
-    B --> C[Task 1: Claude Agent]
-    B --> D[Task 2: Gemini Agent]
-    B --> E[Task 3: Codex Agent]
-    C --> F[Git Worktree 1]
-    D --> G[Git Worktree 2]
-    E --> H[Git Worktree 3]
-    F --> I[Container 1]
-    G --> J[Container 2]
-    H --> K[Container 3]
-```
+Rover has two different set of configuration and state files. All of them are stored under your project repository:
+
+- `.rover`: this directory contains settings that are related to user preferences, such as what is your preferred agent. Not meant to be checked in git.
+- `rover.json`: this file contains project settings, such as what are the languages in this repo, what package manager it uses, and whether commits should include agent attribution. Meant to be checked in git.
+
+There are two types of initialization: from scratch, and when a repository was cloned with a pre-initialized `rover.json`, in which case only the `.rover` directory needs to be populated.
+
+#### Initialization
+
+The command required to initialized the repository is the same in both cases: `rover init`.
+
+<StepList title="Initializing rover from scratch">
+  <StepItem step={1}>
+    Navigate to a project in which you want to enable rover. This project needs to have git initialized, and at least one commit has to exist in its history.
+
+    ```sh
+    mkdir -p ~/rover-quickstart && cd ~/rover-quickstart && git init && \
+      touch README.md && git add README.md && git commit -a -m 'Initial commit'
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Init rover
+
+    ```sh
+    rover init -y
+    ```
+
+    Rover will detect all supported installed agents in your system. You can init rover in as many projects as you wish.
+  </StepItem>
+  <StepItem step={3}>
+    Rover is fully initialized!
+  </StepItem>
+</StepList>
+
+Had you cloned a rover pre-initialized repository, you just need to init it locally after cloning:
+
+<StepList title="Initializing rover on a rover pre-initialized repo">
+  <StepItem step={1}>
+    Clone your project that has already been initialized by rover:
+
+    ```sh
+    git clone git@github.com:myorg/myrepo.git && cd myrepo
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Init rover
+
+    ```sh
+    rover init -y
+    ```
+
+    Rover will detect all supported installed agents in your system. You can init rover in as many projects as you wish.
+  </StepItem>
+  <StepItem step={3}>
+    Rover is fully initialized!
+  </StepItem>
+</StepList>
+
+## Task creation and iteration
+
+The main concept of rover are tasks. Tasks can be as complex and big as needed, however, if you request smaller tasks or concise ones and with pointers, it will be easier for the agent to figure out how to implement them, but they can be whatever you want, so... try them out and experiment to find out how they best fit your needs!
+
+### Task creation
+
+Let's ask rover to create a simple task from scratch on an empty repository:
+
+<StepList title="Task Creation">
+  <StepItem step={1}>
+    Navigate to a project that was previously initialized with rover
+
+    ```sh
+    cd ~/my-project
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    You can ask rover to create a program, for example [fizzbuzz](https://en.wikipedia.org/wiki/Fizz_buzz)
+
+    ```sh
+    rover task -y "Create a fizzbuzz bash program as a programming example"
+    ```
+  </StepItem>
+  <StepItem step={3}>
+  You can follow the progress of all tasks by watching the task list
+
+  ```sh
+  rover list -w
+  ```
+  </StepItem>
+</StepList>
+
+## Inspecting, testing, trying and debugging
+
+### Inspect agent proposed changes
+### Test, try and debug
+### Improve and complete agent

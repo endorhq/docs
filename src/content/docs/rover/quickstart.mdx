@@ -7,6 +7,8 @@ import StepList from '../../../components/StepList.svelte';
 import StepItem from '../../../components/StepItem.svelte';
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
+## Install
+
 Installing rover and getting it to work for you is straightforward, just follow the steps:
 
 <StepList title="Installing rover">
@@ -29,6 +31,7 @@ Installing rover and getting it to work for you is straightforward, just follow 
   </StepItem>
 </StepList>
 
+## Initialize
 
 From here on you are ready to enable rover on a project that you have
 on your filesystem:
@@ -46,7 +49,7 @@ on your filesystem:
     Init rover
 
     ```sh
-    rover init
+    rover init -y
     ```
 
     Rover will detect all supported installed agents in your system. You can init rover in as many projects as you wish.
@@ -65,11 +68,41 @@ on your filesystem:
     ```
   </StepItem>
   <StepItem step={2}>
+    Let's ask rover to create a [fizzbuzz](https://en.wikipedia.org/wiki/Fizz_buzz) program
+
     ```sh
-    rover task "Create a fizzbuzz bash program as a programming example"
+    rover task -y "Create a fizzbuzz bash program as a programming example"
     ```
   </StepItem>
   <StepItem step={3}>
     You can now read the Common Workflows document to see what are the common ways in which you can interact with rover
   </StepItem>
 </StepList>
+
+## Other Resources
+
+<CardGrid>
+  <Card title="Common Workflows" icon="forward-slash">
+    Read more about common workflows with rover and how they make you more productive. From initialization all the way down to debugging.
+
+    [Common Workflows →](/rover/common-workflows)
+  </Card>
+
+  <Card title="VSCode Extension" icon="document">
+    Integrate Endor with VSCode to never leave your favorite IDE in order to get agentic help.
+
+    [VSCode Extension →](/rover/vscode-extension)
+  </Card>
+
+  <Card title="Command Reference" icon="document">
+    Exhaustive rover command reference.
+
+    [Command Reference →](/rover/command-reference)
+  </Card>
+
+  <Card title="Overview" icon="forward-slash">
+    Rover Overview.
+
+    [Overview →](/rover/overview)
+  </Card>
+</CardGrid>
