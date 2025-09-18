@@ -85,9 +85,9 @@ The main concept of rover are tasks. Tasks can be as complex and big as needed, 
 
 Every task in rover has its own git worktree. By doing this, rover is able to work on multiple tasks in parallel without them conflicting with each other, or with your own work.
 
-### Task creation
+### Task Creation
 
-Let's ask rover to create a simple task from scratch on an empty repository:
+Ask rover to create a simple task from scratch on an empty repository.
 
 <StepList title="Task Creation">
   <StepItem step={1}>
@@ -121,7 +121,7 @@ You might be happy with the first implementation of this task made by the agent,
 
 Iterations are another core concept of rover: you can have as many iterations as you need as part of one task. They reflect the interaction between you, and the agent with regards to a specific task. Whenever you ask rover to create a new iteration on a task, the rest of the iterations will be took into account and will be part of the context of the overall task, leading to the final result -- the last iteration.
 
-### Inspect agent proposed changes
+### Inspect agent proposed plan
 
 Besides listing the current tasks, or watching the listing, you can also inspect tasks and their iterations.
 
@@ -141,6 +141,8 @@ Besides listing the current tasks, or watching the listing, you can also inspect
     ```
   </StepItem>
 </StepList>
+
+Besides the plan, you can also check for the `context.md`, `changes.md` and `summary.md` documents that represent: the context of the change, what are the changes that need to be implemented, and the summary with all the changes that were made by the agent.
 
 ### Merge, push
 
@@ -165,9 +167,87 @@ Rover does not dictate how you should work with git, it just tries to help you w
 
 #### Push branch to a remote
 
+<StepList title="Push branch to the remote">
+  <StepItem step={1}>
+  You can push the working branch to the remote repository. If there are remaining uncommitted changes, you will be asked whether you want to commit them.
+
+  ```sh
+  rover list
+  ```
+  </StepItem>
+  <StepItem step={2}>
+  ```sh
+  rover push 1
+  ```
+  </StepItem>
+</StepList>
 
 ### Test, try and debug
-### Improve and complete agent
+
+There are multiple ways to check what code diffs the agent is proposing. The most straightforward one is to ask rover for a `diff` of the changes.
+
+<StepList title="Check proposed diff">
+  <StepItem step={1}>
+  ```sh
+  rover diff 1
+  ```
+  </StepItem>
+</StepList>
+
+Check the [command reference](/rover/command-reference) to learn more about what extra arguments and parameters the `rover diff` command supports.
+
+#### Try agent proposed changes
+
+In order to try the proposed changes, you have to `cd` into the git worktree path. Rover allows you to do this by the command `rover shell`. By default, `rover shell` will use your current `$SHELL` to spawn a new instance on the worktree of the task as the current working directory of the new process.
+
+:::note
+The shell open by `rover shell` will run in your host environment by default, if you wish to run the code in a containerized environment you can start the shell with `rover shell -c` instead.
+:::
+
+<StepList title="Try proposed changes">
+  <StepItem step={1}>
+  ```sh
+  rover shell 1
+  ```
+  </StepItem>
+  <StepItem step={2}>
+  In this [task creation](#task-creation) run, the agent created a `fizzbuzz.sh` file that we can try on the shell. Your mileage may vary.
+
+  ```sh
+  sh fizzbuzz.sh
+  ```
+  </StepItem>
+</StepList>
+
+Within the workspace you can also use `git` normally. The only special circumstance is that the system is inside a git worktree.
+
+In this environment is also perfectly fine to run tests and perform checks which ensure the quality of the overall changeset.
+
+### Improve and complete agent changes
+
+If the agent has produced a result that needs some small changes to be ready, you can add those changes directly to the worktree. Let's assume that we want to add a `Version: 1.0` string on the `fizzbuzz.sh` output.
+
+<StepList title="Improve proposed changes">
+  <StepItem step={1}>
+  ```sh
+  rover shell 1
+  ```
+  </StepItem>
+  <StepItem step={2}>
+  Edit the file, perform the required changes and save it
+
+  ```sh
+  $EDITOR fizzbuzz.sh
+  ```
+  </StepItem>
+  <StepItem step={3}>
+  Commit your changes
+
+  ```sh
+  git commit -a -m 'chore: add version number to the output'
+  ```
+  </StepItem>
+</StepList>
 
 # Other Resources
 
