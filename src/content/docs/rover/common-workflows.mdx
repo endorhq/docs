@@ -9,15 +9,15 @@ import StepList from '../../../components/StepList.svelte';
 import StepItem from '../../../components/StepItem.svelte';
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-In this page you can find what are the most common workflows with rover, and how you can take advantage of them. There are three main kind of workflows at this time:
+In this page you can find what are the most common workflows with Rover, and how you can take advantage of them. There are three main kind of workflows at this time:
 
-- Initialization: initializing a repository with rover is the prerequisite for the rest of the workflows.
-- Task creation and iteration: the core features of rover when it comes to implementing new functionalities, or refining existing ones.
+- Initialization: initializing a repository with Rover is the prerequisite for the rest of the workflows.
+- Task creation and iteration: the core features of Rover when it comes to implementing new functionalities, or refining existing ones.
 - Inspection and debugging: for changeset inspection, testing and debugging.
 
 ## Initialization
 
-Initializing rover in a repository is the first step and a prerequisite to use it.
+Initializing Rover in a repository is the first step and a prerequisite to use it.
 
 ### Configuration and state files
 
@@ -32,9 +32,9 @@ There are two types of initialization: from scratch, and when a repository was c
 
 The command required to initialized the repository is the same in both cases: `rover init`.
 
-<StepList title="Initializing rover from scratch">
+<StepList title="Initializing Rover from scratch">
   <StepItem step={1}>
-    Navigate to a project in which you want to enable rover. This project needs to have git initialized, and at least one commit has to exist in its history.
+    Navigate to a project in which you want to enable Rover. This project needs to have git initialized, and at least one commit has to exist in its history.
 
     ```sh
     mkdir -p ~/rover-quickstart && cd ~/rover-quickstart && git init && \
@@ -42,37 +42,37 @@ The command required to initialized the repository is the same in both cases: `r
     ```
   </StepItem>
   <StepItem step={2}>
-    Init rover
+    Init Rover
 
     ```sh
     rover init -y
     ```
 
-    Rover will detect all supported installed agents in your system. You can init rover in as many projects as you wish.
+    Rover will detect all supported installed agents in your system. You can init Rover in as many projects as you wish.
   </StepItem>
   <StepItem step={3}>
     Rover is fully initialized!
   </StepItem>
 </StepList>
 
-Had you cloned a rover pre-initialized repository, you just need to init it locally after cloning:
+Had you cloned a Rover pre-initialized repository, you just need to init it locally after cloning:
 
-<StepList title="Initializing rover on a rover pre-initialized repo">
+<StepList title="Initializing Rover on a Rover pre-initialized repo">
   <StepItem step={1}>
-    Clone your project that has already been initialized by rover:
+    Clone your project that has already been initialized by Rover:
 
     ```sh
     git clone git@github.com:myorg/myrepo.git && cd myrepo
     ```
   </StepItem>
   <StepItem step={2}>
-    Init rover
+    Init Rover
 
     ```sh
     rover init -y
     ```
 
-    Rover will detect all supported installed agents in your system. You can init rover in as many projects as you wish.
+    Rover will detect all supported installed agents in your system. You can init Rover in as many projects as you wish.
   </StepItem>
   <StepItem step={3}>
     Rover is fully initialized!
@@ -81,24 +81,24 @@ Had you cloned a rover pre-initialized repository, you just need to init it loca
 
 ## Task creation and iteration
 
-The main concept of rover are tasks. Tasks can be as complex and big as needed, however, if you request smaller tasks or concise ones and with pointers, it will be easier for the agent to figure out how to implement them, but they can be whatever you want, so... try them out and experiment to find out how they best fit your needs!
+The main concept of Rover are tasks. Tasks can be as complex and big as needed, however, if you request smaller tasks or concise ones and with pointers, it will be easier for the agent to figure out how to implement them, but they can be whatever you want, so... try them out and experiment to find out how they best fit your needs!
 
-Every task in rover has its own git worktree. By doing this, rover is able to work on multiple tasks in parallel without them conflicting with each other, or with your own work.
+Every task in Rover has its own git worktree. By doing this, Rover is able to work on multiple tasks in parallel without them conflicting with each other, or with your own work.
 
 ### Task Creation
 
-Ask rover to create a simple task from scratch on an empty repository.
+Ask Rover to create a simple task from scratch on an empty repository.
 
 <StepList title="Task Creation">
   <StepItem step={1}>
-    Navigate to a project that was previously initialized with rover
+    Navigate to a project that was previously initialized with Rover
 
     ```sh
     cd ~/my-project
     ```
   </StepItem>
   <StepItem step={2}>
-    You can ask rover to create a program, for example [fizzbuzz](https://en.wikipedia.org/wiki/Fizz_buzz)
+    You can ask Rover to create a program, for example [fizzbuzz](https://en.wikipedia.org/wiki/Fizz_buzz)
 
     ```sh
     rover task -y "Create a fizzbuzz bash program as a programming example"
@@ -119,11 +119,11 @@ Ask rover to create a simple task from scratch on an empty repository.
   </StepItem>
 </StepList>
 
-You might be happy with the first implementation of this task made by the agent, but in most situations, you will want to refine what it did. In order to accomplish this, rover has iterations of a task.
+You might be happy with the first implementation of this task made by the agent, but in most situations, you will want to refine what it did. In order to accomplish this, Rover has iterations of a task.
 
 ### Iterations
 
-Iterations are another core concept of rover: you can have as many iterations as you need as part of a task. They reflect the interaction between you, and the agent with regards to a specific task. Whenever you ask rover to create a new iteration on a task, the rest of the iterations will be took into account and will be part of the context of the overall task, leading to the final result -- the last iteration.
+Iterations are another core concept of Rover: you can have as many iterations as you need as part of a task. They reflect the interaction between you, and the agent with regards to a specific task. Whenever you ask Rover to create a new iteration on a task, the rest of the iterations will be took into account and will be part of the context of the overall task, leading to the final result -- the last iteration.
 
 <StepList title="Task Iteration">
   <StepItem step={1}>
@@ -141,8 +141,6 @@ Iterations are another core concept of rover: you can have as many iterations as
   ```
   </StepItem>
 </StepList>
-
-## Inspecting, testing, trying and debugging
 
 ### Inspect agent proposed plan
 
@@ -167,47 +165,11 @@ Besides listing the current tasks, or watching the listing, you can also inspect
 
 Besides the plan, you can also check for the `context.md`, `changes.md` and `summary.md` documents that represent: the context of the change, what are the changes that need to be implemented, and the summary with all the changes that were made by the agent.
 
-### Merge, push
-
-Rover does not dictate how you should work with git, it just tries to help you with your own workflow. Following this principle, you might want to merge proposed changes directly to a branch, or push the branch to a remote.
-
-#### Merge proposed changes directly to a branch
-
-<StepList title="Merge proposed changes to the current branch">
-  <StepItem step={1}>
-  You can merge a task branch in completed status by using `rover merge`
-
-  ```sh
-  rover list
-  ```
-  </StepItem>
-  <StepItem step={2}>
-  ```sh
-  rover merge 1
-  ```
-  </StepItem>
-</StepList>
-
-#### Push branch to a remote
-
-<StepList title="Push branch to the remote">
-  <StepItem step={1}>
-  You can push the working branch to the remote repository. If there are remaining uncommitted changes, you will be asked whether you want to commit them.
-
-  ```sh
-  rover list
-  ```
-  </StepItem>
-  <StepItem step={2}>
-  ```sh
-  rover push 1
-  ```
-  </StepItem>
-</StepList>
+## Inspecting, testing, trying and debugging
 
 ### Test, try and debug
 
-There are multiple ways to check what code diffs the agent is proposing. The most straightforward one is to ask rover for a `diff` of the changes.
+There are multiple ways to check what code diffs the agent is proposing. The most straightforward one is to ask Rover for a `diff` of the changes.
 
 <StepList title="Check proposed diff">
   <StepItem step={1}>
@@ -275,6 +237,46 @@ If the agent has produced a result that needs some small changes to be ready, yo
   </StepItem>
 </StepList>
 
+## Integrating generated code
+
+### Merge, push
+
+Rover does not dictate how you should work with git, it just tries to help you with your own workflow. Following this principle, you might want to merge proposed changes directly to a branch, or push the branch to a remote.
+
+#### Merge proposed changes directly to a branch
+
+<StepList title="Merge proposed changes to the current branch">
+  <StepItem step={1}>
+  You can merge a task branch in completed status by using `rover merge`
+
+  ```sh
+  rover list
+  ```
+  </StepItem>
+  <StepItem step={2}>
+  ```sh
+  rover merge 1
+  ```
+  </StepItem>
+</StepList>
+
+#### Push branch to a remote
+
+<StepList title="Push branch to the remote">
+  <StepItem step={1}>
+  You can push the working branch to the remote repository. If there are remaining uncommitted changes, you will be asked whether you want to commit them.
+
+  ```sh
+  rover list
+  ```
+  </StepItem>
+  <StepItem step={2}>
+  ```sh
+  rover push 1
+  ```
+  </StepItem>
+</StepList>
+
 # Other Resources
 
 <CardGrid>
@@ -285,7 +287,7 @@ If the agent has produced a result that needs some small changes to be ready, yo
   </Card>
 
   <Card title="Command Reference" icon="document">
-    Exhaustive rover command reference.
+    Exhaustive Rover command reference.
 
     [Command Reference →](/rover/command-reference)
   </Card>
@@ -297,7 +299,7 @@ If the agent has produced a result that needs some small changes to be ready, yo
   </Card>
 
   <Card title="Quickstart" icon="forward-slash">
-    Experiment hands-on with rover on your own projects or start with an empty one.
+    Experiment hands-on with Rover on your own projects or start with an empty one.
 
     [Quickstart →](/rover/quickstart)
   </Card>
