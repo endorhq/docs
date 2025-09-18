@@ -121,11 +121,28 @@ Ask rover to create a simple task from scratch on an empty repository.
 
 You might be happy with the first implementation of this task made by the agent, but in most situations, you will want to refine what it did. In order to accomplish this, rover has iterations of a task.
 
-## Inspecting, testing, trying and debugging
-
 ### Iterations
 
-Iterations are another core concept of rover: you can have as many iterations as you need as part of one task. They reflect the interaction between you, and the agent with regards to a specific task. Whenever you ask rover to create a new iteration on a task, the rest of the iterations will be took into account and will be part of the context of the overall task, leading to the final result -- the last iteration.
+Iterations are another core concept of rover: you can have as many iterations as you need as part of a task. They reflect the interaction between you, and the agent with regards to a specific task. Whenever you ask rover to create a new iteration on a task, the rest of the iterations will be took into account and will be part of the context of the overall task, leading to the final result -- the last iteration.
+
+<StepList title="Task Iteration">
+  <StepItem step={1}>
+    Following the previous example, we can ask an iteration of that task. We want all text to be printed to screen to be done in [FIGlet style](https://en.wikipedia.org/wiki/FIGlet).
+
+    ```sh
+    rover iterate 1 "Update all output to use the figlet style"
+    ```
+  </StepItem>
+  <StepItem step={2}>
+  As with task creation, you can follow the logs of the iteration as it is happening. The task number does not change with new iterations.
+
+  ```sh
+  rover logs -f 1
+  ```
+  </StepItem>
+</StepList>
+
+## Inspecting, testing, trying and debugging
 
 ### Inspect agent proposed plan
 
@@ -152,7 +169,7 @@ Besides the plan, you can also check for the `context.md`, `changes.md` and `sum
 
 ### Merge, push
 
-Rover does not dictate how you should work with git, it just tries to help you with your own workflow. Following this principle, you might want to:
+Rover does not dictate how you should work with git, it just tries to help you with your own workflow. Following this principle, you might want to merge proposed changes directly to a branch, or push the branch to a remote.
 
 #### Merge proposed changes directly to a branch
 
@@ -252,6 +269,9 @@ If the agent has produced a result that needs some small changes to be ready, yo
   ```sh
   git commit -a -m 'chore: add version number to the output'
   ```
+  </StepItem>
+  <StepItem step={4}>
+  It depends on your shell, but usually you can exit the shell environment by writing `exit` or with the `Ctrl+d` key combination
   </StepItem>
 </StepList>
 
