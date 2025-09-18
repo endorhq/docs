@@ -1,4 +1,36 @@
 ---
 title: VSCode extension
 description: Documentation on how to install and use the VSCode extension
+sidebar:
+  order: 4
 ---
+
+import StepList from '../../../components/StepList.svelte';
+import StepItem from '../../../components/StepItem.svelte';
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid>
+  <Card title="Command Reference" icon="document">
+    Exhaustive Rover command reference.
+
+    [Command Reference →](/rover/command-reference)
+  </Card>
+
+  <Card title="Overview" icon="forward-slash">
+    Rover Overview.
+
+    [Overview →](/rover/overview)
+  </Card>
+
+  <Card title="Quickstart" icon="forward-slash">
+    Experiment hands-on with Rover on your own projects or start with an empty one.
+
+    [Quickstart →](/rover/quickstart)
+  </Card>
+
+  <Card title="Common Workflows" icon="forward-slash">
+    Read more about common workflows with Rover and how they make you more productive. From initialization all the way down to debugging.
+
+    [Common Workflows →](/rover/common-workflows)
+  </Card>
+</CardGrid>
