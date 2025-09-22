@@ -9,6 +9,87 @@ import StepList from '../../../components/StepList.svelte';
 import StepItem from '../../../components/StepItem.svelte';
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
+## Installation
+
+1. Install the Rover CLI. It needs to be available in your `$PATH` environment variable.
+2. ...
+
+## Initialization
+
+The first step, as happens with the CLI, is to initialize the repository where you want to enable Rover.
+
+<StepList title="Rover Initialization">
+  <StepItem step={1}>
+    If no workspace is open, the initialization guide will suggest you to open a workspace.
+
+    ![Screenshot showing VSCode open with no workspace shows message to create a workspace](../../../assets/rover/1-initialize-rover-no-workspace.png)
+  </StepItem>
+  <StepItem step={2}>
+    After opening a workspace, you will see a button to `Initialize Rover` on it.
+
+    ![Screenshot showing VSCode open with a workspace open shows message to initialize Rover](../../../assets/rover/2-initialize-rover.png)
+  </StepItem>
+  <StepItem step={3}>
+    Now you are ready to create tasks!
+
+    ![Screenshot showing Rover fully initialized](../../../assets/rover/3-rover-initialized.png)
+  </StepItem>
+</StepList>
+
+## Task management
+
+<StepList title="Rover task management">
+  <StepItem step={1}>
+    You can create a new task by filling the task text field.
+
+    ![Screenshot showing the empty task list with the new task field filled with a prompt that reads 'Create a fizzbuzz bash program as a programming example'](../../../assets/rover/4-rover-initialized-with-prompt.png)
+  </StepItem>
+  <StepItem step={2}>
+    After creation, you will see the new task in the list.
+
+    ![Screenshot showing the new task in the list of tasks](../../../assets/rover/6-task-list-in-progress.png)
+  </StepItem>
+  <StepItem step={3}>
+    The status of the tasks will be automatically refreshed in this listing as they progress.
+
+    ![Screenshot showing the task in the list of tasks in an iterating state](../../../assets/rover/7-task-list-iterating.png)
+  </StepItem>
+  <StepItem step={4}>
+    Both the Rover CLI and the extension use the same single source of truth, so that you can use both tools as it best fits your needs and workflows.
+
+    ![Screenshot showing the Rover CLI showing the same information as the VSCode extension](../../../assets/rover/8-task-list-cli.png)
+  </StepItem>
+  <StepItem step={5}>
+    The task will progress and eventually reach the `Completed` status. Here you can see some actions you can perform from the UI, such as:
+
+    - View task logs
+    - Inspect iteration files (`context.md`, `plan.md`, `review.md`, `summary.md`)
+    - Compare the changes
+    - Open a shell in the git worktree of the task
+    - Merge the task branch
+    - Push the task branch
+    - Open a new VSCode instance in the workspace of the task
+    - Create a new iteration
+    - Delete the task
+
+    ![Screenshot showing the task list with the task in "Completed" status](../../../assets/rover/9-task-list-completed.png)
+
+    ![Screenshot showing the task list with the task in "Completed" status, with the contextual menu open to show more available actions for the task](../../../assets/rover/10-task-list-task-actions.png)
+  </StepItem>
+</StepList>
+
+## Task workspace
+
+One of the core actions with the Rover VSCode extension is to open the worktree of the change in a new VSCode instance, in its own workspace. This ensures that your context (as a human) changes, and that you are working in the changes proposed by the agent.
+
+![Screenshot showing a new instance of VSCode open on the new task workspace](../../../assets/rover/11-task-in-its-own-workspace.png)
+
+Here, you can improve the changes that the agent proposed, and continue working as you'd do normally, committing changes, being able to push or merge those changes on another branch.
+
+Your workflow does not have to change, Rover and the Rover VSCode extension will accomodate your workflow instead!
+
+## Other Resources
+
 <CardGrid>
   <Card title="Command Reference" icon="document">
     Exhaustive Rover command reference.
