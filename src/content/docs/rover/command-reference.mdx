@@ -1,0 +1,259 @@
+---
+title: Command Reference
+description: Rover command reference
+sidebar:
+  order: 5
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+Rover command reference.
+
+## Table of Contents
+
+- [Project configuration](#project-configuration)
+  - [`init`](#init)
+- [Create and manage tasks](#create-and-manage-tasks)
+  - [`task`](#task)
+  - [`restart`](#restart)
+  - [`stop`](#stop)
+  - [`list`](#list)
+  - [`inspect`](#inspect)
+  - [`logs`](#logs)
+  - [`delete`](#delete)
+  - [`iterate`](#iterate)
+- [Debug a task](#debug-a-task)
+  - [`shell`](#shell)
+- [Merge changes](#merge-changes)
+  - [`diff`](#diff)
+  - [`merge`](#merge)
+  - [`push`](#push)
+
+## Project configuration
+
+### init
+
+Initialize your project
+
+**Usage:**
+```
+rover init [options] [path]
+```
+
+**Options:**
+
+- `-y, --yes`: Skip all confirmations and run non-interactively
+
+## Create and manage tasks
+
+### task
+
+Start a new task for an AI Agent. It will spawn a new environment to complete it.
+
+**Usage:**
+```
+rover task [options] [description]
+```
+
+**Options:**
+
+- `--from-github <issue>`: Fetch task description from a GitHub issue number
+- `-y, --yes`: Skip all confirmations and run non-interactively
+- `-s, --source-branch <branch>`: Base branch for git worktree creation
+- `-t, --target-branch <branch>`: Custom name for the worktree branch
+- `-a, --agent <agent>`: AI agent to use (claude, gemini, qwen)
+- `--json`: Output the result in JSON format
+- `--debug`: Show debug information like running commands
+
+### restart
+
+Restart a new or failed task
+
+**Usage:**
+```
+rover restart [options] <taskId>
+```
+
+**Options:**
+
+- `--json`: Output the result in JSON format
+
+### stop
+
+Stop a running task and clean up its resources
+
+**Usage:**
+```
+rover stop [options] <taskId>
+```
+
+**Options:**
+
+- `-a, --remove-all`: Remove container, git worktree and branch if they exist
+- `-c, --remove-container`: Remove container if it exists
+- `-g, --remove-git-worktree-and-branch`: Remove git worktree and branch
+- `--json`: Output the result in JSON format
+
+### list
+
+Show tasks and their status
+
+**Usage:**
+```
+rover list [options]
+```
+
+**Options:**
+
+- `-w, --watch`: Watch for changes and refresh every 5 seconds
+- `--json`: Output in JSON format
+
+**Aliases:** `ls`
+
+### inspect
+
+Inspect a task
+
+**Usage:**
+```
+rover inspect [options] <taskId> [iterationNumber]
+```
+
+**Options:**
+
+- `--file <files...>`: Output iteration file contents
+- `--json`: Output in JSON format
+
+### logs
+
+Show execution logs for a task iteration
+
+**Usage:**
+```
+rover logs [options] <taskId> [iterationNumber]
+```
+
+**Options:**
+
+- `-f, --follow`: Follow log output in real-time
+- `--json`: Output the result in JSON format
+
+### delete
+
+Delete a task
+
+**Usage:**
+```
+rover delete [options] <taskId...>
+```
+
+**Options:**
+
+- `-y, --yes`: Skip all confirmations and run non-interactively
+- `--json`: Output in JSON format
+
+**Aliases:** `del`
+
+### iterate
+
+Add instructions to a task and start new iteration
+
+**Usage:**
+```
+rover iterate [options] <taskId> [instructions]
+```
+
+**Options:**
+
+- `-f, --follow`: Follow execution logs in real-time
+- `--json`: Output JSON and skip confirmation prompts
+
+**Aliases:** `iter`
+
+## Debug a task
+
+### shell
+
+Open interactive shell for testing task changes
+
+**Usage:**
+```
+rover shell [options] <taskId>
+```
+
+**Options:**
+
+- `-c, --container`: Start the interactive shell within a container
+
+## Merge changes
+
+### diff
+
+Show git diff between task worktree and main branch
+
+**Usage:**
+```
+rover diff [options] <taskId> [filePath]
+```
+
+**Options:**
+
+- `-b, --branch <name>`: Compare changes with a specific branch
+- `--only-files`: Show only changed filenames
+
+### merge
+
+Merge the task changes into your current branch
+
+**Usage:**
+```
+rover merge [options] <taskId>
+```
+
+**Options:**
+
+- `-f, --force`: Force merge without confirmation
+- `--json`: Output in JSON format
+
+### push
+
+Commit and push task changes to remote, with GitHub PR support
+
+**Usage:**
+```
+rover push [options] <taskId>
+```
+
+**Options:**
+
+- `-m, --message <message>`: Commit message
+- `--json`: Output in JSON format
+
+
+## Other Resources
+
+<CardGrid>
+  <Card title="Overview" icon="forward-slash">
+    Rover Overview.
+
+    [Overview →](/rover/overview)
+  </Card>
+
+  <Card title="Quickstart" icon="forward-slash">
+    Experiment hands-on with Rover on your own projects or start with an empty one.
+
+    [Quickstart →](/rover/quickstart)
+  </Card>
+
+  <Card title="Common Workflows" icon="forward-slash">
+    Read more about common workflows with Rover and how they make you more productive. From initialization all the way down to debugging.
+
+    [Common Workflows →](/rover/common-workflows)
+  </Card>
+
+  <Card title="VSCode Extension" icon="document">
+    Integrate Endor with VSCode to never leave your favorite IDE in order to get agentic help.
+
+    [VSCode Extension →](/rover/vscode-extension)
+  </Card>
+</CardGrid>

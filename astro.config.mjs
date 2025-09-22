@@ -30,6 +30,32 @@ if (isProd) {
 
 // https://astro.build/config
 export default defineConfig({
+  redirects: {
+    '/mcp/overview': {
+      status: 302,
+      destination: '/cli/mcp/overview',
+    },
+    '/mcp/claude-code': {
+      status: 302,
+      destination: '/cli/mcp/claude-code',
+    },
+    '/mcp/cursor': {
+      status: 302,
+      destination: '/cli/mcp/cursor',
+    },
+    '/mcp/goose': {
+      status: 302,
+      destination: '/cli/mcp/goose',
+    },
+    '/mcp/vscode': {
+      status: 302,
+      destination: '/cli/mcp/vscode',
+    },
+    '/mcp/windsurf': {
+      status: 302,
+      destination: '/cli/mcp/windsurf',
+    },
+  },
   integrations: [
     starlight({
       title: 'Endor Documentation',
@@ -54,6 +80,10 @@ export default defineConfig({
       ],
       sidebar: [
         {
+          label: 'Rover',
+          autogenerate: { directory: 'rover' },
+        },
+        {
           label: 'CLI',
           items: [
             {
@@ -63,6 +93,10 @@ export default defineConfig({
             {
               label: 'Setup',
               link: '/cli/setup',
+            },
+            {
+              label: 'MCP',
+              autogenerate: { directory: 'cli/mcp' }
             },
             {
               label: 'Networking',
@@ -85,10 +119,6 @@ export default defineConfig({
               autogenerate: { directory: 'cli/services' },
             }
           ],
-        },
-        {
-          label: 'MCP',
-          autogenerate: { directory: 'mcp' }
         },
         {
           label: 'FAQ',
