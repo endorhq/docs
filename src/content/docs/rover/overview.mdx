@@ -67,6 +67,37 @@ Rover provides:
 - **Agent Integration**: Unified interface for different AI coding agents
 - **Build System**: Single ES module bundle using tsdown
 
+## Telemetry
+
+Rover has very basic telemetry reporting to help us understand how our users prefer to use the tool. This telemetry does not identify or record user data. The only information that is recorded by the telemetry is which action was invoked, and in some cases, very basic information about that action.
+
+### Disabling telemetry
+
+There are two ways to completely disable telemetry in Rover. One is in your home directory Rover settings, and the other one is by exporting the `ROVER_NO_TELEMETRY` environment variable.
+
+<StepList title="Disabling Rover telemetry in your home directory">
+  <StepItem step={1}>
+    ```sh
+    mkdir -p ~/.config/rover
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    ```sh
+    touch ~/.config/rover/.no-telemetry
+    ```
+  </StepItem>
+</StepList>
+
+You can either export a `ROVER_NO_TELEMETRY` environment variable set to `true` globally, or you can set it every time you run the Rover CLI.
+
+<StepList title="Disabling Rover telemetry with an environment variable">
+  <StepItem step={1}>
+    ```sh
+    ROVER_NO_TELEMETRY=true rover list
+    ```
+  </StepItem>
+</StepList>
+
 ## Community and Support
 
 - **GitHub**: [github.com/endorhq/rover](https://github.com/endorhq/rover)
