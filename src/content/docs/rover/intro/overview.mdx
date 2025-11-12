@@ -7,20 +7,11 @@ sidebar:
 
 import StepList from '../../../../components/StepList.svelte';
 import StepItem from '../../../../components/StepItem.svelte';
-import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
+import { LinkCard, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
 
-**Rover is a manager on top of AI coding agents** such as Claude Code, Codex, Gemini, Cursor, and Qwen. Use Rover to **create tasks and assign them to the coding agents** you already use every day.
+**Rover is a manager on top of AI coding agents** such as Claude Code, Codex, Gemini, Cursor, and Qwen. Use Rover to **define multiple tasks and assign them to the coding agents** you already use every day.
 
-Once you create a task, you can forget about it until it's completed. Rover will create an isolated environment per task, a separate git branch, and configure the agent to complete the task autonomously in the background. **Everything runs in your system**, under your control. 
-
-**You can create multiple tasks as they run in parallel**. For example, you can use it to:
-
-- **Assign a full task** (like GitHub issue or Jira ticket) so an agent completes it
-- Develop a **test suite** for a class while you continue working on a different one
-- Write the user documentation for a new feature
-- And much more!
-
-Meanwhile, you can continue working on other things or take a break. **Rover ensures that agents are working for you**.
+Rover will prepare an isolated environment for each task and ensure the agents complete it in the background. **No more chat monitoring, context switching, and interruptions**.
 
 ![Rover showing a list of completed tasks](overview/intro.png)
 
@@ -74,31 +65,21 @@ Meanwhile, you can continue working on other things or take a break. **Rover ens
 
 After completing these steps, follow the tips that Rover will give you to continue. You can also check the [quickstart guide](/rover/intro/quickstart) and the [common workflows](/rover/guides/common-workflows).
 
-## Why Rover?
+## What Rover does for you
 
-AI is here to stay, and coding agents are becoming more powerful every day. However, **the experience from different developers and teams is mixed**. Some people show wonderful success cases of coding agents, while others feel frustrated or avoid them as much as possible.
+- **Assign a full task** (like GitHub issue or Jira ticket). Rover will take care of breaking it down into steps so an AI agent can complete it autonomously
+- **Develop a test suite** for a class while you continue working on a different one. When you are ready, review and merge the test suite changes
+- **Write the user documentation** for a new feature. Get high-quality documentation following the best practices
+- **Automate repetitive tasks** like code refactoring or adding logging. Create a task, and let the agent do the work while you focus on more important things
+- And much more!
 
-The way people use coding agents is **evolving**. From copy/pasting in ChatGPT to directly integrating them where your code lives. 
+## Why developers love Rover
 
-In Endor, we went through a similar process. These are the key learnings we found are:
-
-- **The usage of AI agents across the team is uneven**. This creates friction when working on the same codebase.
-- **Context switching is costly**. Moving between your code, the coding agent sessions, and back to your code interrupts your flow and focus.
-- **Parallelization is key to maximize productivity**. Letting multiple agents work for you while you focus on other tasks is a force multiplier.
-- To parallelize work, you need:
-  - **Isolation**, so that agents do not interfere with each other
-  - A clear **set of steps to get consistent results**
-
-Those learnings led us to build Rover.
-
-### Key Benefits
-
-- **🛠️ Tasks**: Create and manage tasks that AI agents complete on their own
-- **🚀 Parallel Execution**: Run multiple AI agents simultaneously on different tasks
-- **🔒 Complete Isolation**: Each task runs in its own containerized environment with independent Git worktrees
-- **💻 Local Control**: Everything runs on your machine using your existing tools and configurations
-- **🤖 Agent Agnostic**: Works with your preferred AI coding agents without requiring new subscriptions
-- **👐 Open Source**: Released under Apache 2.0 license
+- **Work on multiple tasks at the same time**: Rover creates isolated environments for each task, allowing AI agents to work autonomously without interference
+- **Reduce context switching**: each task runs in the background. The coding agents will produce a set of documents and code changes that you can review when ready
+- **Meet where you are**: Rover works with the coding agents you already use, no need to sign up for new services or subscriptions
+- **Ensure consistency across AI coding agents and teams**: get a consistent environment and workflow for all your coding agents, and share it with your team
+- **It's Open Source**: Released under Apache 2.0 license. You can check the code and contribute
 
 ## Community and Support
 
@@ -108,3 +89,12 @@ We'd love to hear from you! Whether you have questions, feedback, or want to sha
 - **Twitter/X**: Follow us [@EndorHQ](https://twitter.com/EndorHQ) for updates and announcements
 - **Mastodon**: Find us at [@EndorHQ@mastodon.social](https://mastodon.social/@EndorHQ)
 - **Bluesky**: Follow [@endorhq.bsky.social](https://bsky.app/profile/endorhq.bsky.social)
+
+## Next Steps
+
+<CardGrid>
+  <LinkCard title="Common Workflows" href="/rover/common-workflows" description="Read more about common workflows with Rover and how they make you more productive. From initialization all the way down to debugging." />
+  <LinkCard title="VSCode Extension" icon="document" href="/rover/vscode-extension" description="Integrate Endor with VSCode to never leave your favorite IDE in order to get agentic help." />
+  <LinkCard title="Command Reference" icon="document" href="/rover/command-reference" description="Exhaustive Rover command reference." />
+  <LinkCard title="Overview" icon="forward-slash" href="/rover/overview" description="Rover Overview." />
+</CardGrid>

@@ -74,8 +74,8 @@ export default defineConfig({
                 autogenerate: { directory: 'rover/intro' },
               },
               {
-                label: 'Workflows',
-                autogenerate: { directory: 'rover/workflows' },
+                label: 'Key Concepts',
+                autogenerate: { directory: 'rover/concepts' },
               },
               {
                 label: 'Guides',
