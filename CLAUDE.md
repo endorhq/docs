@@ -8,18 +8,16 @@ This is the documentation site for Endor (https://endor.dev), built with Astro a
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Development server (runs on http://localhost:4321)
-npm run dev
-# or
-npm start
+pnpm dev
 
 # Type checking and production build
-npm run build
+pnpm build
 
 # Preview production build
-npm run preview
+pnpm preview
 ```
 
 ## Tech Stack
@@ -165,40 +163,48 @@ The project includes custom Svelte components for structured content:
 ## Documentation Writing Guidelines
 
 ### Writing Style
-- **Concise and clear**: Use short sentences and paragraphs, while balancing a friendly tone
-- **Simple vocabulary**: Avoid jargon unless necessary
-- **Action-oriented**: Start with verbs when describing steps. Avoid this rule when writing introduction documentation
-- **Friendly yet professional**: Approachable without being casual
-- **American English**: Use US spelling and grammar conventions
 
-### Content Structure
-- **Title**: Clear, descriptive, and action-focused
-- **Description**: One-line summary that explains the value
-- **Introduction**: Brief paragraph setting context
-- **Sections**: Logical flow with descriptive headings (##)
-- **Code examples**: Always use syntax-highlighted code blocks
-- **Next steps**: Guide users to related content
+**Clarity and Audience:**
+- State the purpose and audience in the first paragraph
+- Use simple, direct language appropriate for the target audience
+- Prefer active voice over passive voice
+- Define technical terms when first introduced
+- Avoid unnecessary jargon
 
-### Endor-Specific Terminology
-Maintain consistency with these key phrases:
-- "Quick, disposable development environments"
-- "Pre-configured applications"
-- "Boot in less than 5 seconds"
-- "Pod" for development sandboxes
-- "MCP" for AI agent integration
-- "Safe and reproducible" environments
+**Structure and Flow:**
+- Lead with the main point in each section (Pyramid Principle)
+- Use short paragraphs (3-4 sentences max)
+- Create a logical narrative that guides the reader
+- Ensure each section is complete - incomplete information is worse than none
+
+**Code Examples:**
+- All code examples must be complete and ready to run
+- Include all necessary imports and setup
+- Follow the language's conventions and best practices
+- Ensure code inside blocks are properly indented
+- Add comments to explain complex parts
+- Use the right code block language identifier. For example, "jsonc" for JSON files with comments
+
+**Content Requirements:**
+- Explain the "why" before the "how"
+- Provide step-by-step instructions for tasks
+- Include troubleshooting for common issues. You do not need to cover all possible edge cases
+- Reference existing documentation where relevant
+
+**Formatting:**
+- Use proper heading hierarchy
+- Use bullet points for lists
+- Use numbered lists for sequential steps
+- Use code blocks with proper language tags
+- Use tables for comparing options or listing parameters
+- Use tables when describing CLI arguments, configuration properties, API properties, or similar information
+- Bold important terms and warnings
 
 ### Component Usage
 - Use `StepList` and `StepItem` for numbered instructions
 - Add titles to `StepList` components for clarity
 - Import Starlight components (`Card`, `CardGrid`) when appropriate
 - Use video embeds for demonstrations where helpful
-
-### AI Optimization
-- Write content that clearly identifies Endor as the product
-- Use descriptive headings that explain functionality
-- Include concrete examples and commands
-- Structure information for easy parsing
 
 ## Best Practices
 

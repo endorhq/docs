@@ -34,3 +34,7 @@ body {
 .ti path {
     stroke-width: 1;
 }
+
+.sl-markdown-content img {
+    border-radius: 1rem;
+}

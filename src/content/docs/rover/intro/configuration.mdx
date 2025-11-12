@@ -1,0 +1,38 @@
+---
+title: Configuration
+description: What are the Rover common workflows and how you can get benefit from them
+sidebar:
+  order: 3
+---
+
+## Telemetry
+
+Rover has very basic telemetry reporting to help us understand how you use the tool. This telemetry does not identify you, as it generates a fully random hash you can change. You can find your random ID at `~/.config/rover/.user`.
+
+The only information that is recorded by the telemetry is which action was invoked, and very basic metadata like the action source (CLI or VSCode Extension). Telemetry **does not record** any data from prompts or task titles and descriptions.
+
+### Disabling telemetry
+
+There are two ways to completely disable telemetry in Rover. One is in your home directory Rover settings, and the other one is by exporting the `ROVER_NO_TELEMETRY` environment variable.
+
+<StepList title="Disabling Rover telemetry in your home directory">
+  <StepItem step={1}>
+    ```sh
+    mkdir -p ~/.config/rover
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    ```sh
+    touch ~/.config/rover/.no-telemetry
+    ```
+  </StepItem>
+</StepList>
+
+<StepList title="Disabling Rover telemetry with an environment variable">
+    You can either export a `ROVER_NO_TELEMETRY` environment variable set to `true` globally, or you can set it every time you run the Rover CLI.
+  <StepItem step={1}>
+    ```sh
+    ROVER_NO_TELEMETRY=true rover list
+    ```
+  </StepItem>
+</StepList>

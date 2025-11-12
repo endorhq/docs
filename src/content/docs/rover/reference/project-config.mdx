@@ -1,0 +1,522 @@
+---
+title: Project Configuration (rover.json)
+description: Rover project configuration file (rover.json) reference
+sidebar:
+  order: 2
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The `rover.json` file is Rover's project configuration file that controls how AI agents interact with your codebase. This reference documentation explains each configuration field, provides practical examples, and covers security best practices.
+
+## Introduction
+
+The `rover.json` file:
+
+- Lives in your project root directory
+- Is committed to version control and shared across your team
+- Configures AI agent behavior, environment detection, and runtime settings
+- Is automatically created when you run `rover init`
+
+**Key distinction:** `rover.json` defines project-wide settings, while `.rover/settings.json` stores user-specific preferences (like user preferences). Only commit `rover.json` to version control.
+
+## File Basics
+
+### Location and Creation
+
+Place `rover.json` in your project's root directory. Rover creates this file automatically during initialization:
+
+```bash
+rover init
+```
+
+### Schema Versioning
+
+Rover uses schema versioning for automatic migration of configuration files. When you open a project with an older schema, Rover automatically migrates it while preserving your settings.
+
+### Configuration vs Settings
+
+| Type | File | Purpose | Commit? |
+|------|------|---------|---------|
+| **Project Config** | `rover.json` | Shared project settings | ✅ Yes |
+| **User Settings** | `.rover/settings.json` | Personal preferences, API keys | ❌ No |
+
+## Configuration Fields
+
+### version
+
+<Aside type="caution">**You don't need to manage the version field manually** — Rover handles migrations automatically.</Aside>
+
+```typescript
+"version": "1.2"
+```
+
+**Type:** `string` | **Required:** Yes | **Current:** `1.2`
+
+The schema version enables automatic migration when Rover's configuration format evolves. Rover manages this field automatically—you don't need to set or update it manually.
+
+### languages
+
+```typescript
+"languages": ["typescript", "python"]
+```
+
+**Type:** `string[]` | **Auto-detected:** Yes | **Valid values:** `javascript`, `typescript`, `php`, `rust`, `go`, `python`, `ruby`
+
+Specifies programming languages used in your project. Rover uses this to configure appropriate tools in the AI agent's container environment.
+
+#### Auto-Detection Logic
+
+Rover detects languages by scanning for these files:
+
+| Language | Detection Files |
+|----------|----------------|
+| TypeScript | `tsconfig.json`, `tsconfig.node.json` |
+| JavaScript | `package.json`, `.node-version` |
+| PHP | `composer.json`, `index.php`, `phpunit.xml` |
+| Rust | `Cargo.toml` |
+| Go | `go.mod`, `go.sum` |
+| Python | `pyproject.toml`, `uv.lock`, `setup.py` |
+| Ruby | `.ruby-version`, `Gemfile`, `config.ru` |
+
+#### When to Specify Manually
+
+Explicitly configure languages when:
+
+- Working with polyglot projects mixing multiple languages
+- Using languages in non-standard locations (e.g., subdirectories)
+- Ensuring consistent configuration in CI/CD environments
+- Auto-detection doesn't identify all languages correctly
+
+### packageManagers
+
+```typescript
+"packageManagers": ["npm", "pip"]
+```
+
+**Type:** `string[]` | **Auto-detected:** Yes | **Valid values:** `npm`, `yarn`, `pnpm`, `composer`, `cargo`, `gomod`, `pip`, `poetry`, `uv`, `rubygems`
+
+Specifies package managers used to install dependencies. Rover sets up these tools in the AI agent's container.
+
+#### Auto-Detection Logic
+
+Rover detects package managers by scanning for these files:
+
+| Package Manager | Detection Files |
+|----------------|----------------|
+| npm | `package-lock.json` |
+| pnpm | `pnpm-lock.yaml` |
+| yarn | `yarn.lock` |
+| composer | `composer.lock` |
+| cargo | `Cargo.toml`, `Cargo.lock` |
+| gomod | `go.mod`, `go.sum` |
+| pip | `pyproject.toml` (without poetry/uv) |
+| poetry | `poetry.lock` |
+| uv | `uv.lock` |
+| rubygems | `Gemfile`, `Gemfile.lock` |
+
+#### When to Specify Manually
+
+Explicitly configure package managers when:
+
+- Your project uses multiple package managers
+- Lock files aren't committed to version control
+- Ensuring specific tools are available in CI/CD
+
+### taskManagers
+
+```typescript
+"taskManagers": ["make"]
+```
+
+**Type:** `string[]` | **Auto-detected:** Yes | **Valid values:** `just`, `make`, `task`
+
+Specifies task runners and build tools for automating development tasks.
+
+#### Auto-Detection Logic
+
+| Task Manager | Detection Files | Common Use Cases |
+|-------------|----------------|------------------|
+| make | `Makefile` | Traditional Unix builds, C/C++ projects |
+| just | `Justfile` | Modern command runner, simple syntax |
+| task | `Taskfile.yml` | Go-based task runner, YAML config |
+
+### attribution
+
+```typescript
+"attribution": true
+```
+
+**Type:** `boolean` | **Required:** Yes | **Default:** `true`
+
+Controls whether Rover adds co-authoring metadata to commits. When enabled, commits include:
+
+```
+Co-Authored-By: Rover <noreply@rover.dev>
+```
+
+#### When to Disable
+
+Set `attribution: false` when:
+
+- Company policies prohibit external attribution in commits
+- Privacy requirements prevent indicating AI assistance
+- Commit messages must follow strict formatting standards
+
+### mcps
+
+```typescript
+"mcps": [
+  {
+    "name": "filesystem",
+    "commandOrUrl": "npx @modelcontextprotocol/server-filesystem /data",
+    "transport": "stdio",
+    "envs": ["HOME"]
+  }
+]
+```
+
+**Type:** `object[]` | **Required:** Yes (can be empty `[]`) | **Default:** `[]`
+
+Configures Model Context Protocol (MCP) servers that extend AI agents with additional capabilities like filesystem access, database queries, and API integrations.
+
+#### MCP Configuration Structure
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `name` | string | Yes | Unique identifier for the MCP server |
+| `commandOrUrl` | string | Yes | Command to launch server or URL for remote servers |
+| `transport` | string | Yes | Protocol: `stdio` (local) or `sse` (remote) |
+| `envs` | string[] | No | Environment variables to pass to the server |
+| `headers` | string[] | No | HTTP headers (SSE transport only) |
+
+#### Common MCP Capabilities
+
+- **Filesystem access**: Read/write files beyond the container
+- **Database access**: Query PostgreSQL, MySQL, SQLite
+- **API integration**: REST APIs, GraphQL endpoints
+- **Specialized tools**: Domain-specific services and utilities
+
+**Learn more:** [Model Context Protocol documentation](https://modelcontextprotocol.io/)
+
+### envs
+
+```typescript
+"envs": ["API_KEY", "NODE_ENV=production"]
+```
+
+**Type:** `string[]` | **Required:** No | **Default:** `undefined`
+
+Specifies environment variables to pass to AI agent containers. Supports two formats:
+
+#### Passthrough Format
+
+```typescript
+"envs": ["API_KEY", "DATABASE_URL"]
+```
+
+Reads variable values from your host environment. If the variable doesn't exist on the host, it's skipped.
+
+**Best for:** Secrets and sensitive values (keeps them out of version control)
+
+#### Explicit Value Format
+
+```typescript
+"envs": ["NODE_ENV=production", "DEBUG=false"]
+```
+
+Sets variables to exact values regardless of host environment.
+
+**Best for:** Non-sensitive configuration values
+
+#### Mixed Format
+
+```typescript
+"envs": [
+  "API_KEY",              // Passthrough from host
+  "NODE_ENV=development", // Explicit value
+  "DATABASE_URL"          // Passthrough from host
+]
+```
+
+**Security warning:** Never commit secrets using explicit value format. Use passthrough or `envsFile` with `.gitignore`.
+
+### envsFile
+
+```typescript
+"envsFile": ".env.rover"
+```
+
+**Type:** `string` | **Required:** No | **Default:** `undefined`
+
+Path to a dotenv file (`.env` format) containing environment variables. Path must be relative to project root.
+
+#### Dotenv File Format
+
+```bash
+# .env.rover
+API_KEY=your-api-key-here
+DATABASE_URL=postgresql://localhost:5432/mydb
+NODE_ENV=development
+DEBUG=true
+```
+
+#### How envs and envsFile Interact
+
+When both are specified:
+
+1. Variables from `envsFile` load first
+2. Variables from `envs` load second (can override file values)
+
+This allows you to load common variables from a file and override specific values.
+
+#### Security Features
+
+**Path traversal protection:** Rover prevents `envsFile` from referencing files outside your project root. Invalid paths are rejected with an error.
+
+**Best practice:** Add environment files to `.gitignore`:
+
+```bash
+# .gitignore
+.env
+.env.local
+.env.*.local
+```
+
+Commit a template instead:
+
+```bash
+# .env.example
+API_KEY=your-api-key-here
+DATABASE_URL=postgresql://localhost:5432/mydb
+```
+
+## Security Best Practices
+
+### Never Commit Secrets
+
+**✅ DO: Use Passthrough Format**
+
+```jsonc
+{
+  "envs": ["API_KEY", "DATABASE_URL"]
+}
+```
+
+**✅ DO: Use Environment Files with .gitignore**
+
+```jsonc
+{
+  "envsFile": ".env.local"
+}
+```
+
+```bash
+# .gitignore
+.env.local
+```
+
+**❌ DON'T: Commit Explicit Secrets**
+
+```jsonc
+{
+  "envs": ["API_KEY=sk_live_abc123"]  // NEVER DO THIS
+}
+```
+
+### Environment Variable Isolation
+
+Environment variables configured in `rover.json` are passed **only to AI agent containers**. Containers can't access host environment variables unless explicitly passed via `envs`. This provides isolation and security.
+
+### Path Traversal Protection
+
+```jsonc
+{
+  "envsFile": "../../../etc/passwd"  // ❌ REJECTED
+}
+```
+
+```jsonc
+{
+  "envsFile": ".env.rover"  // ✅ ALLOWED
+}
+```
+
+Rover validates `envsFile` paths to prevent accessing files outside your project root. Invalid paths cause configuration errors.
+
+### What to Commit
+
+| File | Commit? | Reason |
+|------|---------|--------|
+| `rover.json` | ✅ Yes | Project-wide configuration |
+| `.rover/settings.json` | ❌ No | User-specific settings and API keys |
+| `.env`, `.env.local` | ❌ No | Contains secrets |
+| `.env.example` | ✅ Yes | Template for required variables |
+
+## Configuration Examples
+
+### Minimal Configuration
+
+Auto-detected TypeScript project with defaults:
+
+```jsonc
+{
+  "version": "1.2",
+  "languages": ["typescript"],
+  "packageManagers": ["npm"],
+  "taskManagers": [],
+  "attribution": true,
+  "mcps": []
+}
+```
+
+**Use when:** Standard single-language project where auto-detection works well.
+
+### Multi-Language Project
+
+Polyglot project with TypeScript, Python, and Go:
+
+```jsonc
+{
+  "version": "1.2",
+  "languages": ["typescript", "python", "go"],
+  "packageManagers": ["npm", "pip", "gomod"],
+  "taskManagers": ["make"],
+  "attribution": true,
+  "mcps": [],
+  "envs": [
+    "NODE_ENV=development",
+    "PYTHON_ENV=development",
+    "GO_ENV=development"
+  ]
+}
+```
+
+**Use when:**
+- Microservices architectures with different language services
+- Full-stack applications (TypeScript frontend, Python backend)
+- Projects with multiple language components
+
+**Why explicit helps:** Ensures all tools are available, especially when languages are in subdirectories or non-standard locations.
+
+### MCP-Enabled Configuration
+
+Configuration with filesystem and database access:
+
+```jsonc
+{
+  "version": "1.2",
+  "languages": ["typescript"],
+  "packageManagers": ["npm"],
+  "taskManagers": [],
+  "attribution": true,
+  "mcps": [
+    {
+      "name": "filesystem",
+      "commandOrUrl": "npx @modelcontextprotocol/server-filesystem /workspace/uploads",
+      "transport": "stdio"
+    },
+    {
+      "name": "postgres",
+      "commandOrUrl": "npx @modelcontextprotocol/server-postgres",
+      "transport": "stdio",
+      "envs": ["DATABASE_URL"]
+    }
+  ],
+  "envs": ["DATABASE_URL"]
+}
+```
+
+**What this enables:**
+- **Filesystem MCP**: AI agents can read/write files in `/workspace/uploads`
+- **Postgres MCP**: Agents can query database and explore schema
+
+**Use when:** AI agents need to interact with external systems beyond the codebase.
+
+### Environment Variables Configuration
+
+Project with custom environment variables:
+
+```jsonc
+{
+  "version": "1.2",
+  "languages": ["typescript"],
+  "packageManagers": ["npm"],
+  "taskManagers": [],
+  "attribution": true,
+  "mcps": [],
+  "envs": [
+    "NODE_ENV",           // Passthrough from host
+    "API_KEY",            // Passthrough from host
+    "DEBUG=false"         // Explicit value
+  ],
+  "envsFile": ".env.rover"
+}
+```
+
+**Use when:**
+- Passing API keys and configuration to agents
+- Different environment settings for development vs production
+- Loading many variables from a file
+
+### Disabled Attribution
+
+Configuration without Rover co-authoring:
+
+```jsonc
+{
+  "version": "1.2",
+  "languages": ["typescript"],
+  "packageManagers": ["npm"],
+  "taskManagers": [],
+  "attribution": false,
+  "mcps": []
+}
+```
+
+**Use when:**
+- Company policies prohibit external attribution
+- Privacy requirements prevent indicating AI assistance
+- Strict commit message formatting requirements
+
+## Troubleshooting
+
+### Configuration Not Working
+
+**Check these common issues:**
+
+1. **Invalid JSON**: Validate syntax with a JSON linter
+2. **Invalid field values**: Ensure values match documented valid options
+3. **File paths**: Verify `envsFile` path is relative to project root
+4. **Environment files**: Ensure files exist and are readable
+5. **Missing environment variables**: Check passthrough variables exist on host
+
+### Environment Variables Not Available
+
+**If environment variables aren't working:**
+
+1. **Passthrough format**: Verify variables exist in your host environment (`echo $VAR_NAME`)
+2. **File path**: Ensure `envsFile` path is correct and file exists
+3. **File format**: Verify dotenv file syntax (`KEY=value` format)
+4. **Path traversal**: Check that `envsFile` is within project root
+
+### MCPs Not Connecting
+
+**If MCP servers aren't working:**
+
+1. **Command availability**: Verify MCP server commands are installed (e.g., `npx @modelcontextprotocol/server-filesystem`)
+2. **Transport type**: Ensure `transport` matches server type (`stdio` for local, `sse` for remote)
+3. **Environment variables**: Check required environment variables are passed via `envs`
+4. **Permissions**: Verify MCP has necessary permissions for operations
+
+## Related Documentation
+
+- **[Schema Versioning](docs/schemas.md)**: Learn about Rover's schema migration approach
+- **[Rover Init Command](README.md)**: How `rover init` creates `rover.json`
+- **[Model Context Protocol](https://modelcontextprotocol.io/)**: Available MCP servers and guides
+- **[User Settings](.rover/settings.json)**: Configure personal preferences
+
+---
+
+**Questions or issues?** Verify your `rover.json` is valid JSON with correct field values. Rover auto-migrates schema versions on load—you don't need to manage versions manually.
+

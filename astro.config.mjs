@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import starlightThemeRapide from 'starlight-theme-rapide';
+import starlightSidebarTopics from 'starlight-sidebar-topics';
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
 
@@ -59,7 +60,102 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Endor Documentation',
-      plugins: [starlightLinksValidator(), starlightThemeRapide()],
+      plugins: [
+        starlightLinksValidator(),
+        starlightThemeRapide(),
+        starlightSidebarTopics([
+          {
+            label: 'Rover',
+            link: '/rover/intro/overview',
+            icon: 'seti:bicep',
+            items: [
+              {
+                label: 'Introduction',
+                autogenerate: { directory: 'rover/intro' },
+              },
+              {
+                label: 'Workflows',
+                autogenerate: { directory: 'rover/workflows' },
+              },
+              {
+                label: 'Guides',
+                autogenerate: { directory: 'rover/guides' },
+              },
+              {
+                label: 'Reference',
+                autogenerate: { directory: 'rover/reference' },
+              },
+              {
+                label: 'Troubleshooting',
+                autogenerate: { directory: 'rover/troubleshooting' },
+              }
+            ],
+          },
+          {
+            label: 'Endor CLI',
+            link: '/cli/overview',
+            icon: 'forward-slash',
+            items: [
+              {
+                label: 'CLI',
+                items: [
+                  {
+                    label: 'Overview',
+                    link: '/cli/overview',
+                  },
+                  {
+                    label: 'Setup',
+                    link: '/cli/setup',
+                  },
+                  {
+                    label: 'MCP',
+                    autogenerate: { directory: 'cli/mcp' }
+                  },
+                  {
+                    label: 'Networking',
+                    link: '/cli/networking',
+                  },
+                  {
+                    label: 'Volumes',
+                    link: '/cli/volumes',
+                  },
+                  {
+                    label: 'Commands',
+                    link: '/cli/commands',
+                  },
+                  {
+                    label: 'Open a Shell',
+                    link: '/cli/shell',
+                  },
+                  {
+                    label: 'Services',
+                    autogenerate: { directory: 'cli/services' },
+                  }
+                ],
+              }
+            ],
+          },
+          {
+            label: 'Endor Web',
+            link: '/faq/',
+            icon: 'seti:html',
+            items: [
+              {
+                label: 'FAQ',
+                autogenerate: { directory: 'faq' },
+              },
+              {
+                label: 'Reference',
+                autogenerate: { directory: 'reference' },
+              },
+              {
+                label: 'Guides',
+                autogenerate: { directory: 'guides' },
+              },
+            ],
+          },
+        ]),
+      ],
       head,
       customCss: [
         './src/styles/global.css'
@@ -77,61 +173,6 @@ export default defineConfig({
         { icon: 'blueSky', label: 'BlueSky', href: 'https://bsky.app/profile/endorhq.bsky.social' },
         { icon: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/@endorhq' },
         { icon: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/company/endorhq' },
-      ],
-      sidebar: [
-        {
-          label: 'Rover',
-          autogenerate: { directory: 'rover' },
-        },
-        {
-          label: 'CLI',
-          items: [
-            {
-              label: 'Overview',
-              link: '/cli/overview',
-            },
-            {
-              label: 'Setup',
-              link: '/cli/setup',
-            },
-            {
-              label: 'MCP',
-              autogenerate: { directory: 'cli/mcp' }
-            },
-            {
-              label: 'Networking',
-              link: '/cli/networking',
-            },
-            {
-              label: 'Volumes',
-              link: '/cli/volumes',
-            },
-            {
-              label: 'Commands',
-              link: '/cli/commands',
-            },
-            {
-              label: 'Open a Shell',
-              link: '/cli/shell',
-            },
-            {
-              label: 'Services',
-              autogenerate: { directory: 'cli/services' },
-            }
-          ],
-        },
-        {
-          label: 'FAQ',
-          autogenerate: { directory: 'faq' },
-        },
-        {
-          label: 'Reference',
-          autogenerate: { directory: 'reference' },
-        },
-        {
-          label: 'Guides',
-          autogenerate: { directory: 'guides' },
-        },
       ],
     }),
     svelte(),

@@ -32,6 +32,9 @@ importers:
       starlight-links-validator:
         specifier: ^0.17.0
         version: 0.17.0(@astrojs/starlight@0.35.3(astro@5.13.7(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.45.0)(typescript@5.9.2)(yaml@2.6.0)))
+      starlight-sidebar-topics:
+        specifier: ^0.6.2
+        version: 0.6.2(@astrojs/starlight@0.35.3(astro@5.13.7(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.45.0)(typescript@5.9.2)(yaml@2.6.0)))
       starlight-theme-rapide:
         specifier: ^0.5.1
         version: 0.5.1(@astrojs/starlight@0.35.3(astro@5.13.7(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.45.0)(typescript@5.9.2)(yaml@2.6.0)))
@@ -2205,6 +2208,12 @@ packages:
   starlight-links-validator@0.17.0:
     resolution: {integrity: sha512-D+j0W7Z6CVSxPlt8jskBcApqaAU16JmuxE4c483Xj2sWJteiz0wW2xvk0cG3o/cW1q9x44Ezc668OnUi3a5LAA==}
     engines: {node: '>=18.17.1'}
+    peerDependencies:
+      '@astrojs/starlight': '>=0.32.0'
+
+  starlight-sidebar-topics@0.6.2:
+    resolution: {integrity: sha512-SNCTUZS/hcVor0ZcaXbaSVU37+V+qtvzNirkvnOg3Mqu/awuGpthkH5+uKpiZqWxLffp6TrOlsv5E5QsxrndNg==}
+    engines: {node: '>=18'}
     peerDependencies:
       '@astrojs/starlight': '>=0.32.0'
 
@@ -5520,6 +5529,11 @@ snapshots:
       unist-util-visit: 5.0.0
     transitivePeerDependencies:
       - supports-color
+
+  starlight-sidebar-topics@0.6.2(@astrojs/starlight@0.35.3(astro@5.13.7(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.45.0)(typescript@5.9.2)(yaml@2.6.0))):
+    dependencies:
+      '@astrojs/starlight': 0.35.3(astro@5.13.7(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.45.0)(typescript@5.9.2)(yaml@2.6.0))
+      picomatch: 4.0.3
 
   starlight-theme-rapide@0.5.1(@astrojs/starlight@0.35.3(astro@5.13.7(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.45.0)(typescript@5.9.2)(yaml@2.6.0))):
     dependencies:
