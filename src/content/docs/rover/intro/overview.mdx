@@ -1,6 +1,6 @@
 ---
 title: Overview
-description: Rover overview
+description: Manage AI coding agents with Rover - run parallel tasks autonomously
 sidebar:
   order: 1
 ---
@@ -9,9 +9,9 @@ import StepList from '../../../../components/StepList.svelte';
 import StepItem from '../../../../components/StepItem.svelte';
 import { Card, CardGrid, Tabs, TabItem } from '@astrojs/starlight/components';
 
-**Rover is a manager on top of AI coding agents** such as Claude Code, Codex, Gemini, Cursor, and Qwen. Use Rover to **create tasks and assign them to the coding agents** you already use everyday.
+**Rover is a manager on top of AI coding agents** such as Claude Code, Codex, Gemini, Cursor, and Qwen. Use Rover to **create tasks and assign them to the coding agents** you already use every day.
 
-Once you create a task, you can forget about it until it's completed. **No more agent chat monitoring**. Rover will create an isolated environment per task, a separate git branch, and configure the agent to complete the task autonomously in the background. **Everything runs in your system**, under your control.
+Once you create a task, you can forget about it until it's completed. Rover will create an isolated environment per task, a separate git branch, and configure the agent to complete the task autonomously in the background. **Everything runs in your system**, under your control. 
 
 **You can create multiple tasks as they run in parallel**. For example, you can use it to:
 
@@ -20,11 +20,11 @@ Once you create a task, you can forget about it until it's completed. **No more 
 - Write the user documentation for a new feature
 - And much more!
 
-Meanwhile, you can continue working on other things or take a break. **Rover is ensuring that agents are working for you**.
+Meanwhile, you can continue working on other things or take a break. **Rover ensures that agents are working for you**.
 
 ![Rover showing a list of completed tasks](overview/intro.png)
 
-## Get started
+## Getting Started
 
 ### Prerequisites
 - **Node.js 22** or newer
@@ -72,15 +72,15 @@ Meanwhile, you can continue working on other things or take a break. **Rover is 
   </StepItem>
 </StepList>
 
-From there on, follow the tips that Rover will give you to continue. You can also check the [quickstart guide](/rover/intro/quickstart) and the [common workflows](/rover/guides/common-workflows).
+After completing these steps, follow the tips that Rover will give you to continue. You can also check the [quickstart guide](/rover/intro/quickstart) and the [common workflows](/rover/guides/common-workflows).
 
 ## Why Rover?
 
-AI is here to stay, and coding agents are becoming more powerful every day. However, the experience from different developers and teams is mixed. Some people shows wonderful success cases of coding agents, while others feel frustrated using them or avoid it as much as possible.
+AI is here to stay, and coding agents are becoming more powerful every day. However, **the experience from different developers and teams is mixed**. Some people show wonderful success cases of coding agents, while others feel frustrated or avoid them as much as possible.
 
-The way people use coding agents is evolving. From copy / pasting in ChatGPT to directly integrate them where your code lives. In Endor, we went through a similar transformation, [you can read more about it on our blog](https://endor.dev/blog). 
+The way people use coding agents is **evolving**. From copy/pasting in ChatGPT to directly integrating them where your code lives. 
 
-The key learnings we found are:
+In Endor, we went through a similar process. These are the key learnings we found are:
 
 - **The usage of AI agents across the team is uneven**. This creates friction when working on the same codebase.
 - **Context switching is costly**. Moving between your code, the coding agent sessions, and back to your code interrupts your flow and focus.
