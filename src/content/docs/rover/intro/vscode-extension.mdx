@@ -7,11 +7,11 @@ sidebar:
 
 import StepList from '../../../../components/StepList.svelte';
 import StepItem from '../../../../components/StepItem.svelte';
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 ## Installation
 
-1. [Install the Rover CLI](/rover/intro/quickstart#install). It needs to be available in your `$PATH` environment variable
+1. [Install the Rover CLI](/rover/intro/quickstart#your-first-steps-with-rover). It needs to be available in your `$PATH` environment variable
 2. [Install Rover](https://marketplace.visualstudio.com/items?itemName=endor.endor-rover) from the official extension marketplace
 
 ## Initialization
@@ -91,27 +91,7 @@ Your workflow does not have to change, Rover and the Rover VSCode extension will
 ## Other Resources
 
 <CardGrid>
-  <Card title="Command Reference" icon="document">
-    Exhaustive Rover command reference.
-
-    [Command Reference →](/rover/reference/cli-reference)
-  </Card>
-
-  <Card title="Overview" icon="forward-slash">
-    Rover Overview.
-
-    [Overview →](/rover/intro/overview)
-  </Card>
-
-  <Card title="Quickstart" icon="forward-slash">
-    Experiment hands-on with Rover on your own projects or start with an empty one.
-
-    [Quickstart →](/rover/intro/quickstart)
-  </Card>
-
-  <Card title="Common Workflows" icon="forward-slash">
-    Read more about common workflows with Rover and how they make you more productive. From initialization all the way down to debugging.
-
-    [Common Workflows →](/rover/guides/common-workflows)
-  </Card>
+  <LinkCard title="Command Reference" href="/rover/reference/cli-reference" description="Exhaustive Rover command reference" />
+  <LinkCard title="Overview" href="/rover/intro/overview" description="Learn about Rover and what it can do for you" />
+  <LinkCard title="Quickstart" href="/rover/intro/quickstart" description="Get started with Rover in minutes" />
 </CardGrid>

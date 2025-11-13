@@ -1,6 +1,94 @@
 ---
 title: Iterate on tasks
-description: What are the Rover common workflows and how you can get benefit from them
+description: Refine and improve task implementations through iterative feedback with AI coding agents
 sidebar:
   order: 4
 ---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Iterations are a core concept in Rover. You might be happy with the first implementation of a task made by the agent, but in most situations, you'll want to refine what it did. This guide shows you how to iterate on tasks to get the results you need.
+
+## Understanding iterations
+
+You can have as many iterations as you need as part of a task. They reflect the interaction between you and the agent with regards to a specific task. Whenever you ask Rover to create a new iteration on a task, all previous iterations are taken into account and become part of the context of the overall task, leading to the final result—the last iteration.
+
+## Create an iteration
+
+Following the fizzbuzz example from the task creation guide, you can ask for an iteration to refine the implementation.
+
+<StepList title="Task Iteration">
+  <StepItem step={1}>
+    Request an iteration to modify the task. For example, update all output to use [FIGlet style](https://en.wikipedia.org/wiki/FIGlet).
+
+    ```sh
+    rover iterate 1 "Update all output to use the figlet style"
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    As with task creation, you can follow the logs of the iteration as it happens. The task number does not change with new iterations.
+
+    ```sh
+    rover logs -f 1
+    ```
+  </StepItem>
+</StepList>
+
+## Review iteration changes
+
+After an iteration completes, you can inspect what changed compared to the previous iteration.
+
+<StepList title="Check iteration diff">
+  <StepItem step={1}>
+    View the diff to see what the agent modified
+
+    ```sh
+    rover diff 1
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Inspect the iteration details to see the agent's plan and summary
+
+    ```sh
+    rover inspect 1
+    ```
+  </StepItem>
+</StepList>
+
+## When to iterate
+
+Iterations are useful when you want to:
+
+- **Refine the implementation**: Ask the agent to improve code quality, add error handling, or optimize performance
+- **Add new features**: Extend the existing implementation with additional functionality
+- **Fix issues**: Address bugs or problems discovered during testing
+- **Adjust style**: Change coding style, naming conventions, or formatting
+- **Update documentation**: Improve comments, READMEs, or inline documentation
+
+## Best practices
+
+To get the best results from iterations:
+
+- **Be specific**: Provide clear, actionable feedback about what needs to change
+- **One focus per iteration**: Keep each iteration focused on a specific improvement
+- **Test between iterations**: Verify changes work as expected before requesting the next iteration
+- **Use context**: Reference specific files, functions, or line numbers when possible
+- **Build incrementally**: Start with core functionality and add complexity through iterations
+
+## Relevant Concepts
+
+<CardGrid>
+  <LinkCard title="Task" href="/rover/concepts/task" description="Learn about Rover tasks and how they work" />
+  <LinkCard title="Workflow" href="/rover/concepts/workflow" description="Discover how workflows guide coding agents" />
+</CardGrid>
+
+## Related Guides
+
+<CardGrid>
+  <LinkCard title="Implement a new feature" href="/rover/guides/assign-tasks" description="Create and assign tasks to AI coding agents" />
+  <LinkCard title="Merge changes from tasks" href="/rover/guides/merge-tasks" description="Integrate completed tasks into your codebase" />
+  <LinkCard title="Project Initialization" href="/rover/guides/project-initialization" description="Initialize Rover in your repository" />
+  <LinkCard title="Write technical documentation" href="/rover/guides/write-docs" description="Use Rover to create and maintain documentation" />
+</CardGrid>

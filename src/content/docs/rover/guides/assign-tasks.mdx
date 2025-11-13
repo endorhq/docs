@@ -1,6 +1,167 @@
 ---
 title: Implement a new feature
-description: What are the Rover common workflows and how you can get benefit from them
+description: Create and assign tasks to AI coding agents to implement new features and functionalities
 sidebar:
   order: 2
 ---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Tasks are the main concept in Rover. Each task represents a unit of work that an AI coding agent will complete autonomously. This guide shows you how to create and manage tasks effectively.
+
+## Understanding tasks
+
+Tasks can be as complex and large as needed. However, smaller, more focused tasks with clear descriptions and pointers make it easier for the agent to implement them successfully. Experiment to find what works best for your needs.
+
+Every task in Rover has its own git worktree, allowing Rover to work on multiple tasks in parallel without conflicts between them or with your own work.
+
+## Create a task
+
+Create a simple task from scratch in your initialized repository.
+
+<StepList title="Task Creation">
+  <StepItem step={1}>
+    Navigate to a project that was previously initialized with Rover
+
+    ```sh
+    cd ~/my-project
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Ask Rover to create a program, for example [fizzbuzz](https://en.wikipedia.org/wiki/Fizz_buzz)
+
+    ```sh
+    rover task -y "Create a fizzbuzz bash program as a programming example"
+    ```
+  </StepItem>
+  <StepItem step={3}>
+    Follow the progress of all tasks by watching the task list
+
+    ```sh
+    rover list -w
+    ```
+
+    You can also follow the newly created task progress by following its logs. Assuming it got a Task ID of 1:
+
+    ```sh
+    rover logs -f 1
+    ```
+  </StepItem>
+</StepList>
+
+## Inspect the task
+
+Besides listing current tasks or watching the listing, you can inspect tasks and their iterations to understand what the agent planned and executed.
+
+<StepList title="Inspecting tasks">
+  <StepItem step={1}>
+    Inspect a task to see information about iterations and files
+
+    ```sh
+    rover inspect 1
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    If the previous step lists a `plan.md` file in the iteration details, check its contents
+
+    ```sh
+    rover inspect 1 --file plan.md
+    ```
+  </StepItem>
+</StepList>
+
+Besides the plan, you can also check for the `context.md`, `changes.md`, and `summary.md` documents that represent: the context of the change, what changes need to be implemented, and the summary with all changes made by the agent.
+
+## Review proposed changes
+
+Check what code changes the agent is proposing before integrating them into your codebase.
+
+<StepList title="Check proposed diff">
+  <StepItem step={1}>
+    View the diff of changes made by the agent
+
+    ```sh
+    rover diff 1
+    ```
+  </StepItem>
+</StepList>
+
+Check the [command reference](/rover/reference/cli-reference/#diff) to learn more about extra arguments and parameters the `rover diff` command supports.
+
+## Test the changes
+
+To try the proposed changes, you can open a shell in the task's git worktree using `rover shell`. By default, this uses your current `$SHELL` to spawn a new instance with the worktree as the current working directory.
+
+:::note
+The shell opened by `rover shell` runs in your host environment by default. To run code in a containerized environment, use `rover shell -c` instead.
+:::
+
+<StepList title="Try proposed changes">
+  <StepItem step={1}>
+    Open a shell in the task workspace
+
+    ```sh
+    rover shell 1
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    In this example, the agent created a `fizzbuzz.sh` file that you can try. Your mileage may vary.
+
+    ```sh
+    sh fizzbuzz.sh
+    ```
+  </StepItem>
+</StepList>
+
+Within the workspace you can use `git` normally. The only special circumstance is that the system is inside a git worktree.
+
+In this environment, you can run tests and perform checks to ensure the quality of the overall changeset.
+
+## Make manual improvements
+
+If the agent has produced a result that needs small changes to be ready, you can add those changes directly to the worktree.
+
+<StepList title="Improve proposed changes">
+  <StepItem step={1}>
+    Open a shell in the task workspace
+
+    ```sh
+    rover shell 1
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Edit the file, perform the required changes, and save it
+
+    ```sh
+    $EDITOR fizzbuzz.sh
+    ```
+  </StepItem>
+  <StepItem step={3}>
+    Commit your changes
+
+    ```sh
+    git commit -a -m 'chore: add version number to the output'
+    ```
+  </StepItem>
+  <StepItem step={4}>
+    Exit the shell environment by typing `exit` or pressing `Ctrl+d`
+  </StepItem>
+</StepList>
+
+## Relevant Concepts
+
+<CardGrid>
+  <LinkCard title="Task" href="/rover/concepts/task" description="Learn about Rover tasks and how they work" />
+  <LinkCard title="Workspace" href="/rover/concepts/workspace" description="Understand how Rover creates isolated workspaces for each task" />
+</CardGrid>
+
+## Related Guides
+
+<CardGrid>
+  <LinkCard title="Project Initialization" href="/rover/guides/project-initialization" description="Initialize Rover in your repository" />
+  <LinkCard title="Iterate on tasks" href="/rover/guides/iterate-tasks" description="Refine and improve task implementations" />
+  <LinkCard title="Merge changes from tasks" href="/rover/guides/merge-tasks" description="Integrate completed tasks into your codebase" />
+  <LinkCard title="Write technical documentation" href="/rover/guides/write-docs" description="Use Rover to create and maintain documentation" />
+</CardGrid>

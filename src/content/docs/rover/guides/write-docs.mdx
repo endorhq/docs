@@ -1,6 +1,156 @@
 ---
 title: Write technical documentation
-description: What are the Rover common workflows and how you can get benefit from them
+description: Use Rover to create and maintain technical documentation with AI coding agents
 sidebar:
   order: 3
 ---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Rover includes a specialized workflow for creating technical documentation. This guide shows you how to use the `tech-writer` workflow to generate developer documentation, end-user guides, tutorials, and more.
+
+## Understanding the tech-writer workflow
+
+The `tech-writer` workflow is specifically designed for documentation tasks. It guides the AI coding agent through a structured process:
+
+1. **Context Analysis**: The agent examines your codebase to understand what needs to be documented
+2. **Outline**: Creates a structured outline for the documentation
+3. **Draft**: Writes the initial documentation content
+4. **Review**: Refines the content for clarity, accuracy, and completeness
+
+This workflow accepts different inputs than the standard software engineering workflow, allowing you to specify your target audience and preferred format.
+
+## Create documentation
+
+Use the tech-writer workflow to generate documentation for your project.
+
+<StepList title="Creating technical documentation">
+  <StepItem step={1}>
+    Navigate to your project directory
+
+    ```sh
+    cd ~/my-project
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Create a documentation task using the tech-writer workflow
+
+    ```sh
+    rover task --workflow tech-writer -y "Document the authentication system, including how to configure OAuth providers and handle user sessions"
+    ```
+
+    You can also specify additional parameters:
+
+    ```sh
+    rover task --workflow tech-writer \
+      --input audience="developers" \
+      --input format="markdown" \
+      -y "Create an API reference for the REST endpoints"
+    ```
+  </StepItem>
+  <StepItem step={3}>
+    Monitor the task progress
+
+    ```sh
+    rover logs -f 1
+    ```
+  </StepItem>
+</StepList>
+
+## Workflow inputs
+
+The tech-writer workflow accepts the following inputs:
+
+| Input | Description | Default |
+|-------|-------------|---------|
+| `description` | What documentation you want to create | Required |
+| `audience` | Target audience (e.g., "developers", "end users", "administrators") | "end users" |
+| `format` | Output format (e.g., "markdown", "html", "asciidoc") | "markdown" |
+
+You can specify inputs using the `--input` flag when creating the task.
+
+## Review and refine
+
+After the agent completes the documentation, review it and iterate as needed.
+
+<StepList title="Review documentation">
+  <StepItem step={1}>
+    Open a shell in the task workspace to view the generated files
+
+    ```sh
+    rover shell 1
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Review the documentation files created by the agent
+
+    ```sh
+    ls -la
+    cat README.md
+    ```
+  </StepItem>
+  <StepItem step={3}>
+    If changes are needed, exit the shell and create an iteration
+
+    ```sh
+    exit
+    rover iterate 1 "Add more examples to the authentication section and include troubleshooting steps for common errors"
+    ```
+  </StepItem>
+</StepList>
+
+## Documentation best practices
+
+To get the best results when creating documentation with Rover:
+
+- **Be specific about scope**: Clearly define what should be documented (e.g., "Document the API authentication module" rather than "Document the API")
+- **Specify the audience**: Different audiences need different levels of detail and technical depth
+- **Provide context**: If documenting complex features, reference specific files or functions
+- **Include examples**: Ask for code examples, use cases, or step-by-step tutorials
+- **Request structure**: Specify if you want specific sections like "Overview", "Getting Started", "API Reference", etc.
+
+## Common documentation tasks
+
+Here are some examples of documentation tasks you can create with Rover:
+
+**API Documentation**:
+```sh
+rover task --workflow tech-writer --input audience="developers" \
+  -y "Create API reference documentation for all REST endpoints in src/api/"
+```
+
+**User Guides**:
+```sh
+rover task --workflow tech-writer --input audience="end users" \
+  -y "Write a user guide explaining how to configure and use the dashboard"
+```
+
+**Installation Instructions**:
+```sh
+rover task --workflow tech-writer \
+  -y "Create installation and setup documentation for the project"
+```
+
+**Architecture Documentation**:
+```sh
+rover task --workflow tech-writer --input audience="developers" \
+  -y "Document the system architecture, including the microservices structure and data flow"
+```
+
+## Relevant Concepts
+
+<CardGrid>
+  <LinkCard title="Workflow" href="/rover/concepts/workflow" description="Discover how workflows guide coding agents" />
+  <LinkCard title="Task" href="/rover/concepts/task" description="Learn about Rover tasks and how they work" />
+</CardGrid>
+
+## Related Guides
+
+<CardGrid>
+  <LinkCard title="Implement a new feature" href="/rover/guides/assign-tasks" description="Create and assign tasks to AI coding agents" />
+  <LinkCard title="Iterate on tasks" href="/rover/guides/iterate-tasks" description="Refine and improve task implementations" />
+  <LinkCard title="Merge changes from tasks" href="/rover/guides/merge-tasks" description="Integrate completed tasks into your codebase" />
+  <LinkCard title="Project Initialization" href="/rover/guides/project-initialization" description="Initialize Rover in your repository" />
+</CardGrid>
