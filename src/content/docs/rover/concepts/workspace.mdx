@@ -4,3 +4,47 @@ description: TBD
 sidebar:
   order: 2
 ---
+
+import { FileTree } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+A workspace is the independent folders where coding agents will apply their changes. Rover creates a separate workspace for each [task](/rover/reference/cli-reference/#task), making it possible to run multiple tasks in parallel without interference.
+
+To create it, Rover uses the [`git` worktree feature](https://git-scm.com/docs/git-worktree). A worktree is a separate checkout of your repository, sharing the same `.git` folder. Imagine it as having multiple copies of your local repository, each in its own folder and a different branch, but all connected to the same git history.
+
+## Workspace structure
+
+When you create a new task, Rover will create a new worktree in the `.rover/tasks/<task-id>/workspace/` folder. This workspace starts from the branch you specify when [creating the task](/rover/reference/cli-reference/#task) (defaulting to the current branch). The coding agent will then apply changes directly in this workspace.
+
+<FileTree>
+- .rover/
+  - tasks/
+    - 1/
+    - 2/
+      - description.json
+      - ...
+      - workspace/
+        - YOUR_README.md
+        - ...
+    - 3/
+    - ...
+</FileTree>
+
+## Deleting a workspace
+
+When you delete a task using `rover delete <task-id>`, Rover will also remove the associated workspace, cleaning up the worktree and all its files. 
+
+If you delete the `.rover/tasks/X/workspace/` folder manually, you will need to prune the git worktree references using:
+
+```sh
+git worktree prune
+```
+
+## Next steps
+
+<CardGrid>
+  <LinkCard title="Overview" href="/rover/intro/overview" description="Get started with the Rover CLI" />
+  <LinkCard title="Task" href="/rover/concepts/task" description="Learn about Rover tasks and how to manage them" />
+  <LinkCard title="Sandbox" href="/rover/concepts/sandbox" description="Understand the sandboxed environment where tasks run" />
+  <LinkCard title="Workflow" href="/rover/concepts/workflow" description="Learn how workflows guide coding agents to complete tasks" />
+</CardGrid>
