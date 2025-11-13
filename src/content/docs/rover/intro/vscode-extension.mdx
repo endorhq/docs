@@ -2,16 +2,16 @@
 title: VSCode extension
 description: Documentation on how to install and use the VSCode extension
 sidebar:
-  order: 4
+  order: 5
 ---
 
-import StepList from '../../../components/StepList.svelte';
-import StepItem from '../../../components/StepItem.svelte';
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 ## Installation
 
-1. [Install the Rover CLI](/rover/quickstart#install). It needs to be available in your `$PATH` environment variable
+1. [Install the Rover CLI](/rover/intro/quickstart#your-first-steps-with-rover). It needs to be available in your `$PATH` environment variable
 2. [Install Rover](https://marketplace.visualstudio.com/items?itemName=endor.endor-rover) from the official extension marketplace
 
 ## Initialization
@@ -22,17 +22,17 @@ The first step, as happens with the CLI, is to initialize the repository where y
   <StepItem step={1}>
     If no workspace is open, the initialization guide will suggest you to open a workspace.
 
-    ![Screenshot showing VSCode open with no workspace shows message to create a workspace](../../../assets/rover/1-initialize-rover-no-workspace.png)
+    ![Screenshot showing VSCode open with no workspace shows message to create a workspace](../../../../assets/rover/1-initialize-rover-no-workspace.png)
   </StepItem>
   <StepItem step={2}>
     After opening a workspace, you will see a button to `Initialize Rover` on it.
 
-    ![Screenshot showing VSCode open with a workspace open shows message to initialize Rover](../../../assets/rover/2-initialize-rover.png)
+    ![Screenshot showing VSCode open with a workspace open shows message to initialize Rover](../../../../assets/rover/2-initialize-rover.png)
   </StepItem>
   <StepItem step={3}>
     Now you are ready to create tasks!
 
-    ![Screenshot showing Rover fully initialized](../../../assets/rover/3-rover-initialized.png)
+    ![Screenshot showing Rover fully initialized](../../../../assets/rover/3-rover-initialized.png)
   </StepItem>
 </StepList>
 
@@ -42,22 +42,22 @@ The first step, as happens with the CLI, is to initialize the repository where y
   <StepItem step={1}>
     You can create a new task by filling the task text field.
 
-    ![Screenshot showing the empty task list with the new task field filled with a prompt that reads 'Create a fizzbuzz bash program as a programming example'](../../../assets/rover/4-rover-initialized-with-prompt.png)
+    ![Screenshot showing the empty task list with the new task field filled with a prompt that reads 'Create a fizzbuzz bash program as a programming example'](../../../../assets/rover/4-rover-initialized-with-prompt.png)
   </StepItem>
   <StepItem step={2}>
     After creation, you will see the new task in the list.
 
-    ![Screenshot showing the new task in the list of tasks](../../../assets/rover/6-task-list-in-progress.png)
+    ![Screenshot showing the new task in the list of tasks](../../../../assets/rover/6-task-list-in-progress.png)
   </StepItem>
   <StepItem step={3}>
     The status of the tasks will be automatically refreshed in this listing as they progress.
 
-    ![Screenshot showing the task in the list of tasks in an iterating state](../../../assets/rover/7-task-list-iterating.png)
+    ![Screenshot showing the task in the list of tasks in an iterating state](../../../../assets/rover/7-task-list-iterating.png)
   </StepItem>
   <StepItem step={4}>
     Both the Rover CLI and the extension use the same single source of truth, so that you can use both tools as it best fits your needs and workflows.
 
-    ![Screenshot showing the Rover CLI showing the same information as the VSCode extension](../../../assets/rover/8-task-list-cli.png)
+    ![Screenshot showing the Rover CLI showing the same information as the VSCode extension](../../../../assets/rover/8-task-list-cli.png)
   </StepItem>
   <StepItem step={5}>
     The task will progress and eventually reach the `Completed` status. Here you can see some actions you can perform from the UI, such as:
@@ -72,9 +72,9 @@ The first step, as happens with the CLI, is to initialize the repository where y
     - Create a new iteration
     - Delete the task
 
-    ![Screenshot showing the task list with the task in "Completed" status](../../../assets/rover/9-task-list-completed.png)
+    ![Screenshot showing the task list with the task in "Completed" status](../../../../assets/rover/9-task-list-completed.png)
 
-    ![Screenshot showing the task list with the task in "Completed" status, with the contextual menu open to show more available actions for the task](../../../assets/rover/10-task-list-task-actions.png)
+    ![Screenshot showing the task list with the task in "Completed" status, with the contextual menu open to show more available actions for the task](../../../../assets/rover/10-task-list-task-actions.png)
   </StepItem>
 </StepList>
 
@@ -82,7 +82,7 @@ The first step, as happens with the CLI, is to initialize the repository where y
 
 One of the core actions with the Rover VSCode extension is to open the worktree of the change in a new VSCode instance, in its own workspace. This ensures that your context (as a human) changes, and that you are working in the changes proposed by the agent.
 
-![Screenshot showing a new instance of VSCode open on the new task workspace](../../../assets/rover/11-task-in-its-own-workspace.png)
+![Screenshot showing a new instance of VSCode open on the new task workspace](../../../../assets/rover/11-task-in-its-own-workspace.png)
 
 Here, you can improve the changes that the agent proposed, and continue working as you'd do normally, committing changes, being able to push or merge those changes on another branch.
 
@@ -91,27 +91,7 @@ Your workflow does not have to change, Rover and the Rover VSCode extension will
 ## Other Resources
 
 <CardGrid>
-  <Card title="Command Reference" icon="document">
-    Exhaustive Rover command reference.
-
-    [Command Reference →](/rover/command-reference)
-  </Card>
-
-  <Card title="Overview" icon="forward-slash">
-    Rover Overview.
-
-    [Overview →](/rover/overview)
-  </Card>
-
-  <Card title="Quickstart" icon="forward-slash">
-    Experiment hands-on with Rover on your own projects or start with an empty one.
-
-    [Quickstart →](/rover/quickstart)
-  </Card>
-
-  <Card title="Common Workflows" icon="forward-slash">
-    Read more about common workflows with Rover and how they make you more productive. From initialization all the way down to debugging.
-
-    [Common Workflows →](/rover/common-workflows)
-  </Card>
+  <LinkCard title="Command Reference" href="/rover/reference/cli-reference" description="Exhaustive Rover command reference" />
+  <LinkCard title="Overview" href="/rover/intro/overview" description="Learn about Rover and what it can do for you" />
+  <LinkCard title="Quickstart" href="/rover/intro/quickstart" description="Get started with Rover in minutes" />
 </CardGrid>

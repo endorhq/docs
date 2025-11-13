@@ -1,0 +1,116 @@
+---
+title: settings.json
+description: Rover user configuration file (.rover/settings.json) reference
+sidebar:
+  order: 2
+---
+
+`.rover/settings.json` file format reference.
+
+## Location and Creation
+
+The settings file is located at `.rover/settings.json` in your project root. Rover creates this file automatically during initialization:
+
+```bash
+rover init
+```
+
+## Configuration Schema
+
+### version
+
+```typescript
+"version": "1.0"
+```
+
+**Type:** `string` | **Required:** Yes | **Current:** `1.0`
+
+The schema version enables automatic migration when Rover's settings format evolves. Rover manages this field automatically—you don't need to set or update it manually.
+
+### aiAgents
+
+```typescript
+"aiAgents": ["claude", "gemini", "cursor"]
+```
+
+**Type:** `string[]` | **Required:** Yes | **Valid values:** `claude`, `codex`, `cursor`, `gemini`, `qwen`
+
+Lists AI agents available on your machine that Rover can use for tasks. All agents in this array must be installed and accessible via command line.
+
+#### Supported AI Agents
+
+| Agent | Description |
+|-------|-------------|
+| `claude` | Claude Code |
+| `codex` | Codex |
+| `cursor` | Cursor |
+| `gemini` | Gemini CLI |
+| `qwen` | Qwen CLI |
+
+**Important:** The `defaults.aiAgent` value must be one of these agents.
+
+### defaults.aiAgent
+
+```typescript
+"defaults": {
+  "aiAgent": "claude"
+}
+```
+
+**Type:** `string` | **Required:** No | **Default:** First agent in `aiAgents` array
+
+Specifies which AI agent to use when creating tasks without the `--agent` flag. The value must be one of the agents listed in the `aiAgents` array.
+
+#### Usage
+
+When you run:
+
+```bash
+rover task "Add unit tests for authentication"
+```
+
+Rover uses the agent specified in `defaults.aiAgent`.
+
+#### Overriding the Default
+
+To use a different agent for a specific task:
+
+```bash
+rover task "Add unit tests" --agent gemini
+```
+
+## Configuration Examples
+
+### Single Agent Configuration
+
+If you only have Claude installed:
+
+```json
+{
+  "version": "1.0",
+  "aiAgents": ["claude"],
+  "defaults": {
+    "aiAgent": "claude"
+  }
+}
+```
+
+### Multiple Agents Configuration
+
+With several agents installed, Claude as default:
+
+```json
+{
+  "version": "1.0",
+  "aiAgents": ["claude", "gemini", "cursor", "qwen"],
+  "defaults": {
+    "aiAgent": "claude"
+  }
+}
+```
+
+You can use any agent with `--agent` flag, but tasks default to Claude.
+
+## Modifying Settings
+
+Edit `.rover/settings.json` directly in any text editor. Changes take effect immediately for new tasks.

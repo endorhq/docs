@@ -1,0 +1,117 @@
+---
+title: Quickstart
+description: Quickstart on how to install and run Rover
+sidebar:
+  order: 2
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkCard, Tabs, TabItem } from '@astrojs/starlight/components';
+
+This quickstart guide will help you install Rover and get it running in your system. By the end of this guide, you'll have Rover set up and be able to create your first task with an AI coding agent.
+
+## Before you begin
+
+Ensure you have the following prerequisites installed on your machine:
+
+- **Node.js 22** or newer
+- **Git**
+- **Docker** or **Podman**
+- **Supported AI Agent** ([Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview#get-started-in-30-seconds), [Codex](https://github.com/openai/codex?tab=readme-ov-file#installing-and-running-codex-cli), [Gemini](https://github.com/google-gemini/gemini-cli?tab=readme-ov-file#quick-install), [Cursor](https://cursor.com/cli) or [Qwen](https://github.com/QwenLM/qwen-code?tab=readme-ov-file#installation))
+
+## Your first steps with Rover
+
+Installing Rover and getting it to work for you is straightforward, just follow the steps:
+
+<StepList title="1. Installing Rover">
+  <StepItem step={1}>
+    Install Rover
+
+    <Tabs>
+      <TabItem label="npm">
+        ```sh
+        npm install -g @endorhq/rover@latest
+        ```
+      </TabItem>
+      <TabItem label="pnpm">
+        ```sh
+        pnpm add -g @endorhq/rover@latest
+        ```
+      </TabItem>
+    </Tabs>
+  </StepItem>
+  <StepItem step={2}>
+    Check that Rover is correctly installed
+
+    ```sh
+    rover --version
+    ```
+  </StepItem>
+  <StepItem step={3}>
+    Congratulations!, you are a step closer to making those agents work for you
+  </StepItem>
+</StepList>
+
+From here on you are ready to enable Rover on a project that you have
+on your filesystem.
+
+<StepList title="2. Initializing Rover">
+  <StepItem step={1}>
+    Navigate to a project in which you want to enable Rover. This project needs to have git initialized, and at least one commit has to exist in its history. 
+    You can use the following commands to create a sample project:
+
+    ```sh
+    mkdir -p ~/rover-quickstart && cd ~/rover-quickstart && git init && \
+      touch README.md && git add README.md && git commit -m 'Initial commit'
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Init Rover
+
+    ```sh
+    rover init
+    ```
+
+    Rover will detect all supported installed agents in your system. You can init Rover in as many projects as you wish.
+  </StepItem>
+  <StepItem step={3}>
+    Now you are ready to ask Rover its first task!
+  </StepItem>
+</StepList>
+
+<StepList title="3. Asking Rover its first task">
+  <StepItem step={1}>
+    Navigate to the project in which you enabled Rover
+
+    ```sh
+    cd ~/rover-quickstart
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Ask Rover to create a [fizzbuzz](https://en.wikipedia.org/wiki/Fizz_buzz) program
+
+    ```sh
+    rover task -y "Create a fizzbuzz bash program as a programming example"
+    ```
+  </StepItem>
+  <StepItem step={3}>
+    You can now read the Common Workflows document to see what are the common ways in which you can interact with Rover, but in the meantime you can watch the task list progress.
+
+    ```sh
+    rover list -w
+    ```
+  </StepItem>
+</StepList>
+
+Congratulations! **You have successfully installed Rover, initialized it in a project, and created your first task**. From here, you can explore more advanced features and workflows to make the most out of Rover and AI coding agents.
+
+## Common Workflows
+
+<CardGrid>
+  <LinkCard title="Implement a new feature" href="/rover/guides/assign-tasks" description="Create and assign tasks to AI coding agents to implement new features" />
+  <LinkCard title="Write technical documentation" href="/rover/guides/write-docs" description="Use the tech-writer workflow to generate documentation" />
+  <LinkCard title="Iterate on tasks" href="/rover/guides/iterate-tasks" description="Refine and improve task implementations through iterations" />
+  <LinkCard title="Merge changes from tasks" href="/rover/guides/merge-tasks" description="Integrate completed tasks into your codebase" />
+</CardGrid>

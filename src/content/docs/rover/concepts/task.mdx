@@ -1,0 +1,99 @@
+---
+title: Task
+description: Learn how Rover manages tasks as units of work for AI coding agents
+sidebar:
+  order: 1
+---
+
+import { FileTree } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Rover manages your requests as tasks. Each task is an unit of work for Rover and it contains:
+
+- Your initial description, enhanced with a coding agent
+- A selected coding agent to complete it
+- A [workflow](/rover/concepts/workflow) to guide the coding agent and complete your request
+- A separate [workspace](/rover/concepts/workspace) to apply the changes
+- Its own [sandboxed environment](/rover/concepts/sandbox) to run in isolation
+- Associated metadata, like status, history, generated files, etc.
+
+Tasks can run in parallel, and **you can create as many as you want**. Each task is independent from the others, so you can stop, restart, inspect, debug, or delete them individually.
+
+## Local Structure
+
+Rover uses a local folder structure to manage tasks. Each task has its own folder inside the `.rover/tasks/` directory. The `.rover` folder lives in your project's root directory, and it's created automatically when you run `rover init`. You shouldn't commit this folder to the reposistory, as it contains user-specific and local task information.
+
+You will find multiple folders in `.rover/tasks/`. The folder name is the unique task ID assigned when you create it. 
+
+<FileTree>
+- .rover/
+  - tasks/
+    - 1/
+    - 2/
+      - description.json
+      - entrypoint.sh
+      - inputs.json
+      - workflow.yml
+      - iterations/
+        - 1/
+          - iteration.json
+          - status.json
+          - summary.md
+          - ...
+        - ...
+      - workspace/
+    - 3/
+    - ...
+</FileTree>
+
+### Task files
+
+| Name | Description |
+|------|-------------|
+| `description.json` | Contains the original task description, selected agent, and metadata |
+| `entrypoint.sh` | Script that starts the task execution inside the sandbox |
+| `inputs.json` | Input data provided to the coding agent |
+| `workflow.yml` | The [workflow](/rover/concepts/workflow) guiding the coding agent to complete the task |
+| `iterations/` | Folder containing each iteration made by the coding agent |
+| `workspace/` | The [workspace](/rover/concepts/workspace) where the coding agent applies changes |
+
+### Iteration files
+
+| Name | Description |
+|------|-------------|
+| `iteration.json` | Details of a specific iteration, including changes made and agent messages |
+| `status.json` | Current status of the iteration (e.g., in-progress, completed) |
+
+
+## Task Lifecycle
+
+Each task goes through a lifecycle with different states. Rover ensuses that tasks progress through these states as coding agents work on them. The Rover agent running in the [sandboxed environment](/rover/concepts/sandbox) updates the task status as the coding agents complete each step. 
+
+You can find the current status of a task in the `status.json` file inside the `.rover/tasks/<task_id>/iterations/<iteration_id>/` folder.
+
+```mermaid
+stateDiagram-v2
+      [*] --> New: rover task (create task)
+
+      New --> Running: Start
+
+      Running --> Completed: Success
+      Running --> Failed: Error
+
+      Failed --> Running: Restart
+
+      Completed --> Pushed: rover push (push to remote)
+      Completed --> Merged: rover merge (merge to your branch)
+
+      Pushed --> [*]
+      Merged --> [*]
+```
+
+## Next Steps
+
+<CardGrid>
+  <LinkCard title="Overview" href="/rover/intro/overview" description="Get started with the Rover CLI" />
+  <LinkCard title="Sandbox" href="/rover/concepts/sandbox" description="Understand the sandboxed environment where tasks run" />
+  <LinkCard title="Workflow" href="/rover/concepts/workflow" description="Learn how workflows guide coding agents to complete tasks" />
+  <LinkCard title="Workspace" href="/rover/concepts/workspace" description="Explore the workspace where coding agents apply changes" />
+</CardGrid>

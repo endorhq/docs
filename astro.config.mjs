@@ -2,8 +2,10 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import starlightThemeRapide from 'starlight-theme-rapide';
+import starlightSidebarTopics from 'starlight-sidebar-topics';
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
+import mermaid from 'astro-mermaid';
 
 import { posthogCode } from './posthog.mjs';
 
@@ -31,6 +33,7 @@ if (isProd) {
 // https://astro.build/config
 export default defineConfig({
   redirects: {
+    // MCP redirects
     '/mcp/overview': {
       status: 302,
       destination: '/cli/mcp/overview',
@@ -55,11 +58,132 @@ export default defineConfig({
       status: 302,
       destination: '/cli/mcp/windsurf',
     },
+    // Rover redirects
+    '/rover/overview': {
+      status: 301,
+      destination: '/rover/intro/overview',
+    },
+    '/rover/quickstart': {
+      status: 301,
+      destination: '/rover/intro/quickstart',
+    },
+    '/rover/common-workflows': {
+      status: 301,
+      destination: '/rover/intro/quickstart',
+    },
+    '/rover/vscode-extension': {
+      status: 301,
+      destination: '/rover/intro/vscode-extension',
+    },
+    '/rover/command-reference': {
+      status: 301,
+      destination: '/rover/reference/cli-reference/',
+    },
   },
   integrations: [
+    // @see https://github.com/joesaby/astro-mermaid?tab=readme-ov-file#integration-order-important
+    mermaid({
+      theme: 'forest',
+      autoTheme: true
+    }),
     starlight({
       title: 'Endor Documentation',
-      plugins: [starlightLinksValidator(), starlightThemeRapide()],
+      plugins: [
+        starlightLinksValidator(),
+        starlightThemeRapide(),
+        starlightSidebarTopics([
+          {
+            label: 'Rover',
+            link: '/rover/intro/overview',
+            icon: 'seti:bicep',
+            items: [
+              {
+                label: 'Introduction',
+                autogenerate: { directory: 'rover/intro' },
+              },
+              {
+                label: 'Key Concepts',
+                autogenerate: { directory: 'rover/concepts' },
+              },
+              {
+                label: 'Guides',
+                autogenerate: { directory: 'rover/guides' },
+              },
+              {
+                label: 'Reference',
+                autogenerate: { directory: 'rover/reference' },
+              },
+              {
+                label: 'Troubleshooting',
+                autogenerate: { directory: 'rover/troubleshooting' },
+              }
+            ],
+          },
+          {
+            label: 'Endor CLI',
+            link: '/cli/overview',
+            icon: 'forward-slash',
+            items: [
+              {
+                label: 'CLI',
+                items: [
+                  {
+                    label: 'Overview',
+                    link: '/cli/overview',
+                  },
+                  {
+                    label: 'Setup',
+                    link: '/cli/setup',
+                  },
+                  {
+                    label: 'MCP',
+                    autogenerate: { directory: 'cli/mcp' }
+                  },
+                  {
+                    label: 'Networking',
+                    link: '/cli/networking',
+                  },
+                  {
+                    label: 'Volumes',
+                    link: '/cli/volumes',
+                  },
+                  {
+                    label: 'Commands',
+                    link: '/cli/commands',
+                  },
+                  {
+                    label: 'Open a Shell',
+                    link: '/cli/shell',
+                  },
+                  {
+                    label: 'Services',
+                    autogenerate: { directory: 'cli/services' },
+                  }
+                ],
+              }
+            ],
+          },
+          {
+            label: 'Endor Web',
+            link: '/faq/',
+            icon: 'seti:html',
+            items: [
+              {
+                label: 'FAQ',
+                autogenerate: { directory: 'faq' },
+              },
+              {
+                label: 'Reference',
+                autogenerate: { directory: 'reference' },
+              },
+              {
+                label: 'Guides',
+                autogenerate: { directory: 'guides' },
+              },
+            ],
+          },
+        ]),
+      ],
       head,
       customCss: [
         './src/styles/global.css'
@@ -77,61 +201,6 @@ export default defineConfig({
         { icon: 'blueSky', label: 'BlueSky', href: 'https://bsky.app/profile/endorhq.bsky.social' },
         { icon: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/@endorhq' },
         { icon: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/company/endorhq' },
-      ],
-      sidebar: [
-        {
-          label: 'Rover',
-          autogenerate: { directory: 'rover' },
-        },
-        {
-          label: 'CLI',
-          items: [
-            {
-              label: 'Overview',
-              link: '/cli/overview',
-            },
-            {
-              label: 'Setup',
-              link: '/cli/setup',
-            },
-            {
-              label: 'MCP',
-              autogenerate: { directory: 'cli/mcp' }
-            },
-            {
-              label: 'Networking',
-              link: '/cli/networking',
-            },
-            {
-              label: 'Volumes',
-              link: '/cli/volumes',
-            },
-            {
-              label: 'Commands',
-              link: '/cli/commands',
-            },
-            {
-              label: 'Open a Shell',
-              link: '/cli/shell',
-            },
-            {
-              label: 'Services',
-              autogenerate: { directory: 'cli/services' },
-            }
-          ],
-        },
-        {
-          label: 'FAQ',
-          autogenerate: { directory: 'faq' },
-        },
-        {
-          label: 'Reference',
-          autogenerate: { directory: 'reference' },
-        },
-        {
-          label: 'Guides',
-          autogenerate: { directory: 'guides' },
-        },
       ],
     }),
     svelte(),

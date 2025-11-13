@@ -1,0 +1,93 @@
+---
+title: Project Initialization
+description: Initialize Rover in your repository to start creating tasks with AI coding agents
+sidebar:
+  order: 1
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Initializing Rover in a repository is the first step and a prerequisite to use it. This guide walks you through setting up Rover in both new and existing projects.
+
+## Configuration and state files
+
+Rover uses two different sets of configuration and state files, all stored under your project repository:
+
+- `.rover`: This directory contains settings related to user preferences, such as your preferred agent. Not meant to be checked into git.
+- `rover.json`: This file contains project settings, such as the languages in your repository, the package manager it uses, and whether commits should include agent attribution. Meant to be checked into git.
+
+There are two types of initialization: from scratch, and when a repository was cloned with a pre-initialized `rover.json`, in which case only the `.rover` directory needs to be populated.
+
+## Initialize from scratch
+
+Use this approach when setting up Rover in a project for the first time.
+
+<StepList title="Initializing Rover from scratch">
+  <StepItem step={1}>
+    Navigate to a project in which you want to enable Rover. This project needs to have git initialized, and at least one commit has to exist in its history.
+
+    ```sh
+    mkdir -p ~/rover-quickstart && cd ~/rover-quickstart && git init && \
+      touch README.md && git add README.md && git commit -a -m 'Initial commit'
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Initialize Rover
+
+    ```sh
+    rover init -y
+    ```
+
+    Rover will detect all supported installed agents in your system. You can init Rover in as many projects as you wish.
+  </StepItem>
+  <StepItem step={3}>
+    Rover is fully initialized! You can now start creating tasks.
+  </StepItem>
+</StepList>
+
+## Initialize a cloned repository
+
+If you cloned a repository that already has a `rover.json` file, you only need to initialize Rover locally.
+
+<StepList title="Initializing Rover on a pre-initialized repository">
+  <StepItem step={1}>
+    Clone your project that has already been initialized by Rover:
+
+    ```sh
+    git clone git@github.com:myorg/myrepo.git && cd myrepo
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Initialize Rover
+
+    ```sh
+    rover init -y
+    ```
+
+    Rover will detect all supported installed agents in your system.
+  </StepItem>
+  <StepItem step={3}>
+    Rover is fully initialized! The `.rover` directory is now created with your local preferences.
+  </StepItem>
+</StepList>
+
+## Next steps
+
+After initialization, you're ready to create your first task. Check out the guides below to learn how to work with Rover.
+
+## Relevant Concepts
+
+<CardGrid>
+  <LinkCard title="Task" href="/rover/concepts/task" description="Learn about Rover tasks and how they work" />
+  <LinkCard title="Workspace" href="/rover/concepts/workspace" description="Understand how Rover creates isolated workspaces for each task" />
+</CardGrid>
+
+## Related Guides
+
+<CardGrid>
+  <LinkCard title="Implement a new feature" href="/rover/guides/assign-tasks" description="Create and assign tasks to AI coding agents" />
+  <LinkCard title="Iterate on tasks" href="/rover/guides/iterate-tasks" description="Refine and improve task implementations" />
+  <LinkCard title="Merge changes from tasks" href="/rover/guides/merge-tasks" description="Integrate completed tasks into your codebase" />
+</CardGrid>

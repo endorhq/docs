@@ -1,0 +1,510 @@
+---
+title: Workflow YAML File
+description: Reference for the workflow.yml file format and structure
+sidebar:
+  order: 5
+---
+
+`workflow.yml` file format reference. You have more information about workflows on the [Workflow Concept](/rover/concepts/workflow) page.
+
+## File Structure
+
+Every workflow file must include these top-level fields:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `version` | string | **Yes** | Schema version for compatibility (currently `'1.0'`) |
+| `name` | string | **Yes** | Unique workflow identifier |
+| `description` | string | **Yes** | Human-readable description of the workflow's purpose |
+| `steps` | array | **Yes** | Ordered list of execution steps |
+| `inputs` | array | No | Input parameters for the workflow |
+| `outputs` | array | No | Expected outputs from the workflow |
+| `defaults` | object | No | Default AI tool and model configuration |
+| `config` | object | No | Workflow-level configuration (timeout, error handling) |
+
+### Schema Version
+
+The `version` field specifies the workflow schema version for compatibility checking.
+
+**Current version**: `'1.0'`
+
+Always include this field at the top of your workflow file:
+
+```yaml
+version: '1.0'
+```
+
+This ensures Rover can validate and execute your workflow correctly as the schema evolves.
+
+### Workflow Metadata
+
+The `name` and `description` fields identify and document your workflow.
+
+**Best practices**:
+- Use lowercase, hyphenated names (e.g., `'code-reviewer'`, `'swe'`)
+- Make descriptions clear and specific (50-100 characters)
+- Choose names that reflect the workflow's primary purpose
+
+```yaml
+name: 'code-reviewer'
+description: 'Reviews code and provides feedback on quality and best practices'
+```
+
+## Inputs
+
+Inputs define **parameters that users provide** when running the workflow. They make workflows reusable and flexible.
+
+### Input Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `name` | string | **Yes** | Unique identifier for the input |
+| `description` | string | **Yes** | Explanation of what the input is for |
+| `type` | enum | **Yes** | Data type: `string`, `number`, or `boolean` |
+| `required` | boolean | **Yes** | Whether the input must be provided |
+| `label` | string | No | Display label for UI/CLI |
+| `default` | any | No | Default value (only if `required: false`) |
+
+### Input Examples
+
+**Required string input**:
+```yaml
+inputs:
+  - name: repository_url
+    description: 'The GitHub repository to review'
+    type: string
+    required: true
+```
+
+**Optional input with default**:
+```yaml
+inputs:
+  - name: file_types
+    description: 'File extensions to include in review'
+    type: string
+    required: false
+    default: '.py,.js,.ts'
+```
+
+**Boolean input**:
+```yaml
+inputs:
+  - name: enable_auto_fix
+    description: 'Automatically fix issues when possible'
+    type: boolean
+    required: false
+    default: false
+```
+
+**Number input**:
+```yaml
+inputs:
+  - name: max_issues
+    description: 'Maximum number of issues to report'
+    type: number
+    required: false
+    default: 10
+```
+
+## Outputs
+
+Outputs declare **what the workflow produces**. They can be simple values or files.
+
+### Output Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `name` | string | **Yes** | Unique identifier for the output |
+| `description` | string | **Yes** | Explanation of what the output contains |
+| `type` | enum | **Yes** | Data type: `string`, `number`, `boolean`, or `file` |
+| `filename` | string | **Conditional** | **Required for `type: file` outputs** |
+| `required` | boolean | No | Whether the output must be produced |
+
+### Output Examples
+
+**String output**:
+```yaml
+outputs:
+  - name: issues_count
+    description: 'Number of issues found'
+    type: string
+```
+
+**File output** (requires `filename`):
+```yaml
+outputs:
+  - name: review_report
+    description: 'Markdown file with the complete review'
+    type: file
+    filename: 'review_report.md'
+```
+
+**Multiple outputs**:
+```yaml
+outputs:
+  - name: summary
+    description: 'Executive summary of findings'
+    type: string
+  - name: detailed_report
+    description: 'Full analysis report'
+    type: file
+    filename: 'report.md'
+  - name: score
+    description: 'Overall code quality score'
+    type: number
+```
+
+## Steps
+
+Steps define the workflow's **execution sequence**. They are executed in the order they appear in the `steps` array.
+
+**Key requirements**:
+- Each step must have a **unique `id`**
+- Steps execute **sequentially** (one after another)
+- Later steps can **reference outputs** from earlier steps
+- Currently, only **`agent`** type steps are supported
+
+```yaml
+steps:
+  - id: step_one
+    type: agent
+    name: 'First Step'
+    prompt: 'Do something...'
+
+  - id: step_two
+    type: agent
+    name: 'Second Step'
+    prompt: 'Do something else...'
+```
+
+## Agent Step Configuration
+
+Agent steps execute **AI agent prompts** to perform tasks. They are the primary building blocks of workflows.
+
+### Agent Step Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | string | **Yes** | Unique step identifier (used for referencing outputs) |
+| `type` | literal | **Yes** | Must be `'agent'` |
+| `name` | string | **Yes** | Human-readable step name |
+| `prompt` | string | **Yes** | The instructions for the AI agent (supports templates) |
+| `tool` | enum | No | AI tool to use: `claude`, `gemini`, `codex`, `qwen` |
+| `model` | string | No | Specific model version |
+| `outputs` | array | No | Outputs this step produces |
+| `config` | object | No | Step-specific configuration (timeout, retries) |
+
+### Agent Step Example
+
+```yaml
+steps:
+  - id: analyze_structure
+    type: agent
+    name: 'Analyze Repository Structure'
+    tool: claude
+    model: claude-3-sonnet
+    prompt: |
+      Analyze the repository structure and list all files.
+
+      Focus on files with these extensions: {{inputs.file_types}}
+    outputs:
+      - name: file_list
+        description: 'List of files to review'
+        type: string
+      - name: project_overview
+        description: 'Summary of the project structure'
+        type: string
+    config:
+      timeout: 1800
+      retries: 2
+```
+
+### Supported AI Tools
+
+Rover supports these AI tools:
+
+- **`claude`** - Anthropic's Claude models
+- **`gemini`** - Google's Gemini models
+- **`codex`** - OpenAI's Codex models
+- **`qwen`** - Alibaba's Qwen models
+
+Specify the tool at the workflow level (in `defaults`) or override it per step.
+
+## Step Outputs
+
+Step outputs make **data available to subsequent steps**. They use the same structure as workflow outputs.
+
+**Key points**:
+- Define outputs in the step's `outputs` array
+- Reference them in later steps using **template syntax**
+- Output types: `string`, `number`, `boolean`, `file`
+- **File outputs require a `filename`**
+
+```yaml
+steps:
+  - id: extract_data
+    type: agent
+    name: 'Extract Data'
+    prompt: 'Extract information from the repository'
+    outputs:
+      - name: language
+        description: 'Primary programming language'
+        type: string
+      - name: line_count
+        description: 'Total lines of code'
+        type: number
+      - name: report
+        description: 'Analysis report'
+        type: file
+        filename: 'analysis.md'
+```
+
+## Template Syntax
+
+Templates allow you to create **dynamic prompts** by referencing inputs and step outputs using **Mustache-style placeholders**.
+
+### Syntax Rules
+
+- **Reference inputs**: `{{inputs.input_name}}`
+- **Reference step outputs**: `{{steps.step_id.outputs.output_name}}`
+- Steps must be defined **before** they are referenced
+- Placeholders are replaced with actual values at runtime
+
+### Template Examples
+
+**Reference workflow input**:
+```yaml
+prompt: |
+  Analyze this repository: {{inputs.repository_url}}
+```
+
+**Reference previous step output**:
+```yaml
+steps:
+  - id: scan
+    type: agent
+    name: 'Scan Files'
+    prompt: 'List all files in the project'
+    outputs:
+      - name: file_list
+        description: 'All project files'
+        type: string
+
+  - id: review
+    type: agent
+    name: 'Review Files'
+    prompt: |
+      Review these files for issues:
+      {{steps.scan.outputs.file_list}}
+```
+
+**Combine multiple references**:
+```yaml
+prompt: |
+  Repository: {{inputs.repository_url}}
+  File types: {{inputs.file_types}}
+
+  Previous analysis:
+  {{steps.analyze_structure.outputs.project_overview}}
+
+  Files to review:
+  {{steps.analyze_structure.outputs.file_list}}
+```
+
+## Defaults
+
+The `defaults` object sets **workflow-level configuration** that steps inherit. This avoids repetition when most steps use the same AI tool and model.
+
+### Default Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `tool` | enum | No | Default AI tool: `claude`, `gemini`, `codex`, `qwen` |
+| `model` | string | No | Default model version |
+
+### Defaults Example
+
+```yaml
+defaults:
+  tool: claude
+  model: sonnet
+
+steps:
+  - id: step1
+    type: agent
+    name: 'Step 1'
+    # Uses claude/sonnet (inherited from defaults)
+    prompt: 'Do something...'
+
+  - id: step2
+    type: agent
+    name: 'Step 2'
+    tool: gemini  # Override tool for this step only
+    model: gemini-pro
+    prompt: 'Do something else...'
+
+  - id: step3
+    type: agent
+    name: 'Step 3'
+    # Uses claude/sonnet again (inherited from defaults)
+    prompt: 'Do another thing...'
+```
+
+## Workflow-Level Configuration
+
+The `config` object sets **global workflow behavior** for timeout and error handling.
+
+### Configuration Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `timeout` | number | No | Maximum workflow execution time (seconds) |
+| `continueOnError` | boolean | No | Whether to continue when a step fails (default: `false`) |
+
+### Configuration Example
+
+```yaml
+config:
+  timeout: 3600  # 1 hour maximum
+  continueOnError: false  # Stop on first error
+```
+
+## Step-Level Configuration
+
+Each step can override timeout and retry behavior using its own `config` object.
+
+### Step Config Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `timeout` | number | No | Maximum step execution time (seconds, default: **1800**) |
+| `retries` | number | No | Number of retry attempts on failure (default: **0**) |
+
+### Step Configuration Example
+
+```yaml
+steps:
+  - id: quick_check
+    type: agent
+    name: 'Quick Check'
+    prompt: 'Do a quick validation'
+    config:
+      timeout: 300  # 5 minutes
+      retries: 0
+
+  - id: deep_analysis
+    type: agent
+    name: 'Deep Analysis'
+    prompt: 'Perform comprehensive analysis'
+    config:
+      timeout: 1800  # 30 minutes
+      retries: 2  # Retry up to 2 times on failure
+```
+
+## Validation Rules
+
+Rover validates workflow files against these rules:
+
+### Required Fields
+- **`version`, `name`, `description`, and `steps`** must be present
+- Each step must have **`id`, `type`, `name`, and `prompt`**
+- Each input/output must have **`name`, `description`, and `type`**
+
+### Unique Identifiers
+- All step **`id` values must be unique** within the workflow
+- Input and output `name` values should be valid identifiers (letters, numbers, underscores)
+
+### Type Constraints
+- **Input types**: `string`, `number`, `boolean`
+- **Output types**: `string`, `number`, `boolean`, `file`
+- **Step types**: `agent` (other types not yet implemented)
+- **AI tools**: `claude`, `gemini`, `codex`, `qwen`
+
+### Conditional Requirements
+- **Required inputs** (`required: true`) cannot have default values
+- **Optional inputs** (`required: false`) should have default values
+- **File outputs** (`type: file`) **must specify `filename`**
+
+### Step References
+- Template references (`{{steps.step_id.outputs.output_name}}`) must point to **previously defined steps**
+- You cannot reference a step before it appears in the `steps` array
+- Step IDs in templates must match exactly
+
+### Common Validation Errors
+
+❌ **Duplicate step IDs**:
+```yaml
+steps:
+  - id: analyze  # Error: duplicate ID
+    type: agent
+    name: 'First Analysis'
+    prompt: '...'
+  - id: analyze  # Error: duplicate ID
+    type: agent
+    name: 'Second Analysis'
+    prompt: '...'
+```
+
+✅ **Unique step IDs**:
+```yaml
+steps:
+  - id: analyze_structure
+    type: agent
+    name: 'First Analysis'
+    prompt: '...'
+  - id: analyze_quality
+    type: agent
+    name: 'Second Analysis'
+    prompt: '...'
+```
+
+❌ **File output without filename**:
+```yaml
+outputs:
+  - name: report
+    type: file  # Error: missing filename
+    description: 'The report'
+```
+
+✅ **File output with filename**:
+```yaml
+outputs:
+  - name: report
+    type: file
+    filename: 'report.md'  # Required
+    description: 'The report'
+```
+
+❌ **Reference to future step**:
+```yaml
+steps:
+  - id: review
+    type: agent
+    name: 'Review'
+    # Error: analyze_structure not defined yet
+    prompt: 'Review: {{steps.analyze_structure.outputs.file_list}}'
+
+  - id: analyze_structure
+    type: agent
+    name: 'Analyze'
+    prompt: 'Analyze files'
+```
+
+✅ **Reference to previous step**:
+```yaml
+steps:
+  - id: analyze_structure
+    type: agent
+    name: 'Analyze'
+    prompt: 'Analyze files'
+    outputs:
+      - name: file_list
+        type: string
+        description: 'Files found'
+
+  - id: review
+    type: agent
+    name: 'Review'
+    # Correct: analyze_structure is defined above
+    prompt: 'Review: {{steps.analyze_structure.outputs.file_list}}'
+```

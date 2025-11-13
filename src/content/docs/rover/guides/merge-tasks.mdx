@@ -1,0 +1,107 @@
+---
+title: Merge changes from tasks
+description: Integrate completed tasks into your codebase through merging or pushing to remote repositories
+sidebar:
+  order: 5
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+After a task is complete and you've verified the changes, you need to integrate them into your codebase. Rover provides flexible options to fit your workflow. This guide shows you how to merge changes directly or push them to a remote repository.
+
+## Understanding integration options
+
+Rover does not dictate how you should work with git—it helps you with your own workflow. You can choose to:
+
+- **Merge directly**: Integrate changes immediately into your current branch
+- **Push to remote**: Push the task branch to your remote repository for code review and pull requests
+- **Manual integration**: Use standard git commands within the task workspace for custom workflows
+
+## Merge changes directly
+
+Merge a completed task branch directly into your current branch.
+
+<StepList title="Merge proposed changes to the current branch">
+  <StepItem step={1}>
+    List tasks to confirm the task is in completed status
+
+    ```sh
+    rover list
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Merge the task branch into your current branch
+
+    ```sh
+    rover merge 1
+    ```
+  </StepItem>
+</StepList>
+
+This command merges all commits from the task branch into your current branch. After merging, you can push your branch to the remote as you normally would.
+
+## Push to remote repository
+
+Push the task branch to your remote repository, making it available for creating pull requests or sharing with your team.
+
+<StepList title="Push branch to the remote">
+  <StepItem step={1}>
+    List tasks to find the task ID you want to push
+
+    ```sh
+    rover list
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Push the task branch to the remote repository
+
+    ```sh
+    rover push 1
+    ```
+
+    If there are remaining uncommitted changes, you will be asked whether you want to commit them.
+  </StepItem>
+</StepList>
+
+After pushing, you can create a pull request using your repository hosting platform's interface (GitHub, GitLab, Bitbucket, etc.).
+
+## Verify before integrating
+
+Before merging or pushing, always verify that the changes meet your requirements:
+
+1. **Review the diff**: Use `rover diff <task-id>` to see all changes
+2. **Test the code**: Use `rover shell <task-id>` to test in the task workspace
+3. **Check the build**: Run tests and build commands to ensure everything works
+4. **Inspect iterations**: Use `rover inspect <task-id>` to review the agent's work
+
+## Clean up after integration
+
+After successfully merging or pushing a task, you can clean up the task workspace:
+
+```sh
+rover delete 1
+```
+
+This removes the task folder and its associated git worktree, freeing up disk space.
+
+:::note
+Only delete tasks after you've successfully integrated the changes. If you need to reference the task later, you can keep it around.
+:::
+
+## Relevant Concepts
+
+<CardGrid>
+  <LinkCard title="Task" href="/rover/concepts/task" description="Learn about Rover tasks and how they work" />
+  <LinkCard title="Workspace" href="/rover/concepts/workspace" description="Understand how Rover creates isolated workspaces for each task" />
+</CardGrid>
+
+## Related Guides
+
+<CardGrid>
+  <LinkCard title="Implement a new feature" href="/rover/guides/assign-tasks" description="Create and assign tasks to AI coding agents" />
+  <LinkCard title="Iterate on tasks" href="/rover/guides/iterate-tasks" description="Refine and improve task implementations" />
+  <LinkCard title="Project Initialization" href="/rover/guides/project-initialization" description="Initialize Rover in your repository" />
+  <LinkCard title="Write technical documentation" href="/rover/guides/write-docs" description="Use Rover to create and maintain documentation" />
+</CardGrid>

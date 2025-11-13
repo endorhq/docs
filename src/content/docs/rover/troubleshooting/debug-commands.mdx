@@ -1,0 +1,93 @@
+---
+title: Debug commands
+description: Debug and troubleshoot common issues with Rover
+sidebar:
+  order: 1
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+This guide helps you diagnose and resolve issues you might encounter while using Rover. Whether you're facing errors with git operations, container issues, or other problems, these troubleshooting techniques will help you identify the root cause.
+
+## Enable verbose mode
+
+The `-v` (verbose) flag is your primary debugging tool when working with Rover. It shows detailed information about the commands Rover runs and their output, making it easier to identify what's going wrong.
+
+### Using verbose mode
+
+Add the `-v` flag to any Rover command to enable verbose output:
+
+```sh
+rover -v init
+```
+
+```sh
+rover -v task "Create a new feature"
+```
+
+```sh
+rover -v merge 1
+```
+
+### What verbose mode shows
+
+When you enable verbose mode, Rover displays:
+
+- **Underlying commands**: All git, docker/podman, and other system commands that Rover executes
+- **Command output**: The standard output and error streams from these commands
+- **Execution flow**: The sequence of operations Rover performs
+
+This information helps you understand exactly what Rover is doing behind the scenes and identify where failures occur.
+
+### Example output
+
+Here's an example of what you might see with verbose mode enabled:
+
+```sh
+rover -v init
+
+# Running: git rev-parse --is-inside-work-tree
+# Output: true
+#
+# Running: git rev-parse --show-toplevel
+# Output: /home/user/my-project
+#
+# Running: git log -1 --format=%H
+# Output: a1b2c3d4e5f6...
+#
+# Rover initialized successfully
+```
+
+### When to use verbose mode
+
+Use verbose mode when:
+
+- **Commands fail unexpectedly**: See exactly which underlying command failed and why
+- **Debugging git issues**: Understand what git operations Rover is performing
+- **Container problems**: Identify issues with docker or podman commands
+- **Reporting bugs**: Provide detailed information when reporting issues to the Rover team
+
+### Common issues revealed by verbose mode
+
+Verbose mode often helps identify:
+
+- **Git configuration issues**: Missing git configuration or permissions
+- **Path problems**: Incorrect working directories or missing files
+- **Container runtime issues**: Docker or podman daemon not running or misconfigured
+- **Permission errors**: File or directory permission problems
+
+## Getting help
+
+If verbose mode doesn't help you resolve the issue, reach out to the community:
+
+<CardGrid>
+  <LinkCard title="Discord" href="https://discord.gg/ruMJaQqVKa" description="Join our Discord for real-time help and discussions" />
+  <LinkCard title="GitHub Issues" href="https://github.com/endorhq/rover/issues" description="Report bugs and request features" />
+</CardGrid>
+
+## Related Documentation
+
+<CardGrid>
+  <LinkCard title="Command Reference" href="/rover/reference/cli-reference" description="Complete reference for all Rover commands" />
+  <LinkCard title="Quickstart" href="/rover/intro/quickstart" description="Get started with Rover" />
+</CardGrid>
