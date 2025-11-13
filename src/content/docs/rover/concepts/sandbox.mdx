@@ -97,18 +97,18 @@ The sandbox includes several **Model Context Protocol (MCP)** servers and utilit
 
 Multiple package managers are available:
 
-| Package Manager | Purpose | Usage Example |
-|----------------|---------|---------------|
-| **npm** | Node.js packages | `npm install lodash` |
-| **apk** | Alpine Linux system packages | `apk add curl` |
-| **uv** | Python package management | `uv pip install requests` |
-| **Nix** | Cross-platform package manager | `nix-env -i git` |
+| Package Manager | Purpose |
+|----------------|---------|
+| **npm** | Node.js packages |
+| **apk** | Alpine Linux system packages |
+| **uv** | Python package management |
+| **Nix** | Cross-platform package manager |
 
 ### Installing System Tools
 
-The sandbox includes the `package-manager-mcp` server, which allows coding agents to install additional system tools as needed. For example, to install `curl`, they can install it via an MCP tool. 
+The sandbox includes the [`package-manager-mcp` server](https://github.com/endorhq/package-manager-mcp), which allows coding agents to install additional system tools as needed. For example, to install `curl`, they can install it via an MCP tool. 
 
-The MCP limits the ability to install packages to the distribution package manager, ensuring security and stability within the sandbox. In the current image, this means only `apk` can be used to install system packages.
+**The MCP limits the ability to install packages to the distribution package manager**, ensuring security and stability within the sandbox. In the current image, this means only `apk` can be used to install system packages.
 
 ## Next Steps
 

@@ -8,18 +8,39 @@ sidebar:
 import StepList from '../../../../components/StepList.svelte';
 import StepItem from '../../../../components/StepItem.svelte';
 import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkCard, Tabs, TabItem } from '@astrojs/starlight/components';
 
-## Install
+This quickstart guide will help you install Rover and get it running in your system. By the end of this guide, you'll have Rover set up and be able to create your first task with an AI coding agent.
+
+## Before you begin
+
+Ensure you have the following prerequisites installed on your machine:
+
+- **Node.js 22** or newer
+- **Git**
+- **Docker** or **Podman**
+- **Supported AI Agent** ([Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview#get-started-in-30-seconds), [Codex](https://github.com/openai/codex?tab=readme-ov-file#installing-and-running-codex-cli), [Gemini](https://github.com/google-gemini/gemini-cli?tab=readme-ov-file#quick-install), [Cursor](https://cursor.com/cli) or [Qwen](https://github.com/QwenLM/qwen-code?tab=readme-ov-file#installation))
+
+## Your first steps with Rover
 
 Installing Rover and getting it to work for you is straightforward, just follow the steps:
 
-<StepList title="Installing Rover">
+<StepList title="1. Installing Rover">
   <StepItem step={1}>
     Install Rover
 
-    ```sh
-    npm install -g @endorhq/rover@latest
-    ```
+    <Tabs>
+      <TabItem label="npm">
+        ```sh
+        npm install -g @endorhq/rover@latest
+        ```
+      </TabItem>
+      <TabItem label="pnpm">
+        ```sh
+        pnpm add -g @endorhq/rover@latest
+        ```
+      </TabItem>
+    </Tabs>
   </StepItem>
   <StepItem step={2}>
     Check that Rover is correctly installed
@@ -36,11 +57,10 @@ Installing Rover and getting it to work for you is straightforward, just follow 
 From here on you are ready to enable Rover on a project that you have
 on your filesystem.
 
-## Initialize
-
-<StepList title="Initializing Rover">
+<StepList title="2. Initializing Rover">
   <StepItem step={1}>
-    Navigate to a project in which you want to enable Rover. This project needs to have git initialized, and at least one commit has to exist in its history.
+    Navigate to a project in which you want to enable Rover. This project needs to have git initialized, and at least one commit has to exist in its history. 
+    You can use the following commands to create a sample project:
 
     ```sh
     mkdir -p ~/rover-quickstart && cd ~/rover-quickstart && git init && \
@@ -51,7 +71,7 @@ on your filesystem.
     Init Rover
 
     ```sh
-    rover init -y
+    rover init
     ```
 
     Rover will detect all supported installed agents in your system. You can init Rover in as many projects as you wish.
@@ -61,7 +81,7 @@ on your filesystem.
   </StepItem>
 </StepList>
 
-<StepList title="Asking Rover its first task">
+<StepList title="3. Asking Rover its first task">
   <StepItem step={1}>
     Navigate to the project in which you enabled Rover
 
@@ -85,30 +105,13 @@ on your filesystem.
   </StepItem>
 </StepList>
 
-## Other Resources
+Congratulations! **You have successfully installed Rover, initialized it in a project, and created your first task**. From here, you can explore more advanced features and workflows to make the most out of Rover and AI coding agents.
+
+## Next steps
 
 <CardGrid>
-  <Card title="Common Workflows" icon="forward-slash">
-    Read more about common workflows with Rover and how they make you more productive. From initialization all the way down to debugging.
-
-    [Common Workflows →](/rover/guides/common-workflows)
-  </Card>
-
-  <Card title="VSCode Extension" icon="document">
-    Integrate Endor with VSCode to never leave your favorite IDE in order to get agentic help.
-
-    [VSCode Extension →](/rover/intro/vscode-extension)
-  </Card>
-
-  <Card title="Command Reference" icon="document">
-    Exhaustive Rover command reference.
-
-    [Command Reference →](/rover/reference/cli-reference)
-  </Card>
-
-  <Card title="Overview" icon="forward-slash">
-    Rover Overview.
-
-    [Overview →](/rover/intro/overview)
-  </Card>
+  <LinkCard title="Overview" href="/rover/intro/overview" description="Get started with Rover" />
+  <LinkCard title="Sandbox" href="/rover/concepts/sandbox" description="Understand the sandboxed environment where tasks run" />
+  <LinkCard title="Workflow" href="/rover/concepts/workflow" description="Learn how workflows guide coding agents to complete tasks" />
+  <LinkCard title="Workspace" href="/rover/concepts/workspace" description="Explore the workspace where coding agents apply changes" />
 </CardGrid>

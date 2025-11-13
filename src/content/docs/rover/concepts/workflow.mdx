@@ -5,4 +5,99 @@ sidebar:
   order: 3
 ---
 
-hehe
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+In Rover, a workflow defines a set of steps to complete a certain kind of task. They're like templates that tell the agent how to work - for example, the _Software Engineering_ / `swe` workflow guides the agent through software engineering tasks.
+
+Each workflow is designed for a specific use case and guides AI coding agents to complete it autonomously. Currently, Rover includes the following workflows:
+
+- [**Software Engineering**](https://github.com/endorhq/rover/blob/main/packages/cli/src/lib/workflows/swe.yml) (`swe`): Guides the agent through software engineering tasks, such as writing code, fixing bugs, and implementing features.
+- [**Technical Writing**](https://github.com/endorhq/rover/blob/main/packages/cli/src/lib/workflows/tech-writer.yml) (`tech-writer`): Helps the agent create technical documentation, such as developer documentation, end-user guides, and tutorials.
+
+You can check the available workflows by running the following command:
+
+```sh
+rover workflows list
+
+# Rover (v1.4.1) · /home/angel/Workspace/rover
+# --------------------------------------------
+# Name         Description                                        Steps Inputs
+# ───────────────────────────────────────────────────────────────────────────────────────────────────
+# swe          Complete software engineering workflow with ada... 6     description
+# tech-writer  Write documentation and tutorials for your tech... 4     description, audience, format
+```
+
+To use a specific workflow, you can specify it when creating a new [task](/rover/concepts/task):
+
+```sh
+rover task --workflow tech-writer
+```
+
+## Workflow Definition
+
+Workflows are defined using YAML files that specify:
+
+1. **Inputs**: The parameters required to start the workflow (e.g., description, audience, format)
+2. **Outputs**: The expected results of the workflow (e.g., documentation files)
+3. **Configuration**: Settings that control how the workflow operates (e.g., model settings, time limits)
+4. **Steps**: The sequence of actions the agent will take to complete the workflow (e.g., research, draft, review, finalize)
+
+If you want to check a full workflow definition, checkout the Workflow File Reference.
+
+## Processing workflow
+
+When you create a task, Rover copies the selected workflow into the [task folder](/rover/concepts/task/#local-structure). Then, the Rover agent manager that runs in the [sandboxed environment](/rover/concepts/sandbox) reads the workflow file and executes each step sequentially.
+
+This tool ensures that the coding agent follows the defined process, using the specified inputs and producing the expected outputs. It validates each step's completion before moving to the next one.
+
+To check it, you can retrieve the task logs and check the different steps:
+
+```sh
+rover logs <task-id>
+
+# =======================================
+# 🚀 Running Workflow
+# =======================================
+# Loading inputs from /inputs.json
+# 
+# Agent Workflow
+# ├── Name: tech-writer
+# └── Description: Write documentation and tutorials for your technical projects
+# 
+# User inputs
+# ├── title=Document rover.json and settings.json configuration files
+# ├── description=Create high-level documentation explaining the purpose ...
+# ├── audience=end users (default)
+# └── format=markdown (default)
+# 
+# Steps
+# ├── 0. Context Analysis
+# ├── 1. Outline
+# ├── 2. Draft
+# └── 3. Review
+# 
+# 🤖 Running Context Analysis > claude
+# ✓ Step 'Context Analysis' completed successfully
+# 
+# 📊 Step Results: Context Analysis
+# ├── ID: context
+# ├── Status: ✓ Success
+# ├── Duration: 171.34s
+# └── Outputs:
+#     ├── context_file: /output/context.md
+#     └── context_file_content: # Documentation Context...
+#
+# 🤖 Running Outline > claude
+# ...
+```
+
+## Custom Workflows
+
+## Next Steps
+
+<CardGrid>
+  <LinkCard title="Overview" href="/rover/intro/overview" description="Get started with the Rover CLI" />
+  <LinkCard title="Task" href="/rover/concepts/task" description="Learn about Rover tasks and how to manage them" />
+  <LinkCard title="Sandbox" href="/rover/concepts/sandbox" description="Understand the sandboxed environment where tasks run" />
+  <LinkCard title="Workspace" href="/rover/concepts/workspace" description="Explore the workspace where coding agents apply changes" />
+</CardGrid>
