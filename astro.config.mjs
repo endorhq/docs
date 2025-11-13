@@ -33,6 +33,7 @@ if (isProd) {
 // https://astro.build/config
 export default defineConfig({
   redirects: {
+    // MCP redirects
     '/mcp/overview': {
       status: 302,
       destination: '/cli/mcp/overview',
@@ -56,6 +57,27 @@ export default defineConfig({
     '/mcp/windsurf': {
       status: 302,
       destination: '/cli/mcp/windsurf',
+    },
+    // Rover redirects
+    '/rover/overview': {
+      status: 301,
+      destination: '/rover/intro/overview',
+    },
+    '/rover/quickstart': {
+      status: 301,
+      destination: '/rover/intro/quickstart',
+    },
+    '/rover/common-workflows': {
+      status: 301,
+      destination: '/rover/intro/quickstart',
+    },
+    '/rover/vscode-extension': {
+      status: 301,
+      destination: '/rover/intro/vscode-extension',
+    },
+    '/rover/command-reference': {
+      status: 301,
+      destination: '/rover/reference/cli-reference/',
     },
   },
   integrations: [
