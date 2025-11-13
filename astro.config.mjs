@@ -5,6 +5,7 @@ import starlightThemeRapide from 'starlight-theme-rapide';
 import starlightSidebarTopics from 'starlight-sidebar-topics';
 import svelte from '@astrojs/svelte';
 import tailwindcss from '@tailwindcss/vite';
+import mermaid from 'astro-mermaid';
 
 import { posthogCode } from './posthog.mjs';
 
@@ -58,6 +59,11 @@ export default defineConfig({
     },
   },
   integrations: [
+    // @see https://github.com/joesaby/astro-mermaid?tab=readme-ov-file#integration-order-important
+    mermaid({
+      theme: 'forest',
+      autoTheme: true
+    }),
     starlight({
       title: 'Endor Documentation',
       plugins: [

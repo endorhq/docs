@@ -1,5 +1,5 @@
 ---
-title: Project Configuration (rover.json)
+title: rover.json Reference
 description: Rover project configuration file (rover.json) reference
 sidebar:
   order: 2
@@ -7,39 +7,13 @@ sidebar:
 
 import { Aside } from '@astrojs/starlight/components';
 
-The `rover.json` file is Rover's project configuration file that controls how AI agents interact with your codebase. This reference documentation explains each configuration field, provides practical examples, and covers security best practices.
-
-## Introduction
-
-The `rover.json` file:
-
-- Lives in your project root directory
-- Is committed to version control and shared across your team
-- Configures AI agent behavior, environment detection, and runtime settings
-- Is automatically created when you run `rover init`
-
-**Key distinction:** `rover.json` defines project-wide settings, while `.rover/settings.json` stores user-specific preferences (like user preferences). Only commit `rover.json` to version control.
-
-## File Basics
-
-### Location and Creation
+## Location and Creation
 
 Place `rover.json` in your project's root directory. Rover creates this file automatically during initialization:
 
 ```bash
 rover init
 ```
-
-### Schema Versioning
-
-Rover uses schema versioning for automatic migration of configuration files. When you open a project with an older schema, Rover automatically migrates it while preserving your settings.
-
-### Configuration vs Settings
-
-| Type | File | Purpose | Commit? |
-|------|------|---------|---------|
-| **Project Config** | `rover.json` | Shared project settings | ✅ Yes |
-| **User Settings** | `.rover/settings.json` | Personal preferences, API keys | ❌ No |
 
 ## Configuration Fields
 
