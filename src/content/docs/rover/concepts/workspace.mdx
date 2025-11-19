@@ -10,7 +10,11 @@ import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 A workspace is an independent folder that contains a copy of your project. Rover creates a separate workspace for each [task](/rover/reference/cli-reference/#task), making it possible to run multiple tasks in parallel without interference. **Each coding agent will apply changes only in its workspace**. 
 
-To create it, Rover uses the [`git` worktree feature](https://git-scm.com/docs/git-worktree). A worktree is a separate checkout of your repository, sharing the same `.git` folder. Imagine it as having multiple copies of your local repository, each in its own folder and a different branch, but all connected to the same git history.
+To create it, Rover uses the [`git` worktree feature](https://git-scm.com/docs/git-worktree).
+
+## What's a git worktree?
+
+A git worktree is a separate checkout of your repository, sharing the same `.git` folder. Imagine it as having multiple copies of your local repository, each in its own folder and a different branch, but all connected to the same git history.
 
 ## Workspace structure
 
