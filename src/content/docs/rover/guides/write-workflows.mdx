@@ -1,0 +1,34 @@
+---
+title: Write workflows
+description: Use Rover to create your own custom workflows
+sidebar:
+  order: 3
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Rover provides you with some built-in workflows such as the Software Engineer and the Tech Writer. Rover gives you the ability to create custom workflows to accomodate changes on the existing ones that best fit your needs, or to create complete new ones from scratch for use cases we haven't foreseen.
+
+## The anatomy of a workflow
+
+Workflows are defined in YAML format and follow a pre-defined structure. You can find this structure [in the Workflow YAML File documentation](../../reference/workflow-file).
+
+
+
+## Relevant Concepts
+
+<CardGrid>
+  <LinkCard title="Workflow" href="/rover/concepts/workflow" description="Discover how workflows guide coding agents" />
+  <LinkCard title="Task" href="/rover/concepts/task" description="Learn about Rover tasks and how they work" />
+</CardGrid>
+
+## Related Guides
+
+<CardGrid>
+  <LinkCard title="Implement a new feature" href="/rover/guides/assign-tasks" description="Create and assign tasks to AI coding agents" />
+  <LinkCard title="Iterate on tasks" href="/rover/guides/iterate-tasks" description="Refine and improve task implementations" />
+  <LinkCard title="Merge changes from tasks" href="/rover/guides/merge-tasks" description="Integrate completed tasks into your codebase" />
+  <LinkCard title="Project Initialization" href="/rover/guides/project-initialization" description="Initialize Rover in your repository" />
+</CardGrid>
