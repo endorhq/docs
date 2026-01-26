@@ -14,10 +14,10 @@ Rover command reference.
 - [Project configuration](#project-configuration)
   - [`init`](#init)
 - [Create and manage tasks](#create-and-manage-tasks)
+  - [`list`](#list)
   - [`task`](#task)
   - [`restart`](#restart)
   - [`stop`](#stop)
-  - [`list`](#list)
   - [`inspect`](#inspect)
   - [`logs`](#logs)
   - [`delete`](#delete)
@@ -28,12 +28,16 @@ Rover command reference.
   - [`diff`](#diff)
   - [`merge`](#merge)
   - [`push`](#push)
+- [Other](#other)
+  - [`workflows`](#workflows)
+  - [`mcp`](#mcp)
+  - [`info`](#info)
 
 ## Project configuration
 
 ### init
 
-Initialize your project
+Create a shared configuration for this project
 
 **Usage:**
 ```
@@ -46,9 +50,25 @@ rover init [options] [path]
 
 ## Create and manage tasks
 
+### list
+
+Show the tasks from current project or all projects
+
+**Usage:**
+```
+rover list [options]
+```
+
+**Options:**
+
+- `-w, --watch [seconds]`: Watch for changes (default 3s, or specify interval)
+- `--json`: Output in JSON format
+
+**Aliases:** `ls`
+
 ### task
 
-Start a new task for an AI Agent. It will spawn a new environment to complete it.
+Create and assign task to an AI Agent to complete it
 
 **Usage:**
 ```
@@ -58,12 +78,16 @@ rover task [options] [description]
 **Options:**
 
 - `--from-github <issue>`: Fetch task description from a GitHub issue number
+- `--workflow, -w <name>`: Use a specific workflow to complete this task
 - `-y, --yes`: Skip all confirmations and run non-interactively
 - `-s, --source-branch <branch>`: Base branch for git worktree creation
 - `-t, --target-branch <branch>`: Custom name for the worktree branch
-- `-a, --agent <agent>`: AI agent to use (claude, gemini, qwen)
+- `-a, --agent <agent>`: AI agent with optional model (e.g., claude:opus, gemini:flash). Repeat for multiple agents. Available: claude, codex, cursor, gemini, qwen
+- `--network-mode <mode>`: Network filtering mode for the container
+- `--network-allow <host>`: Allow network access to host (domain, IP, or CIDR). Can be repeated.
+- `--network-block <host>`: Block network access to host (domain, IP, or CIDR). Can be repeated.
 - `--json`: Output the result in JSON format
-- `--debug`: Show debug information like running commands
+- `--sandbox-extra-args <args>`: Extra arguments to pass to the Docker/Podman container (e.g., "--network mynet")
 
 ### restart
 
@@ -94,22 +118,6 @@ rover stop [options] <taskId>
 - `-g, --remove-git-worktree-and-branch`: Remove git worktree and branch
 - `--json`: Output the result in JSON format
 
-### list
-
-Show tasks and their status
-
-**Usage:**
-```
-rover list [options]
-```
-
-**Options:**
-
-- `-w, --watch`: Watch for changes and refresh every 5 seconds
-- `--json`: Output in JSON format
-
-**Aliases:** `ls`
-
 ### inspect
 
 Inspect a task
@@ -122,6 +130,7 @@ rover inspect [options] <taskId> [iterationNumber]
 **Options:**
 
 - `--file <files...>`: Output iteration file contents
+- `--raw-file <files...>`: Output raw file contents without formatting (mutually exclusive with --file)
 - `--json`: Output in JSON format
 
 ### logs
@@ -165,7 +174,7 @@ rover iterate [options] <taskId> [instructions]
 
 **Options:**
 
-- `-f, --follow`: Follow execution logs in real-time
+- `-i, --interactive`: Open an interactive command session to iterate on the task
 - `--json`: Output JSON and skip confirmation prompts
 
 **Aliases:** `iter`
@@ -198,6 +207,7 @@ rover diff [options] <taskId> [filePath]
 
 **Options:**
 
+- `--base`: Compare against the base commit when task was created
 - `-b, --branch <name>`: Compare changes with a specific branch
 - `--only-files`: Show only changed filenames
 
@@ -227,4 +237,37 @@ rover push [options] <taskId>
 **Options:**
 
 - `-m, --message <message>`: Commit message
+- `--json`: Output in JSON format
+
+## Other
+
+### workflows
+
+Retrieve information about the available workflows
+
+**Usage:**
+```
+rover workflows [options] [command]
+```
+
+### mcp
+
+Start Rover as an MCP server
+
+**Usage:**
+```
+rover mcp [options]
+```
+
+### info
+
+Show information about the Rover global store
+
+**Usage:**
+```
+rover info [options]
+```
+
+**Options:**
+
 - `--json`: Output in JSON format
