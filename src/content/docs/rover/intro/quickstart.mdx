@@ -7,8 +7,7 @@ sidebar:
 
 import StepList from '../../../../components/StepList.svelte';
 import StepItem from '../../../../components/StepItem.svelte';
-import { Card, CardGrid } from '@astrojs/starlight/components';
-import { LinkCard, Tabs, TabItem } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard, Tabs, TabItem } from '@astrojs/starlight/components';
 
 This quickstart guide will help you install Rover and get it running in your system. By the end of this guide, you'll have Rover set up and be able to create your first task with an AI coding agent.
 
@@ -50,16 +49,15 @@ Installing Rover and getting it to work for you is straightforward, just follow 
     ```
   </StepItem>
   <StepItem step={3}>
-    Congratulations!, you are a step closer to making those agents work for you
+    Congratulations! You are a step closer to making those agents work for you
   </StepItem>
 </StepList>
 
-From here on you are ready to enable Rover on a project that you have
-on your filesystem.
+From here on you are ready to use Rover on any git project.
 
-<StepList title="2. Initializing Rover">
+<StepList title="2. Creating your first task">
   <StepItem step={1}>
-    Navigate to a project in which you want to enable Rover. This project needs to have git initialized, and at least one commit has to exist in its history. 
+    Navigate to a git project. The project needs to have git initialized and at least one commit in its history.
     You can use the following commands to create a sample project:
 
     ```sh
@@ -68,44 +66,26 @@ on your filesystem.
     ```
   </StepItem>
   <StepItem step={2}>
-    Init Rover
-
-    ```sh
-    rover init
-    ```
-
-    Rover will detect all supported installed agents in your system. You can init Rover in as many projects as you wish.
-  </StepItem>
-  <StepItem step={3}>
-    Now you are ready to ask Rover its first task!
-  </StepItem>
-</StepList>
-
-<StepList title="3. Asking Rover its first task">
-  <StepItem step={1}>
-    Navigate to the project in which you enabled Rover
-
-    ```sh
-    cd ~/rover-quickstart
-    ```
-  </StepItem>
-  <StepItem step={2}>
     Ask Rover to create a [fizzbuzz](https://en.wikipedia.org/wiki/Fizz_buzz) program
 
     ```sh
     rover task -y "Create a fizzbuzz bash program as a programming example"
     ```
+
+    Rover will automatically detect your installed AI agents and register the project.
   </StepItem>
   <StepItem step={3}>
-    You can now read the Common Workflows document to see what are the common ways in which you can interact with Rover, but in the meantime you can watch the task list progress.
+    Watch the task progress
 
     ```sh
     rover list -w
     ```
+
+    You can also check the Common Workflows section below to see how you can interact with Rover.
   </StepItem>
 </StepList>
 
-Congratulations! **You have successfully installed Rover, initialized it in a project, and created your first task**. From here, you can explore more advanced features and workflows to make the most out of Rover and AI coding agents.
+Congratulations! **You have successfully installed Rover and created your first task**. From here, you can explore more advanced features and workflows to make the most out of Rover and AI coding agents.
 
 ## Common Workflows
 

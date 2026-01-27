@@ -1,0 +1,100 @@
+---
+title: Migrating to Rover v2
+description: What's new in Rover v2 and how to migrate from v1
+sidebar:
+  order: 3
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Rover v2 introduces a centralized architecture for better multi-project support. The good news: **no action is required from users**. Your existing projects will continue to work as before.
+
+This guide explains what changed and optional cleanup steps you may want to take.
+
+## What Changed
+
+### Global Store
+
+Rover now uses a centralized [Global Store](/rover/advanced/global-store) to manage configuration and tasks across all your projects.
+
+| Platform | Location |
+|----------|----------|
+| macOS/Linux | `~/.rover/` |
+| Windows | `%APPDATA%\Rover\` |
+
+The Global Store contains:
+- **Configuration** (`config/rover.json`): User preferences, [telemetry settings](/rover/config/telemetry), and project registry
+- **Task data** (`data/projects/`): Centralized storage for all task data
+- **Cache** (`cache/`): Temporary files
+
+### Project Configuration is Optional
+
+The [`rover.json`](/rover/config/project-config) file at your project root is now **optional**. Rover can detect your project's languages and package managers automatically when you run `rover init`.
+
+If you already have a `rover.json`, it will continue to work and be respected.
+
+## Task Storage
+
+Rover v2 changes where new tasks are stored while maintaining full compatibility with existing tasks.
+
+### Existing Tasks
+
+Tasks created with v1 remain in your project's `.rover/tasks/` directory. Rover will continue to read and manage them from this location. You don't need to move or migrate them.
+
+### New Tasks
+
+New tasks are created in the [Global Store](/rover/advanced/global-store) at:
+- **macOS/Linux**: `~/.rover/data/projects/<project-id>/tasks/`
+- **Windows**: `%APPDATA%\Rover\data\projects\<project-id>\tasks\`
+
+### Cleaning Up Old Tasks
+
+After you've merged or pushed your v1 tasks, you can delete them using the [`rover delete`](/rover/reference/cli#delete) command:
+
+```sh
+# Delete specific tasks by ID
+rover delete 1 2 3
+
+# Check task status before deleting
+rover list
+```
+
+<Aside type="tip">
+Only delete tasks that have been merged or pushed. Use `rover list` to check the status of your tasks before cleanup.
+</Aside>
+
+## Automatic Migration
+
+Rover handles migration automatically:
+
+- **Task IDs**: Your existing task counter is preserved and migrated to the Global Store
+- **Configuration**: Your [`rover.json`](/rover/config/project-config) settings are respected (if present)
+- **Telemetry**: Your [telemetry preferences](/rover/config/telemetry) are migrated from the legacy location
+
+## Summary
+
+| Aspect | v1 | v2 |
+|--------|----|----|
+| Task storage | `.rover/tasks/` in project | [Global Store](/rover/advanced/global-store) (with legacy support) |
+| Configuration | `rover.json` required | [`rover.json`](/rover/config/project-config) optional |
+| Multi-project | Isolated | Centralized registry |
+
+## Verify Your Setup
+
+After updating Rover, verify everything works:
+
+```sh
+# Check version
+rover --version
+
+# List your tasks (should show existing tasks)
+rover list
+```
+
+## Next Steps
+
+<CardGrid>
+  <LinkCard title="Global Store" href="/rover/advanced/global-store" description="Learn more about the centralized Global Store" />
+  <LinkCard title="User Settings" href="/rover/config/user-settings" description="Configure your personal preferences" />
+  <LinkCard title="Project Configuration" href="/rover/config/project-config" description="Optional project-wide configuration" />
+</CardGrid>
