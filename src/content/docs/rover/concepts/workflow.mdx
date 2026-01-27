@@ -100,13 +100,13 @@ Custom workflows are required to follow the [Workflow YAML file format documente
 If you want to start from an existing workflow, you can first dump its contents to a file in the filesystem:
 
 ```sh
-rover workflows inspect swe --json | jq .workflow > improved-swe.json
+rover workflows inspect swe --raw > improved-swe.yaml
 ```
 
-Make the changes you want on the `improved-swe.json`, and import it.
+Make the changes you want on the `improved-swe.yaml`, and import it.
 
 ```sh
-rover workflows add --name improved-swe improved-swe.json
+rover workflows add --name improved-swe improved-swe.yaml
 ```
 
 You can now refer to this workflow normally, for example:
@@ -114,6 +114,8 @@ You can now refer to this workflow normally, for example:
 ```sh
 rover task --workflow improved-swe 'Improve the installation script to check that the user has root permissions'
 ```
+
+You can follow the [`Write workflows` guide](/rover/guides/write-workflows) in order to create your own workflows that accomodate your custom use cases or needs.
 
 ## Next Steps
 
