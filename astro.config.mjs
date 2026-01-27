@@ -79,6 +79,10 @@ export default defineConfig({
       status: 301,
       destination: '/rover/reference/cli-reference/',
     },
+    '/rover/intro/configuration': {
+      status: 301,
+      destination: '/rover/configuration/project-configuration',
+    },
   },
   integrations: [
     // @see https://github.com/joesaby/astro-mermaid?tab=readme-ov-file#integration-order-important
@@ -104,6 +108,10 @@ export default defineConfig({
               {
                 label: 'Key Concepts',
                 autogenerate: { directory: 'rover/concepts' },
+              },
+              {
+                label: 'Configuration',
+                autogenerate: { directory: 'rover/configuration' },
               },
               {
                 label: 'Guides',

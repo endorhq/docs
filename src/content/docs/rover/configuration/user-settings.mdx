@@ -1,0 +1,144 @@
+---
+title: User Settings
+description: Configure user-specific preferences that aren't shared with your team
+sidebar:
+  order: 2
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+The **`.rover/settings.json`** file stores user-specific preferences that should not be shared across your team. This file is automatically added to `.gitignore` when you run `rover init`.
+
+## Configuration Options
+
+| Field | Description |
+|-------|-------------|
+| `aiAgents` | List of AI agents installed on your machine |
+| `defaults.aiAgent` | Your preferred AI agent to use by default |
+| `defaults.models` | Default model to use for each AI agent |
+| `defaults.watchIntervalSeconds` | Polling interval for `rover list --watch` (1-60 seconds, default: 3) |
+
+## Basic Structure
+
+Here's a typical user settings file:
+
+```jsonc
+{
+  // Schema version for automatic migration
+  "version": "1.0",
+
+  // AI agents installed on this machine
+  "aiAgents": ["claude", "gemini"],
+
+  // Default preferences
+  "defaults": {
+    "aiAgent": "claude",
+    "models": {
+      "claude": "sonnet"
+    }
+  }
+}
+```
+
+<Aside type="caution">Do not commit this file. It's automatically added to `.gitignore` because it contains user-specific preferences.</Aside>
+
+## Setting a Default Agent
+
+Choose your preferred AI agent:
+
+```jsonc
+{
+  "version": "1.0",
+  "aiAgents": ["claude", "gemini"],
+  "defaults": {
+    "aiAgent": "gemini"
+  }
+}
+```
+
+The default agent is used when you create tasks without explicitly specifying an agent. You can always override this choice for specific tasks:
+
+```sh
+rover task --agent claude "Fix the login bug"
+```
+
+## Default Models
+
+Configure which model each AI agent should use by default. This is useful when you want to use a specific model tier (like Claude's Opus or Sonnet) without specifying it every time.
+
+```jsonc
+{
+  "version": "1.0",
+  "aiAgents": ["claude", "gemini"],
+  "defaults": {
+    "aiAgent": "claude",
+    "models": {
+      "claude": "opus",
+      "gemini": "flash"
+    }
+  }
+}
+```
+
+The available models depend on each AI agent. Common options include:
+
+| Agent | Example Models |
+|-------|----------------|
+| `claude` | `opus`, `sonnet`, `haiku` |
+| `gemini` | `pro`, `flash` |
+
+You can override the default model for specific tasks using the `--agent agent:model` syntax:
+
+```sh
+rover task --agent claude:sonnet "Quick code review"
+```
+
+## Reference
+
+For a complete list of all available configuration options, see the [User Config Reference](/rover/reference/user-config).
+
+## Telemetry
+
+Rover has basic telemetry reporting to help understand how the tool is used. This telemetry does not identify you, as it generates a fully random hash you can change. You can find your random ID at `~/.config/rover/.user`.
+
+The only information recorded by telemetry is which action was invoked and basic metadata like the action source (CLI or VS Code Extension). Telemetry **does not record** any data from prompts, task titles, or descriptions.
+
+### Disabling Telemetry
+
+There are two ways to disable telemetry in Rover.
+
+**Option 1: Create a no-telemetry file**
+
+<StepList title="Disable via file">
+  <StepItem step={1}>
+    ```sh
+    mkdir -p ~/.config/rover
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    ```sh
+    touch ~/.config/rover/.no-telemetry
+    ```
+  </StepItem>
+</StepList>
+
+**Option 2: Use an environment variable**
+
+Set the `ROVER_NO_TELEMETRY` environment variable:
+
+```sh
+# For a single command
+ROVER_NO_TELEMETRY=true rover list
+
+# Or export it globally
+export ROVER_NO_TELEMETRY=true
+```
+
+## Next Steps
+
+<CardGrid>
+  <LinkCard title="Project Configuration" href="/rover/configuration/project-configuration" description="Configure project-wide settings" />
+  <LinkCard title="Hooks" href="/rover/configuration/hooks" description="Run custom commands at task lifecycle events" />
+</CardGrid>
