@@ -67,7 +67,7 @@ Follow these steps to build the `licensing-expert` workflow piece by piece.
       - name: licensing_report
         description: 'Markdown report of licensing issues and compliance status'
         type: file
-        filename: 'licensing.md'
+        filename: 'licensing_report.md'
     ```
   </StepItem>
   <StepItem step={4}>
@@ -158,7 +158,7 @@ outputs:
   - name: licensing_report
     description: 'Markdown report of licensing issues and compliance status'
     type: file
-    filename: 'licensing.md'
+    filename: 'licensing_report.md'
 ```
 
 For full output properties, see the [Workflow YAML File reference](/rover/reference/workflow-file#outputs).
@@ -201,16 +201,13 @@ steps:
       Analysis:
       {{steps.analyze.outputs.analysis_report}}
 
+      Write the report to `analysis_report.md`.
+
       The report must include:
       - Executive summary of licensing status
       - Table of all dependencies with their license types
       - List of flagged issues (copyleft, missing, or conflicting licenses)
       - Recommended actions to resolve each issue
-    outputs:
-      - name: analysis_report
-        description: 'Detailed dependency and license analysis report'
-        type: string
-        filename: analysis_report.md
 ```
 
 You can override the AI tool or model for individual steps and set step-level timeouts or retries. See the [Workflow YAML File reference](/rover/reference/workflow-file#agent-step-configuration) for all step properties.
@@ -267,7 +264,7 @@ outputs:
   - name: licensing_report
     description: 'Markdown report of licensing issues and compliance status'
     type: file
-    filename: 'licensing.md'
+    filename: 'licensing_report.md'
 
 defaults:
   tool: claude
@@ -307,11 +304,6 @@ steps:
       - Table of all dependencies with their license types
       - List of flagged issues (copyleft, missing, or conflicting licenses)
       - Recommended actions to resolve each issue
-    outputs:
-      - name: analysis_report
-        description: 'Detailed dependency and license analysis report'
-        type: string
-        filename: analysis_report.md
 ```
 
 ## Register the workflow
