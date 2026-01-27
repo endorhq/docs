@@ -2,7 +2,7 @@
 title: Workspace
 description: Understand how Rover creates isolated workspaces using git worktrees for each task
 sidebar:
-  order: 2
+  order: 3
 ---
 
 import { FileTree } from '@astrojs/starlight/components';
@@ -18,27 +18,29 @@ A git worktree is a separate checkout of your repository, sharing the same `.git
 
 ## Workspace structure
 
-When you create a new task, Rover will create a new worktree in the `.rover/tasks/<task-id>/workspace/` folder. This workspace starts from the branch you specify when [creating the task](/rover/reference/cli-reference/#task) (defaulting to the current branch). The coding agent will then apply changes directly in this workspace.
+When you create a new task, Rover creates a new worktree in the [global store](/rover/advanced/global-store) at `~/.rover/data/projects/<project-id>/workspaces/<task-id>/`. This workspace starts from the branch you specify when [creating the task](/rover/reference/cli-reference/#task) (defaulting to the current branch). The coding agent will then apply changes directly in this workspace.
 
 <FileTree>
-- .rover/
+- ~/.rover/data/projects/\<project-id\>/
   - tasks/
     - 1/
     - 2/
-      - description.json
-      - ...
-      - workspace/
-        - YOUR_README.md
-        - ...
-    - 3/
     - ...
+  - workspaces/
+    - 1/ Git worktree for task 1
+      - README.md
+      - src/
+      - ...
+    - 2/ Git worktree for task 2
+    - ...
+  - logs/
 </FileTree>
 
 ## Deleting a workspace
 
-When you delete a task using `rover delete <task-id>`, Rover will also remove the associated workspace, cleaning up the worktree and all its files. 
+When you delete a task using `rover delete <task-id>`, Rover will also remove the associated workspace, cleaning up the worktree and all its files.
 
-If you delete the `.rover/tasks/X/workspace/` folder manually, you will need to prune the git worktree references using:
+If you delete the workspace folder manually from the global store, you will need to prune the git worktree references using:
 
 ```sh
 git worktree prune
@@ -47,7 +49,7 @@ git worktree prune
 ## Next steps
 
 <CardGrid>
-  <LinkCard title="Overview" href="/rover/intro/overview" description="Get started with the Rover CLI" />
+  <LinkCard title="Project" href="/rover/concepts/project" description="Understand how Rover identifies and manages your repositories" />
   <LinkCard title="Task" href="/rover/concepts/task" description="Learn about Rover tasks and how to manage them" />
   <LinkCard title="Sandbox" href="/rover/concepts/sandbox" description="Understand the sandboxed environment where tasks run" />
   <LinkCard title="Workflow" href="/rover/concepts/workflow" description="Learn how workflows guide coding agents to complete tasks" />

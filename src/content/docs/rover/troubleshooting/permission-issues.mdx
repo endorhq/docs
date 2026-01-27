@@ -1,0 +1,84 @@
+---
+title: Permission Issues
+description: Identify and solve permission issues on Rover
+sidebar:
+  order: 1
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+### Verify the Global Store Exists
+
+```bash
+# macOS/Linux
+ls -la ~/.rover
+
+# Windows (PowerShell)
+Get-Item "$env:APPDATA\Rover" -ErrorAction SilentlyContinue
+```
+
+If the directory doesn't exist, run any Rover command to create it automatically.
+
+### Check File Permissions
+
+The global store should have restricted permissions. If you encounter permission errors:
+
+```bash
+# macOS/Linux - fix permissions
+chmod 700 ~/.rover
+chmod 700 ~/.rover/config
+chmod 700 ~/.rover/data
+chmod 600 ~/.rover/config/rover.json
+```
+
+#### File Ownership in Workspaces
+
+When running Rover with Docker rootless mode, file ownership in your [workspace](/rover/concepts/workspace/) may temporarily change during task execution. This is expected behavior. Rover adjusts ownership to allow containers to read and write files properly, and will restore the original ownership at the end of the worfklow execution.
+
+**Before running `chown` commands**, check if any tasks are currently running:
+
+```bash
+rover list
+```
+
+If a task is in progress, changing file ownership may cause it to fail. Wait for the task to complete before modifying ownership. Once tasks finish, Rover restores the original ownership automatically.
+
+If you need to manually restore ownership after all tasks have completed:
+
+```bash
+# Restore ownership to your user and group
+chown -R $(whoami):$(id -gn) ~/.rover/data/projects
+```
+
+### Corrupted Configuration
+
+If `rover.json` becomes corrupted:
+
+1. **Back up the current file:**
+   ```bash
+   cp ~/.rover/config/rover.json ~/.rover/config/rover.json.backup
+   ```
+
+2. **Delete the corrupted file:**
+   ```bash
+   rm ~/.rover/config/rover.json
+   ```
+
+3. **Run any Rover command** to regenerate a default configuration.
+
+**Note:** Deleting `rover.json` removes your project registrations. You'll need to re-register projects, but task data in `data/projects/` is preserved.
+
+### Reset the Global Store
+
+To completely reset Rover's global store:
+
+```bash
+# macOS/Linux
+rm -rf ~/.rover
+
+# Windows (PowerShell)
+Remove-Item -Recurse "$env:APPDATA\Rover"
+Remove-Item -Recurse "$env:LOCALAPPDATA\Rover"
+```
+
+**Warning:** This deletes all configuration, project registrations, tasks, and workspaces. Only do this as a last resort.

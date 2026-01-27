@@ -1,0 +1,189 @@
+---
+title: Global Store
+description: Understand where Rover stores task metadata, logs, and results.
+sidebar:
+    order: 1
+---
+
+import { FileTree } from '@astrojs/starlight/components';
+
+Rover maintains a global store for configuration, task metadata, workspaces, and logs. Each [project](/rover/concepts/project) has its own separate folder. This guide explains the directory structure, files, and how to troubleshoot common issues.
+
+## Global Store Location
+
+The global store location depends on your operating system:
+
+| Platform | Location |
+|----------|----------|
+| macOS | `~/.rover` |
+| Linux | `~/.rover` |
+| Windows | `%APPDATA%\Rover` |
+
+The global store is created automatically the first time you run a Rover command. All directories are created with restricted permissions (mode `0700`) to protect your data.
+
+To verify your global store exists:
+
+```bash
+# macOS/Linux
+ls -la ~/.rover
+
+# Windows (PowerShell)
+Get-Item "$env:APPDATA\Rover"
+```
+
+## Inspecting the Global Store
+
+Use the `rover info` command to view information about your global store and all registered projects:
+
+```sh
+rover info
+
+# Rover Store Information
+# -----------------------
+# · Store Path: /home/user/.rover/data
+# · Registered Projects: 2
+#
+# Projects
+# --------
+#
+# user/my-app
+# ├── ID: user-my-app-a1b2c3d4
+# ├── Path: /home/user/projects/my-app
+# └── Tasks: 5
+#
+# user/api-server
+# ├── ID: user-api-server-e5f6g7h8
+# ├── Path: /home/user/work/api-server
+# └── Tasks: 3
+```
+
+The command displays:
+- **Store Path**: Location of the global data directory
+- **Registered Projects**: Total number of projects Rover is tracking
+- **Per-project details**: ID, filesystem path, and task count for each project
+
+For scripting and automation, use the `--json` flag to get machine-readable output:
+
+```sh
+rover info --json
+```
+
+## Directory Structure Overview
+
+The global store contains three main directories:
+
+<FileTree>
+- ~/.rover/
+  - config/ Global configuration
+    - rover.json Main configuration file
+  - data/ Task and project data
+    - projects/ Per-project storage
+      - \<project-id\>/ Individual project folders
+        - tasks/ Task metadata
+        - workspaces/ Git worktrees
+        - logs/ Execution logs
+  - cache/ Temporary cached data
+</FileTree>
+
+| Directory | Purpose |
+|-----------|---------|
+| `config/` | Global configuration including registered projects and user preferences |
+| `data/` | Project data including tasks, workspaces, and logs |
+| `cache/` | Temporary data that can be safely deleted |
+
+**Note:** On Windows, the cache directory is stored separately at `%LOCALAPPDATA%\Rover\cache`.
+
+## Configuration Directory (config/)
+
+The `config/` directory contains Rover's global configuration file and other elements like [workflows](/rover/concepts/workflow). The files in this folder applies to all the projects in your system.
+
+- **`rover.json`**: the main configuration file containing user preferences and project registrations.
+- **`workflows`**: folder that contains global workflows for all projects.
+
+This directory is created on first Rover CLI use, along with a default `rover.json` file.
+
+### Global Configuration File (rover.json)
+
+The `rover.json` file is the central configuration file for Rover. It stores user preferences, AI agent settings, and the registry of all projects you've used with Rover. This file is auto-generated and managed by the Rover CLI, so you don't need to edit it.
+
+If you want to customize a specific project, create a [Project Configuration](/rover/intro/configuration) file.
+
+### Project Registry
+
+Each project you use with Rover is registered. Registration happens automatically when you run Rover commands in a project directory.
+
+#### Project ID Generation
+
+Project IDs use the format: `<clean-name>-<hash>`
+
+- **clean-name**: Repository name with invalid filename characters replaced by hyphens
+- **hash**: First 8 characters of SHA256 hash of the project path
+
+This ensures unique IDs even for projects with the same name as long as they are in different locations.
+
+**Example:**
+- Project path: `/Users/developer/projects/my-app`
+- Repository name: `my-app`
+- Generated ID: `my-app-a1b2c3d4`
+
+## Data Directory (data/)
+
+The `data/` directory stores all runtime data for your projects, including tasks, Git worktrees, and logs.
+
+<FileTree>
+- ~/.rover/data/
+  - projects/
+    - \<project-id\>/
+      - tasks/
+      - workspaces/
+      - logs/
+</FileTree>
+
+### Project Data Structure
+
+Each registered project has its own subdirectory under `data/projects/`, named using the project ID:
+
+| Subdirectory | Purpose |
+|--------------|---------|
+| `tasks/` | Task metadata (description.json files) |
+| `workspaces/` | Git worktrees for isolated task execution |
+| `logs/` | Execution logs for each task |
+
+### Task Storage
+
+Each task is stored in its own numbered folder under `tasks/`:
+
+<FileTree>
+- ~/.rover/data/projects/\<project-id\>/tasks/
+  - 1/
+    - description.json
+    - iterations/
+      - 1/
+      - 2/
+  - 2/
+    - description.json
+    - iterations/
+  - 3/
+    - description.json
+</FileTree>
+
+Task IDs are sequential integers starting from 1 for each project.
+
+## Cache Directory (cache/)
+
+The cache directory stores temporary data that Rover uses to improve performance. This data can be safely deleted without losing important information.
+
+| Platform | Location |
+|----------|----------|
+| macOS/Linux | `~/.rover/cache` |
+| Windows | `%LOCALAPPDATA%\Rover\cache` |
+
+To clear the cache:
+
+```bash
+# macOS/Linux
+rm -rf ~/.rover/cache
+
+# Windows (PowerShell)
+Remove-Item -Recurse "$env:LOCALAPPDATA\Rover\cache"
+```
