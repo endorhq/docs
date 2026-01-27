@@ -1,13 +1,13 @@
 ---
 title: Global Store
-description: Understand where Rover stores the task metadata, logs, and results.
+description: Understand where Rover stores task metadata, logs, and results.
 sidebar:
     order: 1
 ---
 
 import { FileTree } from '@astrojs/starlight/components';
 
-Rover maintains a global store for configuration, task metadata, workspaces, and logs. Each [project](/rover/concepts/project) has it's own separate folder. This guide explains the directory structure, files, and how to troubleshoot common issues.
+Rover maintains a global store for configuration, task metadata, workspaces, and logs. Each [project](/rover/concepts/project) has its own separate folder. This guide explains the directory structure, files, and how to troubleshoot common issues.
 
 ## Global Store Location
 
@@ -97,7 +97,7 @@ The global store contains three main directories:
 
 The `config/` directory contains Rover's global configuration file and other elements like [workflows](/rover/concepts/workflow). The files in this folder applies to all the projects in your system.
 
-- **`rover.json`**: the main configuration file containing user preferences and project registrations
+- **`rover.json`**: the main configuration file containing user preferences and project registrations.
 - **`workflows`**: folder that contains global workflows for all projects.
 
 This directory is created on first Rover CLI use, along with a default `rover.json` file.
@@ -119,7 +119,7 @@ Project IDs use the format: `<clean-name>-<hash>`
 - **clean-name**: Repository name with invalid filename characters replaced by hyphens
 - **hash**: First 8 characters of SHA256 hash of the project path
 
-This ensures unique IDs even for projects with the same name in different locations.
+This ensures unique IDs even for projects with the same name as long as they are in different locations.
 
 **Example:**
 - Project path: `/Users/developer/projects/my-app`

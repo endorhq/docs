@@ -33,7 +33,7 @@ chmod 600 ~/.rover/config/rover.json
 
 #### File Ownership in Workspaces
 
-When running Rover with Docker rootless mode, file ownership in your [workspace](/rover/concepts/workspace/) may temporarily change during task execution. This is expected behavior. Rover adjusts ownership to allow containers to read and write files properly.
+When running Rover with Docker rootless mode, file ownership in your [workspace](/rover/concepts/workspace/) may temporarily change during task execution. This is expected behavior. Rover adjusts ownership to allow containers to read and write files properly, and will restore the original ownership at the end of the worfklow execution.
 
 **Before running `chown` commands**, check if any tasks are currently running:
 
