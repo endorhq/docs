@@ -59,26 +59,26 @@ rover logs <task-id>
 # 🚀 Running Workflow
 # =======================================
 # Loading inputs from /inputs.json
-# 
+#
 # Agent Workflow
 # ├── Name: tech-writer
 # └── Description: Write documentation and tutorials for your technical projects
-# 
+#
 # User inputs
 # ├── title=Document rover.json and settings.json configuration files
 # ├── description=Create high-level documentation explaining the purpose ...
 # ├── audience=end users (default)
 # └── format=markdown (default)
-# 
+#
 # Steps
 # ├── 0. Context Analysis
 # ├── 1. Outline
 # ├── 2. Draft
 # └── 3. Review
-# 
+#
 # 🤖 Running Context Analysis > claude
 # ✓ Step 'Context Analysis' completed successfully
-# 
+#
 # 📊 Step Results: Context Analysis
 # ├── ID: context
 # ├── Status: ✓ Success
@@ -92,6 +92,30 @@ rover logs <task-id>
 ```
 
 ## Custom Workflows
+
+You can adapt workflows that are Rover built-in, or you can create workflows of your own. Custom workflows can either be saved to the global store, or local to current project. By default, workflows are added locally to the current project, but you can use the `--global` flag to refer to the global workflows when you are in a project.
+
+Custom workflows are required to follow the [Workflow YAML file format documented here](/rover/reference/workflow-file/).
+
+If you want to start from an existing workflow, you can first dump its contents to a file in the filesystem:
+
+```sh
+rover workflows inspect swe --raw > improved-swe.yaml
+```
+
+Make the changes you want on the `improved-swe.yaml`, and import it.
+
+```sh
+rover workflows add --name improved-swe improved-swe.yaml
+```
+
+You can now refer to this workflow normally, for example:
+
+```sh
+rover task --workflow improved-swe 'Improve the installation script to check that the user has root permissions'
+```
+
+You can follow the [`Write workflows` guide](/rover/guides/write-workflows) in order to create your own workflows that accomodate your custom use cases or needs.
 
 ## Next Steps
 

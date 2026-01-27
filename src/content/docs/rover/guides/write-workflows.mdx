@@ -1,0 +1,435 @@
+---
+title: Write workflows
+description: Use Rover to create your own custom workflows
+sidebar:
+  order: 3
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Rover includes built-in workflows like the Software Engineer (`swe`) and Tech Writer (`tech-writer`), but you can also create custom workflows for use cases they don't cover. This guide walks you through writing a custom workflow from scratch.
+
+You will build a `licensing-expert` workflow that analyzes project dependencies and generates a report highlighting licensing issues and compliance concerns. By the end, you will know how to define inputs, outputs, steps, and configuration in a workflow YAML file, register it with Rover, and run it as a task.
+
+For background on how workflows work, see the [Workflow concept page](/rover/concepts/workflow).
+
+## The anatomy of a workflow
+
+Workflows are defined in YAML and follow a pre-defined structure. Each file contains these top-level fields:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `version` | **Yes** | Schema version (currently `'1.0'`) |
+| `name` | **Yes** | Unique workflow identifier |
+| `description` | **Yes** | Human-readable purpose of the workflow |
+| `steps` | **Yes** | Ordered list of agent steps to execute |
+| `inputs` | No | Parameters the user provides when running the workflow |
+| `outputs` | No | Files or values the workflow produces |
+| `defaults` | No | Default AI tool and model for all steps |
+| `config` | No | Timeout and error-handling settings |
+
+You can find the full schema in the [Workflow YAML File reference](/rover/reference/workflow-file).
+
+## Create a workflow file
+
+Follow these steps to build the `licensing-expert` workflow piece by piece.
+
+<StepList title="Building the licensing-expert workflow">
+  <StepItem step={1}>
+    Create a new file called `licensing-expert.yml` in your project directory.
+
+    Start with the required metadata:
+
+    ```yaml
+    version: '1.0'
+    name: 'licensing-expert'
+    description: 'Analyze project dependencies and generate a licensing compliance report'
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    [Define the inputs](#define-inputs) so users can describe what they want analyzed:
+
+    ```yaml
+    inputs:
+      - name: description
+        description: 'Describe the licensing analysis you want performed'
+        type: string
+        required: true
+    ```
+  </StepItem>
+  <StepItem step={3}>
+    [Define the outputs](#define-outputs) to declare the report file the workflow produces:
+
+    ```yaml
+    outputs:
+      - name: licensing_report
+        description: 'Markdown report of licensing issues and compliance status'
+        type: file
+        filename: 'licensing_report.md'
+    ```
+  </StepItem>
+  <StepItem step={4}>
+    Add [defaults and config](#defaults-and-config) to set the AI tool and execution limits:
+
+    ```yaml
+    defaults:
+      tool: claude
+
+    config:
+      timeout: 3600
+      continueOnError: false
+    ```
+  </StepItem>
+  <StepItem step={5}>
+    [Define the steps](#define-steps) that the agent will execute sequentially:
+
+    ```yaml
+    steps:
+      - id: analyze
+        type: agent
+        name: 'Analyze Dependencies'
+        prompt: |
+          Scan the project and identify all dependencies and their licenses.
+
+          Focus on: {{inputs.description}}
+
+          List every dependency with its license type. Flag any dependencies
+          that use copyleft licenses (GPL, AGPL, LGPL), have no license,
+          or have licenses that conflict with common permissive usage.
+        outputs:
+          - name: license_analysis
+            description: 'Detailed dependency and license analysis'
+            type: string
+
+
+      - id: report
+        type: agent
+        name: 'Generate Report'
+        prompt: |
+          Using the analysis below, create a comprehensive licensing report.
+
+          Analysis:
+          {{steps.analyze.outputs.analysis}}
+
+          The report must include:
+          - Executive summary of licensing status
+          - Table of all dependencies with their license types
+          - List of flagged issues (copyleft, missing, or conflicting licenses)
+          - Recommended actions to resolve each issue
+    ```
+  </StepItem>
+  <StepItem step={6}>
+    Verify that your file matches the [complete example](#complete-example) below.
+  </StepItem>
+</StepList>
+
+### Define inputs
+
+Inputs declare the parameters users provide when running the workflow. Each input has a name, description, type, and whether it is required.
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `name` | string | **Yes** | Unique identifier for the input |
+| `description` | string | **Yes** | Explanation of what the input is for |
+| `type` | enum | **Yes** | Data type: `string`, `number`, or `boolean` |
+| `required` | boolean | **Yes** | Whether the user must provide this input |
+| `default` | any | No | Default value (only for optional inputs) |
+
+The `licensing-expert` workflow uses a single required input:
+
+```yaml
+inputs:
+  - name: description
+    description: 'Describe the licensing analysis you want performed'
+    type: string
+    required: true
+```
+
+Reference inputs in step prompts with the template syntax `{{inputs.description}}`. See [Template syntax](#template-syntax) for details.
+
+### Define outputs
+
+Outputs declare what the workflow produces. Output types can be `string`, `number`, `boolean`, or `file`. File outputs require a `filename` property that tells Rover which file to expect.
+
+```yaml
+outputs:
+  - name: licensing_report
+    description: 'Markdown report of licensing issues and compliance status'
+    type: file
+    filename: 'licensing_report.md'
+```
+
+For full output properties, see the [Workflow YAML File reference](/rover/reference/workflow-file#outputs).
+
+### Define steps
+
+Steps are the sequential actions the agent executes. Each step has a unique `id`, a `type` (currently only `agent`), a `name`, and a `prompt` with instructions for the AI agent.
+
+The `licensing-expert` workflow uses two steps:
+
+1. **Analyze Dependencies** — Scans the project and catalogues every dependency with its license type
+2. **Generate Report** — Takes the analysis output and writes a structured `licensing.md` file
+
+Steps can declare their own outputs, which later steps reference through template syntax. In this workflow, the `analyze` step produces an `analysis` output that the `report` step consumes:
+
+```yaml
+steps:
+  - id: analyze
+    type: agent
+    name: 'Analyze Dependencies'
+    prompt: |
+      Scan the project and identify all dependencies and their licenses.
+
+      Focus on: {{inputs.description}}
+
+      List every dependency with its license type. Flag any dependencies
+      that use copyleft licenses (GPL, AGPL, LGPL), have no license,
+      or have licenses that conflict with common permissive usage.
+    outputs:
+      - name: analysis
+        description: 'Detailed dependency and license analysis'
+        type: string
+
+  - id: report
+    type: agent
+    name: 'Generate Report'
+    prompt: |
+      Using the analysis below, create a comprehensive licensing report.
+
+      Analysis:
+      {{steps.analyze.outputs.analysis_report}}
+
+      Write the report to `analysis_report.md`.
+
+      The report must include:
+      - Executive summary of licensing status
+      - Table of all dependencies with their license types
+      - List of flagged issues (copyleft, missing, or conflicting licenses)
+      - Recommended actions to resolve each issue
+```
+
+You can override the AI tool or model for individual steps and set step-level timeouts or retries. See the [Workflow YAML File reference](/rover/reference/workflow-file#agent-step-configuration) for all step properties.
+
+### Template syntax
+
+Templates use Mustache-style placeholders that Rover replaces at runtime:
+
+- **Reference an input**: `{{inputs.input_name}}`
+- **Reference a step output**: `{{steps.step_id.outputs.output_name}}`
+
+Templates can only reference steps that are defined **before** the current step in the `steps` array. Forward references are not allowed.
+
+### Defaults and config
+
+The `defaults` object sets the AI tool and model for all steps. Individual steps can override these values.
+
+```yaml
+defaults:
+  tool: claude
+```
+
+The `config` object controls workflow-level execution behavior:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `timeout` | number | Maximum workflow execution time in seconds |
+| `continueOnError` | boolean | Whether to continue when a step fails (default: `false`) |
+
+```yaml
+config:
+  timeout: 3600
+  continueOnError: false
+```
+
+Steps can also have their own `config` with `timeout` (default: 1800 seconds) and `retries` (default: 0).
+
+### Complete example
+
+Here is the full `licensing-expert.yml` file:
+
+```yaml
+version: '1.0'
+name: 'licensing-expert'
+description: 'Analyze project dependencies and generate a licensing compliance report'
+
+inputs:
+  - name: description
+    description: 'Describe the licensing analysis you want performed'
+    type: string
+    required: true
+
+outputs:
+  - name: licensing_report
+    description: 'Markdown report of licensing issues and compliance status'
+    type: file
+    filename: 'licensing_report.md'
+
+defaults:
+  tool: claude
+
+config:
+  timeout: 3600
+  continueOnError: false
+
+steps:
+  - id: analyze
+    type: agent
+    name: 'Analyze Dependencies'
+    prompt: |
+      Scan the project and identify all dependencies and their licenses.
+
+      Focus on: {{inputs.description}}
+
+      List every dependency with its license type. Flag any dependencies
+      that use copyleft licenses (GPL, AGPL, LGPL), have no license,
+      or have licenses that conflict with common permissive usage.
+    outputs:
+      - name: analysis
+        description: 'Detailed dependency and license analysis'
+        type: string
+
+  - id: report
+    type: agent
+    name: 'Generate Report'
+    prompt: |
+      Using the analysis below, create a comprehensive licensing report.
+
+      Analysis:
+      {{steps.analyze.outputs.analysis_report}}
+
+      The report must include:
+      - Executive summary of licensing status
+      - Table of all dependencies with their license types
+      - List of flagged issues (copyleft, missing, or conflicting licenses)
+      - Recommended actions to resolve each issue
+```
+
+## Register the workflow
+
+After creating the YAML file, register it with Rover so you can use it in tasks.
+
+<StepList title="Registering the workflow">
+  <StepItem step={1}>
+    Navigate to your project directory
+
+    ```sh
+    cd ~/my-project
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Add the workflow to Rover
+
+    ```sh
+    rover workflows add licensing-expert.yml
+    ```
+
+    By default, the workflow is added locally to the current project. To make it available across all projects, add the `--global` flag.
+  </StepItem>
+  <StepItem step={3}>
+    Verify the workflow was registered
+
+    ```sh
+    rover workflows list
+    ```
+
+    You should see the new workflow alongside the built-in ones:
+
+    ```
+    Name               Description                                                Steps Inputs
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    swe                Complete software engineering workflow with ada...          6     description
+    tech-writer        Write documentation and tutorials for your tech...         4     description, audience, format
+    licensing-expert   Analyze project dependencies and generate a li...          2     description
+    ```
+  </StepItem>
+</StepList>
+
+## Run the workflow
+
+Create a task that uses your custom workflow.
+
+<StepList title="Running the licensing-expert workflow">
+  <StepItem step={1}>
+    Create a task with the `--workflow` flag and provide the required input
+
+    ```sh
+    rover task --workflow licensing-expert \
+      "Analyze all project dependencies and identify any licensing conflicts or compliance issues"
+    ```
+
+    The `-y` flag skips confirmation prompts and starts the task immediately.
+  </StepItem>
+  <StepItem step={2}>
+    Monitor the task progress. Assuming the task was assigned ID `1`:
+
+    ```sh
+    rover logs -f 1
+    ```
+
+    The agent executes each step sequentially. You will see output similar to:
+
+    ```
+    =======================================
+    🚀 Running Workflow
+    =======================================
+
+    Agent Workflow
+    ├── Name: licensing-expert
+    └── Description: Analyze project dependencies and generate a licensing compliance report
+
+    Steps
+    ├── 0. Analyze Dependencies
+    └── 1. Generate Report
+
+    🤖 Running Analyze Dependencies > claude
+    ✓ Step 'Analyze Dependencies' completed successfully
+
+    🤖 Running Generate Report > claude
+    ✓ Step 'Generate Report' completed successfully
+    ```
+  </StepItem>
+</StepList>
+
+## Review results
+
+After the task completes, inspect the generated report.
+
+<StepList title="Reviewing the licensing report">
+  <StepItem step={1}>
+    Check the generated report.
+
+    ```Sh
+    rover inspect --file=analysis_report.md 1
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    If the report needs changes, iterate on the task
+
+    ```sh
+    rover iterate 1 "Add a section covering transitive dependencies and their licenses"
+    ```
+
+    See the [Iterate on tasks](/rover/guides/iterate-tasks) guide for more on refining results.
+  </StepItem>
+</StepList>
+
+
+By following this guide, you have created your own workflow. You can take existing workflows and adapt to your own needs, or create new workflows from scratch as we have done. Choose your own adventure!
+
+## Relevant Concepts
+
+<CardGrid>
+  <LinkCard title="Workflow" href="/rover/concepts/workflow" description="Discover how workflows guide coding agents" />
+  <LinkCard title="Task" href="/rover/concepts/task" description="Learn about Rover tasks and how they work" />
+</CardGrid>
+
+## Related Guides
+
+<CardGrid>
+  <LinkCard title="Implement a new feature" href="/rover/guides/assign-tasks" description="Create and assign tasks to AI coding agents" />
+  <LinkCard title="Iterate on tasks" href="/rover/guides/iterate-tasks" description="Refine and improve task implementations" />
+  <LinkCard title="Merge changes from tasks" href="/rover/guides/merge-tasks" description="Integrate completed tasks into your codebase" />
+  <LinkCard title="Project Initialization" href="/rover/guides/project-initialization" description="Initialize Rover in your repository" />
+</CardGrid>
