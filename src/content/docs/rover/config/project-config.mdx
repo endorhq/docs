@@ -29,8 +29,8 @@ You can create a `rover.json` manually or run `rover init` to generate one with 
 | `attribution` | Whether Rover adds itself as co-author on AI-assisted commits |
 | `envs` | Custom environment variables passed to containerized agents |
 | `envsFile` | Path to a dotenv file with environment variables |
-| `hooks` | Commands to run at task lifecycle events ([see Hooks](/rover/configuration/hooks)) |
-| `sandbox` | Customize the container environment ([see Sandbox Configuration](/rover/configuration/sandbox-configuration)) |
+| `hooks` | Commands to run at task lifecycle events ([see Hooks](/rover/config/hooks)) |
+| `sandbox` | Customize the container environment ([see Sandbox Configuration](/rover/config/sandbox-config)) |
 | `excludePatterns` | Glob patterns for files to exclude from task workspaces |
 
 ## Basic Structure
@@ -225,7 +225,7 @@ For a complete list of all available configuration options, see the [Project Con
 ## Next Steps
 
 <CardGrid>
-  <LinkCard title="Sandbox Configuration" href="/rover/configuration/sandbox-configuration" description="Customize the container environment with custom images and network rules" />
-  <LinkCard title="Hooks" href="/rover/configuration/hooks" description="Run custom commands when tasks are merged, pushed, or completed" />
-  <LinkCard title="User Settings" href="/rover/configuration/user-settings" description="Configure user-specific preferences" />
+  <LinkCard title="Sandbox Configuration" href="/rover/config/sandbox-config" description="Customize the container environment with custom images and network rules" />
+  <LinkCard title="Hooks" href="/rover/config/hooks" description="Run custom commands when tasks are merged, pushed, or completed" />
+  <LinkCard title="User Settings" href="/rover/config/user-settings" description="Configure user-specific preferences" />
 </CardGrid>
