@@ -1,0 +1,159 @@
+---
+title: Hooks
+description: Run custom commands when tasks are merged, pushed, or completed
+sidebar:
+  order: 3
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Hooks let you run custom shell commands at specific points in the task lifecycle. Use them to trigger notifications, update dashboards, run CI pipelines, or integrate with other tools.
+
+## Available Hooks
+
+| Hook | Trigger |
+|------|---------|
+| `onMerge` | Runs after a task is successfully merged via `rover merge` |
+| `onPush` | Runs after a task branch is pushed via `rover push` |
+| `onComplete` | Runs when a task finishes (success or failure), detected via `rover list` |
+
+## Configuration
+
+Add hooks to your `rover.json` file:
+
+```jsonc
+{
+  "version": "1.2",
+  "languages": ["typescript"],
+  "packageManagers": ["npm"],
+  "hooks": {
+    "onComplete": ["./scripts/on-complete.sh"],
+    "onMerge": ["./scripts/on-merge.sh"],
+    "onPush": ["echo 'Task $ROVER_TASK_ID pushed'"]
+  }
+}
+```
+
+Each hook accepts an array of shell commands. Commands are executed sequentially in the order specified.
+
+## Environment Variables
+
+Rover passes task information to hooks via environment variables:
+
+| Variable | Description | Available In |
+|----------|-------------|--------------|
+| `ROVER_TASK_ID` | The task ID | All hooks |
+| `ROVER_TASK_BRANCH` | The task branch name | All hooks |
+| `ROVER_TASK_TITLE` | The task title | All hooks |
+| `ROVER_TASK_STATUS` | Task status: `completed` or `failed` | `onComplete` only |
+
+## Example Hook Script
+
+Create a script that notifies your team when a task completes:
+
+```bash
+#!/bin/bash
+# scripts/on-complete.sh
+
+echo "Task $ROVER_TASK_ID ($ROVER_TASK_TITLE) finished with status: $ROVER_TASK_STATUS"
+
+# Send a Slack notification
+if [ "$ROVER_TASK_STATUS" = "completed" ]; then
+  curl -X POST -H 'Content-type: application/json' \
+    --data "{\"text\":\"Task #$ROVER_TASK_ID completed: $ROVER_TASK_TITLE\"}" \
+    "$SLACK_WEBHOOK_URL"
+fi
+```
+
+Make sure to set execute permissions:
+
+```sh
+chmod +x scripts/on-complete.sh
+```
+
+## Hook Behavior
+
+### Execution Context
+
+- Hooks run in the **project directory** (where `rover.json` is located)
+- Commands execute via the shell (`sh -c`), supporting pipes and complex commands
+- Hooks inherit the current environment plus `ROVER_*` variables
+
+### Error Handling
+
+- Hook failures are logged as **warnings** but don't interrupt the main operation
+- If a hook fails, subsequent hooks in the array still execute
+- The primary command (`merge`, `push`, `list`) completes regardless of hook failures
+
+<Aside type="tip">Hooks are designed to be non-blocking. A failing notification script won't prevent your merge from completing.</Aside>
+
+### Deduplication
+
+The `onComplete` hook only triggers on **new** status transitions. If a task was already completed and you run `rover list` again, the hook won't re-execute.
+
+## Use Cases
+
+### Notify on Completion
+
+Send notifications when tasks finish:
+
+```jsonc
+{
+  "hooks": {
+    "onComplete": [
+      "curl -X POST https://api.example.com/webhook -d '{\"task\": \"$ROVER_TASK_ID\", \"status\": \"$ROVER_TASK_STATUS\"}'"
+    ]
+  }
+}
+```
+
+### Trigger CI on Push
+
+Start a CI pipeline when a task branch is pushed:
+
+```jsonc
+{
+  "hooks": {
+    "onPush": [
+      "gh workflow run ci.yml --ref $ROVER_TASK_BRANCH"
+    ]
+  }
+}
+```
+
+### Update Issue Tracker on Merge
+
+Close related issues when tasks are merged:
+
+```jsonc
+{
+  "hooks": {
+    "onMerge": [
+      "./scripts/close-issue.sh"
+    ]
+  }
+}
+```
+
+### Multiple Commands
+
+Chain multiple commands for a single hook:
+
+```jsonc
+{
+  "hooks": {
+    "onComplete": [
+      "echo 'Task $ROVER_TASK_ID completed'",
+      "./scripts/notify-slack.sh",
+      "./scripts/update-dashboard.sh"
+    ]
+  }
+}
+```
+
+## Next Steps
+
+<CardGrid>
+  <LinkCard title="Project Configuration" href="/rover/config/project-config" description="Configure project-wide settings" />
+  <LinkCard title="User Settings" href="/rover/config/user-settings" description="Configure user-specific preferences" />
+</CardGrid>

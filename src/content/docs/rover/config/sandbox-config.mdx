@@ -1,0 +1,263 @@
+---
+title: Sandbox Configuration
+description: Customize the containerized environment where tasks run
+sidebar:
+  order: 4
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+The sandbox configuration lets you customize the containerized environment where AI agents execute tasks. Use it to provide custom Docker images, run initialization scripts, pass extra container arguments, or control network access.
+
+All sandbox options are configured under the `sandbox` key in your `rover.json`:
+
+```jsonc
+{
+  "version": "1.3",
+  "languages": ["typescript"],
+  "packageManagers": ["npm"],
+  "sandbox": {
+    "agentImage": "my-registry/custom-agent:latest",
+    "initScript": "./scripts/init-sandbox.sh",
+    "extraArgs": ["--memory=4g"],
+    "network": {
+      "mode": "allowlist",
+      "rules": [{ "host": "api.example.com" }]
+    }
+  }
+}
+```
+
+## Custom Agent Image
+
+Use the `agentImage` option to specify a custom Docker or Podman image instead of Rover's default agent image.
+
+```jsonc
+{
+  "sandbox": {
+    "agentImage": "ghcr.io/my-org/custom-agent:v1.0"
+  }
+}
+```
+
+### Image Resolution Priority
+
+Rover resolves the agent image in this order:
+
+1. `AGENT_IMAGE` environment variable (highest priority)
+2. Image stored in the task (from previous runs)
+3. `agentImage` from `rover.json`
+4. Default Rover agent image (based on CLI version)
+
+<Aside type="tip">Use the `AGENT_IMAGE` environment variable to temporarily override the configured image without modifying `rover.json`.</Aside>
+
+### Building Custom Images
+
+Custom images should be based on Rover's agent image or include compatible tooling. The image must have the AI agent CLI installed (Claude Code, Codex, Gemini CLI, etc.).
+
+```dockerfile
+FROM ghcr.io/endorhq/rover/agent:latest
+
+# Add your custom tools
+RUN apt-get update && apt-get install -y my-custom-tool
+
+# Add custom configuration
+COPY my-config /etc/my-config
+```
+
+## Initialization Script
+
+The `initScript` option runs a shell script inside the container before the AI agent starts. Use it to set up the environment, install dependencies, or configure tools.
+
+```jsonc
+{
+  "sandbox": {
+    "initScript": "./scripts/init-sandbox.sh"
+  }
+}
+```
+
+The path is relative to your project root. The script is mounted read-only at `/init-script.sh` inside the container.
+
+### Example Script
+
+```bash
+#!/bin/bash
+# scripts/init-sandbox.sh
+
+# Install additional system packages
+apt-get update && apt-get install -y graphviz
+
+# Configure git
+git config --global user.name "AI Agent"
+git config --global user.email "agent@example.com"
+
+# Set up environment
+export MY_CUSTOM_VAR="value"
+```
+
+<Aside type="caution">Make sure your script is executable (`chmod +x scripts/init-sandbox.sh`) and uses Unix line endings (LF, not CRLF).</Aside>
+
+## Extra Container Arguments
+
+The `extraArgs` option passes additional arguments directly to Docker or Podman when starting the container. Use it for advanced configuration like memory limits, CPU constraints, or additional volume mounts.
+
+```jsonc
+{
+  "sandbox": {
+    "extraArgs": ["--memory=4g", "--cpus=2"]
+  }
+}
+```
+
+You can also use a single string with space-separated arguments:
+
+```jsonc
+{
+  "sandbox": {
+    "extraArgs": "--memory=4g --cpus=2"
+  }
+}
+```
+
+### Common Use Cases
+
+| Arguments | Purpose |
+|-----------|---------|
+| `--memory=4g` | Limit container memory to 4GB |
+| `--cpus=2` | Limit to 2 CPU cores |
+| `-v /host/path:/container/path` | Mount additional volumes |
+| `--gpus all` | Enable GPU access (Docker) |
+| `--device /dev/dri` | Pass through GPU device (Podman) |
+
+<Aside type="note">Extra arguments from `rover.json` are combined with any `--extra-args` passed via the CLI. CLI arguments take precedence.</Aside>
+
+## Network Configuration
+
+Control network access from the sandbox using allowlist or blocklist modes. This is useful for security-conscious environments or when you want to restrict which external services the AI agent can access.
+
+```jsonc
+{
+  "sandbox": {
+    "network": {
+      "mode": "allowlist",
+      "rules": [
+        { "host": "api.github.com", "description": "GitHub API" },
+        { "host": "registry.npmjs.org", "description": "npm registry" }
+      ],
+      "allowDns": true,
+      "allowLocalhost": true
+    }
+  }
+}
+```
+
+### Network Modes
+
+| Mode | Behavior |
+|------|----------|
+| `allowall` | No filtering (default). All network traffic is allowed. |
+| `allowlist` | Deny all traffic except to specified hosts. |
+| `blocklist` | Allow all traffic except to specified hosts. |
+
+### Network Rules
+
+Rules specify which hosts to allow or block. Each rule supports:
+
+- **Domain names**: `api.github.com`, `*.example.com`
+- **IP addresses**: `192.168.1.1`
+- **CIDR notation**: `10.0.0.0/8`, `192.168.0.0/16`
+
+```jsonc
+{
+  "sandbox": {
+    "network": {
+      "mode": "allowlist",
+      "rules": [
+        { "host": "api.github.com" },
+        { "host": "192.168.1.0/24", "description": "Local network" },
+        { "host": "10.0.0.5" }
+      ]
+    }
+  }
+}
+```
+
+### Additional Options
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `allowDns` | `true` | Allow DNS resolution. Keep enabled unless you're using IP addresses only. |
+| `allowLocalhost` | `true` | Allow localhost/loopback traffic. Required for MCP servers. |
+
+### Example: Restricted Environment
+
+Allow only essential services for a Node.js project:
+
+```jsonc
+{
+  "sandbox": {
+    "network": {
+      "mode": "allowlist",
+      "rules": [
+        { "host": "registry.npmjs.org", "description": "npm packages" },
+        { "host": "api.github.com", "description": "GitHub API" },
+        { "host": "api.anthropic.com", "description": "Claude API" }
+      ],
+      "allowDns": true,
+      "allowLocalhost": true
+    }
+  }
+}
+```
+
+### Example: Block Specific Hosts
+
+Block known problematic or unwanted destinations:
+
+```jsonc
+{
+  "sandbox": {
+    "network": {
+      "mode": "blocklist",
+      "rules": [
+        { "host": "telemetry.example.com", "description": "Block telemetry" },
+        { "host": "ads.example.com" }
+      ]
+    }
+  }
+}
+```
+
+## Combining Options
+
+You can use all sandbox options together:
+
+```jsonc
+{
+  "version": "1.3",
+  "languages": ["python"],
+  "packageManagers": ["pip"],
+  "sandbox": {
+    "agentImage": "my-registry/python-agent:latest",
+    "initScript": "./scripts/setup-python-env.sh",
+    "extraArgs": ["--memory=8g", "--cpus=4"],
+    "network": {
+      "mode": "allowlist",
+      "rules": [
+        { "host": "pypi.org" },
+        { "host": "files.pythonhosted.org" },
+        { "host": "api.anthropic.com" }
+      ]
+    }
+  }
+}
+```
+
+## Next Steps
+
+<CardGrid>
+  <LinkCard title="Sandbox Concept" href="/rover/concepts/sandbox" description="Learn how the sandboxed environment works" />
+  <LinkCard title="Project Configuration" href="/rover/config/project-config" description="Configure other project-wide settings" />
+  <LinkCard title="Hooks" href="/rover/config/hooks" description="Run commands at task lifecycle events" />
+</CardGrid>

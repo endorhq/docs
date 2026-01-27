@@ -1,0 +1,231 @@
+---
+title: Project Configuration
+description: Configure project-wide settings shared across your team
+sidebar:
+  order: 1
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+The **`rover.json`** file is an **optional** configuration file that defines project-wide settings. Rover works out of the box without it. When you run any Rover command in a git repository, Rover [automatically registers the project](/rover/concepts/project) and detects your environment.
+
+Create a `rover.json` when you want to:
+
+- **Share configuration with your team**: Commit the file to version control so everyone uses the same MCP servers, environment variables, and hooks
+- **Add MCP servers**: Provide additional context to AI agents via Model Context Protocol
+- **Configure hooks**: Run custom commands when tasks are merged, pushed, or completed
+- **Pass environment variables**: Share API keys or configuration with containerized agents
+
+You can create a `rover.json` manually or run `rover init` to generate one with detected defaults.
+
+## Configuration Options
+
+| Field | Description |
+|-------|-------------|
+| `languages` | Programming languages used in the project |
+| `packageManagers` | Package managers available (npm, pnpm, pip, etc.) |
+| `taskManagers` | Task runners like Make, Just, or Task |
+| `mcps` | Model Context Protocol servers providing additional context to AI agents |
+| `attribution` | Whether Rover adds itself as co-author on AI-assisted commits |
+| `envs` | Custom environment variables passed to containerized agents |
+| `envsFile` | Path to a dotenv file with environment variables |
+| `hooks` | Commands to run at task lifecycle events ([see Hooks](/rover/config/hooks)) |
+| `sandbox` | Customize the container environment ([see Sandbox Configuration](/rover/config/sandbox-config)) |
+| `excludePatterns` | Glob patterns for files to exclude from task workspaces |
+
+## Basic Structure
+
+Here's a minimal example:
+
+```jsonc
+{
+  // Schema version for automatic migration
+  "version": "1.3",
+
+  // Programming languages used in the project
+  "languages": ["typescript", "javascript"],
+
+  // Package managers available
+  "packageManagers": ["npm"],
+
+  // Task runners (optional)
+  "taskManagers": [],
+
+  // MCP servers for AI context (optional)
+  "mcps": [],
+
+  // Add Rover as co-author on commits
+  "attribution": true
+}
+```
+
+<Aside type="tip">Commit this file so your team shares the same project configuration.</Aside>
+
+## MCP Servers
+
+Add Model Context Protocol servers to provide additional context to AI agents. These MCP servers are automatically installed in each [task](/rover/concepts/task)'s [sandboxed environment](/rover/concepts/sandbox).
+
+```jsonc
+{
+  "version": "1.3",
+  "languages": ["typescript"],
+  "packageManagers": ["npm"],
+  "mcps": [
+    {
+      "name": "filesystem",
+      "commandOrUrl": "npx -y @modelcontextprotocol/server-filesystem /path/to/files",
+      "transport": "stdio"
+    },
+    {
+      "name": "database",
+      "commandOrUrl": "npx -y @modelcontextprotocol/server-postgres",
+      "transport": "stdio",
+      "envs": ["DATABASE_URL"]
+    }
+  ]
+}
+```
+
+## Environment Variables
+
+Pass environment variables to containerized AI agents using two methods.
+
+### Inline Variables
+
+Use the `envs` array to pass environment variables:
+
+```jsonc
+{
+  "version": "1.3",
+  "languages": ["javascript"],
+  "packageManagers": ["npm"],
+  "envs": [
+    "NODE_ENV",              // Pass through from host
+    "DEBUG=true",            // Set explicit value
+    "API_KEY"                // Pass through from host
+  ]
+}
+```
+
+Environment variable formats:
+- `"ENV_NAME"`: Pass the current value from your host machine to the container
+- `"ENV_NAME=VALUE"`: Set a specific value in the container (overrides host value)
+
+### Dotenv File
+
+Load variables from a dotenv file using the `envsFile` field:
+
+```jsonc
+{
+  "version": "1.3",
+  "languages": ["javascript"],
+  "packageManagers": ["npm"],
+  "envsFile": ".env.rover"
+}
+```
+
+Create a `.env.rover` file in your project root:
+
+```bash
+NODE_ENV=development
+DEBUG=true
+API_KEY=your-api-key-here
+DATABASE_URL=postgres://localhost:5432/mydb
+```
+
+<Aside type="caution">Never commit `.env` files with sensitive credentials. Add them to `.gitignore` and provide a `.env.example` file instead.</Aside>
+
+### Combined Approach
+
+You can use both `envs` and `envsFile` together. Values in `envs` take precedence:
+
+```jsonc
+{
+  "version": "1.3",
+  "languages": ["javascript"],
+  "packageManagers": ["npm"],
+  "envsFile": ".env.rover",    // Load from file
+  "envs": ["DEBUG=false"]      // Override specific values
+}
+```
+
+## Attribution
+
+Control whether Rover adds itself as co-author on commits:
+
+```jsonc
+{
+  "version": "1.3",
+  "languages": ["typescript"],
+  "packageManagers": ["npm"],
+  "attribution": false
+}
+```
+
+When attribution is enabled, commits generated by Rover include:
+
+```
+Co-Authored-By: Rover <noreply@endorhq.com>
+```
+
+## Exclude Patterns
+
+Use `excludePatterns` to prevent specific files from being checked out in task workspaces. Excluded files won't be visible to or modifiable by AI agents. This is useful for:
+
+- **Sensitive files**: Credentials, API keys, or secrets
+- **Large files**: Binary assets, datasets, or generated files
+- **Protected code**: Files that shouldn't be modified by agents
+
+```jsonc
+{
+  "version": "1.3",
+  "languages": ["typescript"],
+  "packageManagers": ["npm"],
+  "excludePatterns": [
+    "secrets/**",
+    "*.env",
+    ".env.*",
+    "credentials.json",
+    "data/*.csv"
+  ]
+}
+```
+
+Patterns use glob syntax and are applied via git sparse checkout:
+
+| Pattern | Matches |
+|---------|---------|
+| `secrets/**` | All files in the `secrets/` directory |
+| `*.env` | All files ending in `.env` |
+| `.env.*` | Files like `.env.local`, `.env.production` |
+| `internal/config.ts` | A specific file |
+| `/root-only.txt` | File only at the repository root |
+
+<Aside type="note">Excluded files are not deleted from git. They're simply not checked out in the task workspace, so the AI agent cannot see or modify them.</Aside>
+
+## Schema Versioning
+
+<Aside type="note">You don't need to manage the version field manually. Rover handles migrations automatically.</Aside>
+
+The `version` field enables automatic migration when upgrading Rover:
+
+```jsonc
+{
+  "version": "1.3",  // Current project config version
+  // ... other settings
+}
+```
+
+When Rover detects an older schema version, it automatically migrates your configuration to the latest format.
+
+## Reference
+
+For a complete list of all available configuration options, see the [Project Config Reference](/rover/reference/project-config).
+
+## Next Steps
+
+<CardGrid>
+  <LinkCard title="Sandbox Configuration" href="/rover/config/sandbox-config" description="Customize the container environment with custom images and network rules" />
+  <LinkCard title="Hooks" href="/rover/config/hooks" description="Run custom commands when tasks are merged, pushed, or completed" />
+  <LinkCard title="User Settings" href="/rover/config/user-settings" description="Configure user-specific preferences" />
+</CardGrid>

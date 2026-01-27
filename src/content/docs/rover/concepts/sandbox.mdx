@@ -22,7 +22,7 @@ Currently, sandboxes are implemented using containers. This ensures that each ta
 When you create a new task with `rover task`, Rover sets up a sandbox for it. This involves:
 
 1. **Creating a [workspace](/rover/concepts/workspace)**, which has copy of your project files
-2. **Load the user configuration to set up the sandbox environment**. This includes MCP servers, environment variables, and any [other settings defined in the configuration](/rover/intro/configuration)
+2. **Load the user configuration to set up the sandbox environment**. This includes MCP servers, environment variables, and any [other settings defined in the configuration](/rover/config/project-config)
 2. **Defines an entrypoint file to initialize the sandbox environment**. This file includes setup steps like installing dependencies and starting MCP servers
 3. **Spinning up a containerized environment** using Docker or Podman container runtimes
 4. **Running the coding agent inside the sandbox**, allowing it to execute commands and make changes in isolation
