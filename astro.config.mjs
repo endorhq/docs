@@ -118,6 +118,10 @@ export default defineConfig({
                 autogenerate: { directory: "rover/guides" },
               },
               {
+                label: "Advanced",
+                autogenerate: { directory: "rover/advanced" },
+              },
+              {
                 label: "Reference",
                 autogenerate: { directory: "rover/reference" },
               },

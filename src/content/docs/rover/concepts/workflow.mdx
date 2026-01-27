@@ -2,7 +2,7 @@
 title: Workflow
 description: Discover how workflows guide AI coding agents through structured processes
 sidebar:
-  order: 3
+  order: 4
 ---
 
 import { CardGrid, LinkCard } from '@astrojs/starlight/components';
@@ -46,7 +46,7 @@ If you want to check a full workflow definition, checkout the Workflow File Refe
 
 ## Processing workflow
 
-When you create a task, Rover copies the selected workflow into the [task folder](/rover/concepts/task/#local-structure). Then, the Rover agent manager that runs in the [sandboxed environment](/rover/concepts/sandbox) reads the workflow file and executes each step sequentially.
+When you create a task, Rover copies the selected workflow into the [task folder](/rover/concepts/task/#task-storage). Then, the Rover agent manager that runs in the [sandboxed environment](/rover/concepts/sandbox) reads the workflow file and executes each step sequentially.
 
 This tool ensures that the coding agent follows the defined process, using the specified inputs and producing the expected outputs. It validates each step's completion before moving to the next one.
 
@@ -120,7 +120,7 @@ You can follow the [`Write workflows` guide](/rover/guides/write-workflows) in o
 ## Next Steps
 
 <CardGrid>
-  <LinkCard title="Overview" href="/rover/intro/overview" description="Get started with the Rover CLI" />
+  <LinkCard title="Project" href="/rover/concepts/project" description="Understand how Rover identifies and manages your repositories" />
   <LinkCard title="Task" href="/rover/concepts/task" description="Learn about Rover tasks and how to manage them" />
   <LinkCard title="Sandbox" href="/rover/concepts/sandbox" description="Understand the sandboxed environment where tasks run" />
   <LinkCard title="Workspace" href="/rover/concepts/workspace" description="Explore the workspace where coding agents apply changes" />
