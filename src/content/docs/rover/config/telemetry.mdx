@@ -1,0 +1,162 @@
+---
+title: Telemetry
+description: Understanding what data Rover collects and how to disable it
+sidebar:
+  order: 5
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Rover collects anonymous usage telemetry to help the team understand how the tool is used and prioritize improvements. This page explains what data is collected, how privacy is protected, and how to disable telemetry if you prefer.
+
+## Why Rover Collects Telemetry
+
+Telemetry helps the Rover team:
+
+- **Understand usage patterns**: Which commands are used most frequently
+- **Prioritize improvements**: Focus development effort on the features people actually use
+
+## Anonymous data
+
+Rover is designed with privacy as a core principle:
+
+- **No personal information**: Telemetry never collects your name, email, or any identifying information
+- **No code or content**: Task descriptions, prompts, file contents, and code are never transmitted
+- **Anonymous user ID**: A random UUID is generated on first use and stored in the [global store](/rover/advanced/global-store)
+- **No tracking across devices**: The random ID is local to your machine and has no connection to your identity
+- **You control your ID**: You can regenerate your anonymous ID at any time by modifying the global store
+
+The anonymous user ID is stored in the global configuration file:
+
+| Platform | Location |
+|----------|----------|
+| macOS/Linux | `~/.rover/config/rover.json` |
+| Windows | `%APPDATA%\Rover\config\rover.json` |
+
+<Aside type="tip">
+Your anonymous ID is just a random string like `a1b2c3d4-5678-90ab-cdef-1234567890ab`. It cannot be linked back to you.
+</Aside>
+
+## What Data is Collected
+
+Telemetry records only command usage events. For each event, Rover sends:
+
+| Data | Description |
+|------|-------------|
+| Anonymous user ID | Random UUID stored in the global configuration |
+| Event type | Which command was run (e.g., `new_task`, `merge_task`) |
+| Source | Whether the command came from the CLI or VS Code extension |
+
+### Additional Metadata by Command
+
+Some commands include basic metadata to help understand usage patterns:
+
+| Command | Additional Data |
+|---------|-----------------|
+| `rover task` | Workflow name, agent names, whether multi-agent mode was used, task provider (user input or GitHub) |
+| `rover iterate` | Iteration number |
+| `rover init` | Agent names, preferred agent, programming languages, attribution setting |
+
+### What is Never Collected
+
+To be explicit, Rover **never** collects:
+
+- Task descriptions or titles
+- Code content or file paths
+- Repository names or URLs
+- GitHub issue content
+- Environment variables or secrets
+- Personal information of any kind
+
+## Disabling Telemetry
+
+You can disable telemetry at any time using one of the following methods.
+
+### Option 1: Environment Variable (Recommended)
+
+Set the `ROVER_NO_TELEMETRY` environment variable:
+
+```sh
+# For a single command
+ROVER_NO_TELEMETRY=1 rover list
+
+# Or export it for your entire session
+export ROVER_NO_TELEMETRY=1
+```
+
+To disable telemetry permanently, add the export to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.):
+
+```sh
+# Add to ~/.bashrc or ~/.zshrc
+export ROVER_NO_TELEMETRY=1
+```
+
+<Aside type="note">
+Either `ROVER_NO_TELEMETRY=1` or `ROVER_NO_TELEMETRY=true` will disable telemetry.
+</Aside>
+
+### Option 2: Global Store Configuration
+
+Edit the global configuration file to set telemetry to disabled:
+
+<StepList title="Disable via global store">
+  <StepItem step={1}>
+    Open the global configuration file
+
+    ```sh
+    # macOS/Linux
+    nano ~/.rover/config/rover.json
+
+    # Windows (PowerShell)
+    notepad $env:APPDATA\Rover\config\rover.json
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Set the `telemetry` field to `"disabled"`
+
+    ```json
+    {
+      "version": "1.0",
+      "userId": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+      "telemetry": "disabled",
+      ...
+    }
+    ```
+  </StepItem>
+</StepList>
+
+### Option 3: Marker File (Legacy)
+
+Create a `.no-telemetry` marker file:
+
+```sh
+# macOS/Linux
+mkdir -p ~/.config/rover && touch ~/.config/rover/.no-telemetry
+
+# To re-enable
+rm ~/.config/rover/.no-telemetry
+```
+
+<Aside type="caution">
+The marker file uses a legacy path (`~/.config/rover/`) that differs from the current global store location (`~/.rover/config/`). While this method still works, we recommend using the environment variable or global store configuration instead.
+</Aside>
+
+## Verifying Telemetry Status
+
+You can verify whether telemetry is disabled by checking any of these:
+
+1. **Environment variable**: `echo $ROVER_NO_TELEMETRY` (if set to `1` or `true`)
+2. **Global store**: Check the `telemetry` field in `~/.rover/config/rover.json`
+3. **Marker file**: `ls ~/.config/rover/.no-telemetry` (if file exists)
+
+Telemetry is disabled if any of these conditions is met.
+
+## Next Steps
+
+<CardGrid>
+  <LinkCard title="Global Store" href="/rover/advanced/global-store" description="Learn about the global configuration where telemetry settings are stored" />
+  <LinkCard title="Project Configuration" href="/rover/config/project-config" description="Configure project-wide settings shared across your team" />
+  <LinkCard title="User Settings" href="/rover/config/user-settings" description="Configure user-specific preferences" />
+</CardGrid>
