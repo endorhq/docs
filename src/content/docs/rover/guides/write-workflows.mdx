@@ -99,10 +99,9 @@ Follow these steps to build the `licensing-expert` workflow piece by piece.
           that use copyleft licenses (GPL, AGPL, LGPL), have no license,
           or have licenses that conflict with common permissive usage.
         outputs:
-          - name: license_analysis
+          - name: analysis
             description: 'Detailed dependency and license analysis'
             type: string
-
 
       - id: report
         type: agent
@@ -118,6 +117,11 @@ Follow these steps to build the `licensing-expert` workflow piece by piece.
           - Table of all dependencies with their license types
           - List of flagged issues (copyleft, missing, or conflicting licenses)
           - Recommended actions to resolve each issue
+        outputs:
+          - name: licensing_report
+            description: 'Markdown report of licensing issues and compliance status'
+            type: file
+            filename: 'licensing_report.md'
     ```
   </StepItem>
   <StepItem step={6}>
@@ -170,7 +174,7 @@ Steps are the sequential actions the agent executes. Each step has a unique `id`
 The `licensing-expert` workflow uses two steps:
 
 1. **Analyze Dependencies** — Scans the project and catalogues every dependency with its license type
-2. **Generate Report** — Takes the analysis output and writes a structured `licensing.md` file
+2. **Generate Report** — Takes the analysis output and writes a structured `licensing_report.md` file
 
 Steps can declare their own outputs, which later steps reference through template syntax. In this workflow, the `analyze` step produces an `analysis` output that the `report` step consumes:
 
@@ -199,15 +203,18 @@ steps:
       Using the analysis below, create a comprehensive licensing report.
 
       Analysis:
-      {{steps.analyze.outputs.analysis_report}}
-
-      Write the report to `analysis_report.md`.
+      {{steps.analyze.outputs.analysis}}
 
       The report must include:
       - Executive summary of licensing status
       - Table of all dependencies with their license types
       - List of flagged issues (copyleft, missing, or conflicting licenses)
       - Recommended actions to resolve each issue
+    outputs:
+      - name: licensing_report
+        description: 'Markdown report of licensing issues and compliance status'
+        type: file
+        filename: 'licensing_report.md'
 ```
 
 You can override the AI tool or model for individual steps and set step-level timeouts or retries. See the [Workflow YAML File reference](/rover/reference/workflow-file#agent-step-configuration) for all step properties.
@@ -297,13 +304,18 @@ steps:
       Using the analysis below, create a comprehensive licensing report.
 
       Analysis:
-      {{steps.analyze.outputs.analysis_report}}
+      {{steps.analyze.outputs.analysis}}
 
       The report must include:
       - Executive summary of licensing status
       - Table of all dependencies with their license types
       - List of flagged issues (copyleft, missing, or conflicting licenses)
       - Recommended actions to resolve each issue
+    outputs:
+      - name: licensing_report
+        description: 'Markdown report of licensing issues and compliance status'
+        type: file
+        filename: 'licensing_report.md'
 ```
 
 ## Register the workflow
@@ -401,7 +413,7 @@ After the task completes, inspect the generated report.
     Check the generated report.
 
     ```Sh
-    rover inspect --file=analysis_report.md 1
+    rover inspect --file=licensing_report.md 1
     ```
   </StepItem>
   <StepItem step={2}>
