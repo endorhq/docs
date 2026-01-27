@@ -1,0 +1,131 @@
+---
+title: Project
+description: Understand how Rover identifies and manages your git repositories
+sidebar:
+  order: 1
+---
+
+import { FileTree } from '@astrojs/starlight/components';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+A **project** in Rover is a git repository on your filesystem. Projects are the top-level organizational unit. Each project contains its own [tasks](/rover/concepts/task), [workspaces](/rover/concepts/workspace), and execution logs. You can work with multiple projects simultaneously, as Rover keeps everything organized for you.
+
+## What is a Project?
+
+Every local git repository you use with Rover becomes a registered project. Each project is identified by:
+
+- **Filesystem path**: The absolute path to the repository on your machine
+- **Project ID**: A unique identifier generated automatically (e.g., `my-app-a1b2c3d4`)
+- **Repository name**: Derived from the git remote URL or directory name
+
+Projects are independent from each other. You can create tasks, run agents, and manage workspaces in multiple projects at the same time without interference.
+
+## Automatic Registration
+
+Rover uses a zero-configuration approach for project management. **Projects register automatically** when you run any Rover command inside a git repository. Custom project configuration is optional.
+
+When you run a command like `rover task` in a new repository, Rover:
+
+1. Detects the git repository root
+2. Derives the project name from the git remote (or uses the directory name as fallback)
+3. Detects your development environment (languages, package managers, task runners)
+4. Generates a unique project ID
+5. Creates project directories in the [global store](/rover/advanced/global-store)
+
+```sh
+# Navigate to any git repository
+cd ~/projects/my-app
+
+# Run any Rover command - the project registers automatically
+rover task "Add input validation to the login form"
+```
+
+After registration, the project appears in your global project list and all task data is stored centrally.
+
+## Project Identification
+
+Each project receives a unique ID using the format: `{repository-name}-{hash}`
+
+- **repository-name**: The name from your git remote (e.g., `user/repo` becomes `user-repo`), with special characters replaced by hyphens
+- **hash**: First 8 characters of a SHA256 hash of the absolute filesystem path
+
+This format ensures unique IDs even when you have repositories with the same name in different locations:
+
+| Repository Path | Project ID |
+|-----------------|------------|
+| `/home/user/work/api` | `api-3f8a2b1c` |
+| `/home/user/personal/api` | `api-9d4e7f2a` |
+
+You can reference projects by their ID, repository name, or filesystem path when using the `--project` flag.
+
+## Environment Detection
+
+When a project registers, Rover automatically detects your development environment. This information helps Rover provide better context to AI agents.
+
+| Category | Detected |
+|----------|----------|
+| **Languages** | TypeScript, JavaScript, Python, Go, Rust, PHP, Ruby |
+| **Package Managers** | npm, pnpm, yarn, pip, poetry, cargo |
+| **Task Runners** | make, just, task |
+
+Detection is based on configuration files in your repository (like `package.json`, `Cargo.toml`, `pyproject.toml`, etc.).
+
+## Where Project Data Lives
+
+Rover stores all project data in a central location on your machine, keeping your repository clean. Task metadata, workspaces, and logs are stored in the global store at `~/.rover/` (or `%APPDATA%\Rover` on Windows).
+
+<FileTree>
+- ~/.rover/
+  - config/
+    - rover.json Global configuration with project registry
+  - data/
+    - projects/
+      - \<project-id\>/
+        - tasks/ Task metadata and iterations
+        - workspaces/ Git worktrees for isolated execution
+        - logs/ Execution logs
+</FileTree>
+
+This centralized approach means:
+- Your repository stays clean (no `.rover/` folder to gitignore)
+- Task data persists even if you delete and re-clone the repository
+- You can manage all projects from a single location
+
+For a detailed breakdown of the global store structure, see the [Global Store](/rover/advanced/global-store) advanced guide.
+
+## Working with Multiple Projects
+
+Rover makes it easy to work across multiple projects:
+
+**List tasks from all projects:**
+```sh
+rover list
+```
+
+**Target a specific project:**
+```sh
+# By project ID
+rover list --project my-app-a1b2c3d4
+
+# By repository name
+rover list --project my-app
+
+# By path
+rover list --project ~/projects/my-app
+```
+
+**Set a default project via environment variable:**
+```sh
+export ROVER_PROJECT=my-app
+rover list  # Uses my-app project
+```
+
+When you run Rover commands outside a git repository, Rover operates in **global mode** and shows an interactive project selector if needed.
+
+## Next Steps
+
+<CardGrid>
+  <LinkCard title="Task" href="/rover/concepts/task" description="Learn how Rover manages tasks as units of work for AI agents" />
+  <LinkCard title="Global Store" href="/rover/advanced/global-store" description="Explore the central storage location for all Rover data" />
+  <LinkCard title="Configuration" href="/rover/intro/configuration" description="Customize Rover settings for your projects" />
+</CardGrid>

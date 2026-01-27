@@ -2,7 +2,7 @@
 title: Task
 description: Learn how Rover manages tasks as units of work for AI coding agents
 sidebar:
-  order: 1
+  order: 2
 ---
 
 import { FileTree } from '@astrojs/starlight/components';
@@ -19,31 +19,34 @@ Rover manages your requests as tasks. Each task is an unit of work for Rover and
 
 Tasks can run in parallel, and **you can create as many as you want**. Each task is independent from the others, so you can stop, restart, inspect, debug, or delete them individually.
 
-## Local Structure
+## Task Storage
 
-Rover uses a local folder structure to manage tasks. Each task has its own folder inside the `.rover/tasks/` directory. The `.rover` folder lives in your project's root directory, and it's created automatically when you run `rover init`. You shouldn't commit this folder to the reposistory, as it contains user-specific and local task information.
-
-You will find multiple folders in `.rover/tasks/`. The folder name is the unique task ID assigned when you create it. 
+Rover stores all task data in the [global store](/rover/advanced/global-store), keeping your repository clean. Each task has its own folder inside `~/.rover/data/projects/<project-id>/tasks/`. The folder name is the unique task ID assigned when you create it.
 
 <FileTree>
-- .rover/
+- ~/.rover/data/projects/\<project-id\>/
   - tasks/
     - 1/
     - 2/
       - description.json
-      - entrypoint.sh
-      - inputs.json
-      - workflow.yml
       - iterations/
         - 1/
+          - entrypoint.sh
+          - inputs.json
+          - workflow.yml
           - iteration.json
           - status.json
           - summary.md
           - ...
+        - 2/
         - ...
-      - workspace/
     - 3/
     - ...
+  - workspaces/
+    - 1/
+    - 2/ Git worktree for task 2
+    - 3/
+  - logs/
 </FileTree>
 
 ### Task files
@@ -51,17 +54,20 @@ You will find multiple folders in `.rover/tasks/`. The folder name is the unique
 | Name | Description |
 |------|-------------|
 | `description.json` | Contains the original task description, selected agent, and metadata |
-| `entrypoint.sh` | Script that starts the task execution inside the sandbox |
-| `inputs.json` | Input data provided to the coding agent |
-| `workflow.yml` | The [workflow](/rover/concepts/workflow) guiding the coding agent to complete the task |
 | `iterations/` | Folder containing each iteration made by the coding agent |
-| `workspace/` | The [workspace](/rover/concepts/workspace) where the coding agent applies changes |
+
+The [workspace](/rover/concepts/workspace) for each task is stored separately in the `workspaces/` directory.
 
 ### Iteration files
 
+Each iteration has its own folder with the files needed to run the task in the sandbox:
+
 | Name | Description |
 |------|-------------|
-| `iteration.json` | Details of a specific iteration, including changes made and agent messages |
+| `entrypoint.sh` | Script that starts the task execution inside the sandbox |
+| `inputs.json` | Input data provided to the coding agent |
+| `workflow.yml` | The [workflow](/rover/concepts/workflow) guiding the coding agent to complete the task |
+| `iteration.json` | Details of the iteration, including changes made and agent messages |
 | `status.json` | Current status of the iteration (e.g., in-progress, completed) |
 
 
@@ -69,7 +75,7 @@ You will find multiple folders in `.rover/tasks/`. The folder name is the unique
 
 Each task goes through a lifecycle with different states. Rover ensuses that tasks progress through these states as coding agents work on them. The Rover agent running in the [sandboxed environment](/rover/concepts/sandbox) updates the task status as the coding agents complete each step. 
 
-You can find the current status of a task in the `status.json` file inside the `.rover/tasks/<task_id>/iterations/<iteration_id>/` folder.
+You can find the current status of a task in the `status.json` file inside the task's `iterations/<iteration_id>/` folder in the [global store](/rover/advanced/global-store).
 
 ```mermaid
 stateDiagram-v2
@@ -92,7 +98,7 @@ stateDiagram-v2
 ## Next Steps
 
 <CardGrid>
-  <LinkCard title="Overview" href="/rover/intro/overview" description="Get started with the Rover CLI" />
+  <LinkCard title="Project" href="/rover/concepts/project" description="Understand how Rover identifies and manages your repositories" />
   <LinkCard title="Sandbox" href="/rover/concepts/sandbox" description="Understand the sandboxed environment where tasks run" />
   <LinkCard title="Workflow" href="/rover/concepts/workflow" description="Learn how workflows guide coding agents to complete tasks" />
   <LinkCard title="Workspace" href="/rover/concepts/workspace" description="Explore the workspace where coding agents apply changes" />
