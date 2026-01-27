@@ -11,7 +11,7 @@ import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 Rover includes built-in workflows like the Software Engineer (`swe`) and Tech Writer (`tech-writer`), but you can also create custom workflows for use cases they don't cover. This guide walks you through writing a custom workflow from scratch.
 
-You will build a `licensing-expert` workflow that analyzes project dependencies and generates a `licensing.md` report highlighting licensing issues and compliance concerns. By the end, you will know how to define inputs, outputs, steps, and configuration in a workflow YAML file, register it with Rover, and run it as a task.
+You will build a `licensing-expert` workflow that analyzes project dependencies and generates a report highlighting licensing issues and compliance concerns. By the end, you will know how to define inputs, outputs, steps, and configuration in a workflow YAML file, register it with Rover, and run it as a task.
 
 For background on how workflows work, see the [Workflow concept page](/rover/concepts/workflow).
 
@@ -99,16 +99,16 @@ Follow these steps to build the `licensing-expert` workflow piece by piece.
           that use copyleft licenses (GPL, AGPL, LGPL), have no license,
           or have licenses that conflict with common permissive usage.
         outputs:
-          - name: analysis
+          - name: license_analysis
             description: 'Detailed dependency and license analysis'
             type: string
+
 
       - id: report
         type: agent
         name: 'Generate Report'
         prompt: |
-          Using the analysis below, create a comprehensive licensing report
-          and save it as `licensing.md`.
+          Using the analysis below, create a comprehensive licensing report.
 
           Analysis:
           {{steps.analyze.outputs.analysis}}
@@ -196,17 +196,21 @@ steps:
     type: agent
     name: 'Generate Report'
     prompt: |
-      Using the analysis below, create a comprehensive licensing report
-      and save it as `licensing.md`.
+      Using the analysis below, create a comprehensive licensing report.
 
       Analysis:
-      {{steps.analyze.outputs.analysis}}
+      {{steps.analyze.outputs.analysis_report}}
 
       The report must include:
       - Executive summary of licensing status
       - Table of all dependencies with their license types
       - List of flagged issues (copyleft, missing, or conflicting licenses)
       - Recommended actions to resolve each issue
+    outputs:
+      - name: analysis_report
+        description: 'Detailed dependency and license analysis report'
+        type: string
+        filename: analysis_report.md
 ```
 
 You can override the AI tool or model for individual steps and set step-level timeouts or retries. See the [Workflow YAML File reference](/rover/reference/workflow-file#agent-step-configuration) for all step properties.
@@ -293,17 +297,21 @@ steps:
     type: agent
     name: 'Generate Report'
     prompt: |
-      Using the analysis below, create a comprehensive licensing report
-      and save it as `licensing.md`.
+      Using the analysis below, create a comprehensive licensing report.
 
       Analysis:
-      {{steps.analyze.outputs.analysis}}
+      {{steps.analyze.outputs.analysis_report}}
 
       The report must include:
       - Executive summary of licensing status
       - Table of all dependencies with their license types
       - List of flagged issues (copyleft, missing, or conflicting licenses)
       - Recommended actions to resolve each issue
+    outputs:
+      - name: analysis_report
+        description: 'Detailed dependency and license analysis report'
+        type: string
+        filename: analysis_report.md
 ```
 
 ## Register the workflow
@@ -394,14 +402,14 @@ Create a task that uses your custom workflow.
 
 ## Review results
 
-After the task completes, inspect the generated `licensing.md` report.
+After the task completes, inspect the generated report.
 
 <StepList title="Reviewing the licensing report">
   <StepItem step={1}>
     Check the generated report.
 
     ```Sh
-    rover inspect --file=licensing.md 1
+    rover inspect --file=analysis_report.md 1
     ```
   </StepItem>
   <StepItem step={2}>
