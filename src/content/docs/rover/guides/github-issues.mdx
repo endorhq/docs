@@ -1,0 +1,186 @@
+---
+title: Work on GitHub issues
+description: Create tasks directly from GitHub issues and track their relationship throughout the development cycle
+sidebar:
+  order: 3
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Rover integrates with GitHub to create [tasks](/rover/concepts/task) directly from issues. This allows you to assign GitHub issues to local AI coding agents and maintain a clear link between the issue and the task result.
+
+## Prerequisites
+
+To create Rover [tasks](/rover/concepts/task) from GitHub issues, you need either:
+
+- **GitHub CLI (`gh`)**: Recommended for private repositories and GitHub Enterprise. Install from [cli.github.com](https://cli.github.com/).
+- **Public repository access**: For public repositories, Rover can fetch issues directly from the GitHub API without authentication.
+
+## Create a task from an issue
+
+Use the `--from-github` flag to create a task using the content of a GitHub issue as the task description.
+
+<StepList title="Creating a task from GitHub">
+  <StepItem step={1}>
+    Navigate to your project directory
+
+    ```sh
+    cd ~/my-project
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Create a task from a GitHub issue by specifying the issue number
+
+    ```sh
+    rover task --from-github 42
+    ```
+
+    Rover fetches the issue title and body from GitHub and uses them as the task description.
+  </StepItem>
+  <StepItem step={3}>
+    Follow the task progress
+
+    ```sh
+    rover logs -f 1
+    ```
+  </StepItem>
+  <StepItem step={4}>
+    Once the task completes, merge the changes into your branch or push them to a remote branch
+
+    ```sh
+    rover merge 1
+    # or
+    rover push 1
+    ```
+
+    See [Merge changes from tasks](/rover/guides/merge-tasks) for detailed guidance on reviewing and integrating task results.
+  </StepItem>
+</StepList>
+
+:::tip
+You can combine `--from-github` with other task options like `--agent` or `--source-branch`:
+
+```sh
+rover task --from-github 42 --agent claude:opus --source-branch develop
+```
+:::
+
+## Understanding GitHub metadata
+
+When you create a task from a GitHub issue, Rover stores metadata about the source issue. This metadata includes:
+
+| Field | Description |
+|-------|-------------|
+| `type` | Source type, always `github` for GitHub issues |
+| `id` | The issue number |
+| `url` | Direct link to the GitHub issue |
+| `ref` | Reference data including `owner`, `repo`, and `number` |
+
+This metadata maintains the connection between your task and its originating issue throughout the development cycle.
+
+## Inspect GitHub metadata
+
+Use the `rover inspect` command to view the GitHub issue linked to a task.
+
+<StepList title="Viewing GitHub metadata">
+  <StepItem step={1}>
+    Inspect a task to see its details, including the linked GitHub issue
+
+    ```sh
+    rover inspect 1
+    ```
+
+    The output includes a "GitHub Issue" field with a direct link to the original issue:
+
+    ```
+    Details
+    -------
+    · ID: 1 (a1b2c3d4-5678-90ab-cdef-1234567890ab)
+    · Title: Implement user authentication
+    · Status: Completed
+    · Workflow: swe
+    · Created At: 1/27/2026, 10:30:00 AM
+    · GitHub Issue: https://github.com/acme/webapp/issues/42
+    · Completed At: 1/27/2026, 11:15:00 AM
+
+    Workspace
+    ---------
+    · Branch Name: rover/task-1-xK9mPq2wLz4N
+    · Git Workspace path: ~/.rover/data/projects/acme-webapp-8f3a1b2c/workspaces/1
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    For programmatic access, use the `--json` flag to get the full source metadata
+
+    ```sh
+    rover inspect 1 --json
+    ```
+
+    The JSON output includes the complete `source` object:
+
+    ```json
+    {
+      "success": true,
+      "id": 1,
+      "title": "Implement user authentication",
+      "status": "COMPLETED",
+      "branchName": "rover/task-1-xK9mPq2wLz4N",
+      "source": {
+        "type": "github",
+        "id": "42",
+        "url": "https://github.com/acme/webapp/issues/42",
+        "ref": {
+          "owner": "acme",
+          "repo": "webapp",
+          "number": 42
+        }
+      }
+    }
+    ```
+  </StepItem>
+</StepList>
+
+## Working with custom workflows
+
+When using a [custom workflow](/rover/concepts/workflow#custom-workflows) that requires additional inputs beyond a description, Rover extracts the required information from the GitHub issue body. The AI agent analyzes the issue content and maps it to the workflow inputs.
+
+For example, if your workflow requires `description` and `acceptance_criteria` inputs, include both in your GitHub issue body:
+
+```markdown
+## Description
+Add a login form with email and password fields.
+
+## Acceptance Criteria
+- Email validation
+- Password minimum 8 characters
+- Show error messages on invalid input
+```
+
+Rover parses the issue and populates the workflow inputs accordingly.
+
+## Best practices
+
+To get the best results when creating tasks from GitHub issues:
+
+- **Write detailed issue descriptions**: Include context, requirements, and acceptance criteria
+- **Use clear formatting**: Markdown headings and bullet points help the agent understand the structure
+- **Reference specific files**: Mention file paths or function names when relevant
+- **Include examples**: Provide code snippets or expected output when applicable
+- **Keep scope focused**: Smaller, well-defined issues lead to better implementations
+
+## Relevant Concepts
+
+<CardGrid>
+  <LinkCard title="Task" href="/rover/concepts/task" description="Learn about Rover tasks and how they work" />
+  <LinkCard title="Workflow" href="/rover/concepts/workflow" description="Discover how workflows guide coding agents" />
+</CardGrid>
+
+## Related Guides
+
+<CardGrid>
+  <LinkCard title="Implement a new feature" href="/rover/guides/assign-tasks" description="Create and assign tasks to AI coding agents" />
+  <LinkCard title="Iterate on tasks" href="/rover/guides/iterate-tasks" description="Refine and improve task implementations" />
+  <LinkCard title="Merge changes from tasks" href="/rover/guides/merge-tasks" description="Integrate completed tasks into your codebase" />
+</CardGrid>
