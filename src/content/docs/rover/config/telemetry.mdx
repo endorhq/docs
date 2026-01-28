@@ -23,7 +23,7 @@ Telemetry helps the Rover team:
 Rover is designed with privacy as a core principle:
 
 - **No personal information**: Telemetry never collects your name, email, or any identifying information
-- **No code or content**: Task descriptions, prompts, file contents, and code are never transmitted
+- **No code or content**: Task descriptions, prompts, file contents, and code are never collected
 - **Anonymous user ID**: A random UUID is generated on first use and stored in the [global store](/rover/advanced/global-store)
 - **No tracking across devices**: The random ID is local to your machine and has no connection to your identity
 - **You control your ID**: You can regenerate your anonymous ID at any time by modifying the global store
@@ -58,17 +58,6 @@ Some commands include basic metadata to help understand usage patterns:
 | `rover task` | Workflow name, agent names, whether multi-agent mode was used, task provider (user input or GitHub) |
 | `rover iterate` | Iteration number |
 | `rover init` | Agent names, preferred agent, programming languages, attribution setting |
-
-### What is Never Collected
-
-To be explicit, Rover **never** collects:
-
-- Task descriptions or titles
-- Code content or file paths
-- Repository names or URLs
-- GitHub issue content
-- Environment variables or secrets
-- Personal information of any kind
 
 ## Disabling Telemetry
 
