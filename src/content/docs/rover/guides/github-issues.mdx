@@ -9,14 +9,17 @@ import StepList from '../../../../components/StepList.svelte';
 import StepItem from '../../../../components/StepItem.svelte';
 import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 
+:::caution
+The `--from-github` flag is deprecated. Use the new [context system](/rover/guides/provide-context) instead: `--context github:issue/<number>`. The `--from-github` flag will continue to work but may be removed in a future release.
+:::
+
 Rover integrates with GitHub to create [tasks](/rover/concepts/task) directly from issues. This allows you to assign GitHub issues to local AI coding agents and maintain a clear link between the issue and the task result.
 
 ## Prerequisites
 
-To create Rover [tasks](/rover/concepts/task) from GitHub issues, you need either:
+To create Rover [tasks](/rover/concepts/task) from GitHub issues, you need:
 
-- **GitHub CLI (`gh`)**: Recommended for private repositories and GitHub Enterprise. Install from [cli.github.com](https://cli.github.com/).
-- **Public repository access**: For public repositories, Rover can fetch issues directly from the GitHub API without authentication.
+- **GitHub CLI (`gh`)**: Install from [cli.github.com](https://cli.github.com/) and authenticate with `gh auth login`.
 
 ## Create a task from an issue
 
@@ -160,6 +163,35 @@ Add a login form with email and password fields.
 
 Rover parses the issue and populates the workflow inputs accordingly.
 
+## Migration to the context system
+
+The `--from-github` and `--include-comments` flags are deprecated in favor of the more flexible [context system](/rover/guides/provide-context). The table below maps old flags to new equivalents:
+
+| Old syntax | New syntax |
+|---|---|
+| `--from-github 15` | `--context github:issue/15` |
+| `--from-github 15 --include-comments` | `--context github:issue/15 --context-trust-all-authors` |
+
+The context system also supports features not available with `--from-github`:
+
+### GitHub PR context
+
+Use `github:pr/<number>` to provide a pull request and its diff as context. This is useful when you want the agent to align its implementation with an existing PR or address review feedback.
+
+```sh
+rover task -c github:pr/42 "Address the review comments on this PR"
+```
+
+### Cross-repo references
+
+Reference issues and PRs from other repositories using the `github:<owner>/<repo>/issue/<number>` or `github:<owner>/<repo>/pr/<number>` format.
+
+```sh
+rover task -c github:acme/design-docs/issue/8 "Implement the feature described in the design doc"
+```
+
+See the [Provide context to tasks](/rover/guides/provide-context) guide for full details on all supported context sources.
+
 ## Best practices
 
 To get the best results when creating tasks from GitHub issues:
@@ -180,6 +212,7 @@ To get the best results when creating tasks from GitHub issues:
 ## Related Guides
 
 <CardGrid>
+  <LinkCard title="Provide context to tasks" href="/rover/guides/provide-context" description="Supply external context from GitHub, local files, and URLs" />
   <LinkCard title="Implement a new feature" href="/rover/guides/assign-tasks" description="Create and assign tasks to AI coding agents" />
   <LinkCard title="Iterate on tasks" href="/rover/guides/iterate-tasks" description="Refine and improve task implementations" />
   <LinkCard title="Merge changes from tasks" href="/rover/guides/merge-tasks" description="Integrate completed tasks into your codebase" />
