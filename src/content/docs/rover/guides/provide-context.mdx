@@ -1,0 +1,135 @@
+---
+title: Provide context to tasks
+description: Supply external context from GitHub issues, pull requests, local files, and web resources to give AI agents the information they need
+sidebar:
+  order: 5
+---
+
+import StepList from '../../../../components/StepList.svelte';
+import StepItem from '../../../../components/StepItem.svelte';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Context lets you attach external information to a [task](/rover/concepts/task) or [iteration](/rover/guides/iterate-tasks) so the AI agent can reference it while working. Instead of pasting content into the task description, use context to provide requirements from GitHub issues, design specs from pull requests, reference documentation from local files, or API specifications from URLs.
+
+## Supported context sources
+
+Rover resolves context URIs through built-in providers. You can combine multiple sources in a single command.
+
+| URI format | Description | Example |
+|---|---|---|
+| `github:issue/<number>` | GitHub issue from the current repo | `github:issue/15` |
+| `github:pr/<number>` | GitHub PR with diff from the current repo | `github:pr/42` |
+| `github:<owner>/<repo>/issue/<number>` | Cross-repo GitHub issue | `github:acme/api/issue/8` |
+| `github:<owner>/<repo>/pr/<number>` | Cross-repo GitHub PR with diff | `github:acme/api/pr/31` |
+| `file:./<path>` | Local file (relative path) | `file:./docs/spec.md` |
+| `file:///<path>` | Local file (absolute path) | `file:///home/user/notes.md` |
+| `https://<url>` | Remote web resource | `https://example.com/api-spec.yaml` |
+
+:::tip
+GitHub context requires the [GitHub CLI (`gh`)](https://cli.github.com/) to be installed and authenticated.
+:::
+
+## Add context to a task
+
+Pass one or more `--context` flags when creating a task. Each flag accepts a context URI.
+
+<StepList title="Creating a task with context">
+  <StepItem step={1}>
+    Create a task with context from a GitHub issue and a local spec file
+
+    ```sh
+    rover task -c github:issue/15 -c file:./docs/api-spec.md "Implement the new endpoint"
+    ```
+
+    Rover fetches the issue content and reads the local file, then provides both to the agent alongside the task description.
+  </StepItem>
+  <StepItem step={2}>
+    You can also provide context from a remote URL
+
+    ```sh
+    rover task -c https://example.com/openapi.yaml "Generate client SDK from the API spec"
+    ```
+  </StepItem>
+  <StepItem step={3}>
+    Follow the task progress
+
+    ```sh
+    rover logs -f 1
+    ```
+  </StepItem>
+</StepList>
+
+:::tip
+The `-c` short flag is equivalent to `--context`. You can repeat it as many times as needed to attach multiple sources.
+:::
+
+## Add context to an iteration
+
+Context works the same way on iterations. Pass `--context` flags to `rover iterate` to provide additional information for a follow-up iteration.
+
+<StepList title="Iterating with context">
+  <StepItem step={1}>
+    Add a PR as context to guide a refinement iteration
+
+    ```sh
+    rover iterate 1 "Align the implementation with the reviewed approach" -c github:pr/50
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Follow the iteration progress
+
+    ```sh
+    rover logs -f 1 2
+    ```
+  </StepItem>
+</StepList>
+
+### Context inheritance
+
+Context from previous iterations carries forward automatically. When you add new context to an iteration, it is merged with context from earlier iterations. 
+
+You don't need to repeat URIs you've already provided. If you pass a URI that was used in a previous iteration, **Rover re-fetches it to get the latest content**.
+
+## Control comment visibility
+
+When using GitHub issues or PRs as context, comments and reviews are **excluded by default** to prevent prompt-injection from untrusted contributors.
+
+You can selectively include comments from trusted authors:
+
+```sh
+# Trust specific authors
+rover task -c github:issue/15 --context-trust-authors alice,bob "Fix the bug"
+
+# Trust all authors (use with caution)
+rover task -c github:pr/42 --context-trust-all-authors "Review and address PR feedback"
+```
+
+The same flags work with `rover iterate`:
+
+```sh
+rover iterate 1 "Address remaining review comments" -c github:pr/42 --context-trust-all-authors
+```
+
+## Best practices
+
+- **Prefer context over copy-paste**: Use context URIs instead of pasting content into the task description. This keeps descriptions focused and lets Rover handle formatting and attribution.
+- **Combine context with clear instructions**: Context provides information; the task description should explain what to do with it.
+- **Scope context narrowly**: Provide only the sources relevant to the task. Too much unrelated context can dilute the agent's focus.
+- **Use GitHub PRs for alignment**: When iterating on a task, referencing a related PR helps the agent understand the desired approach and coding patterns.
+- **Be deliberate with comment trust**: Only enable `--context-trust-all-authors` on repositories where you trust all contributors. For open-source projects with external contributors, prefer `--context-trust-authors` with specific usernames.
+
+## Relevant Concepts
+
+<CardGrid>
+  <LinkCard title="Task" href="/rover/concepts/task" description="Learn about Rover tasks and how they work" />
+  <LinkCard title="Workflow" href="/rover/concepts/workflow" description="Discover how workflows guide coding agents" />
+</CardGrid>
+
+## Related Guides
+
+<CardGrid>
+  <LinkCard title="Implement a new feature" href="/rover/guides/assign-tasks" description="Create and assign tasks to AI coding agents" />
+  <LinkCard title="Work on GitHub issues" href="/rover/guides/github-issues" description="Create tasks from GitHub issues and track their relationship" />
+  <LinkCard title="Iterate on tasks" href="/rover/guides/iterate-tasks" description="Refine and improve task implementations" />
+  <LinkCard title="Merge changes from tasks" href="/rover/guides/merge-tasks" description="Integrate completed tasks into your codebase" />
+</CardGrid>

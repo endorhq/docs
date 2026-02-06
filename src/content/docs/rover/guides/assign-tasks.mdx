@@ -51,6 +51,31 @@ Create a simple task from scratch in your initialized repository.
   </StepItem>
 </StepList>
 
+## Provide context
+
+You can attach external context to a task using the `--context` (or `-c`) flag. This gives the agent reference material from GitHub issues, pull requests, local files, or web URLs alongside the task description.
+
+<StepList title="Creating a task with context">
+  <StepItem step={1}>
+    Combine a task description with context from a GitHub issue and a local file
+
+    ```sh
+    rover task -y -c github:issue/15 -c file:./docs/design.md "Implement the new authentication flow"
+    ```
+
+    Rover fetches the issue content and reads the local file, then provides both to the agent alongside the task description.
+  </StepItem>
+  <StepItem step={2}>
+    Follow the task progress
+
+    ```sh
+    rover logs -f 1
+    ```
+  </StepItem>
+</StepList>
+
+See the [Provide context to tasks](/rover/guides/provide-context) guide for full details on supported context sources and comment trust settings.
+
 ## Inspect the task
 
 Besides listing current tasks or watching the listing, you can inspect tasks and their iterations to understand what the agent planned and executed.
@@ -160,8 +185,8 @@ If the agent has produced a result that needs small changes to be ready, you can
 ## Related Guides
 
 <CardGrid>
+  <LinkCard title="Provide context to tasks" href="/rover/guides/provide-context" description="Supply external context from GitHub, local files, and URLs" />
   <LinkCard title="Project Initialization" href="/rover/guides/project-initialization" description="Initialize Rover in your repository" />
   <LinkCard title="Iterate on tasks" href="/rover/guides/iterate-tasks" description="Refine and improve task implementations" />
   <LinkCard title="Merge changes from tasks" href="/rover/guides/merge-tasks" description="Integrate completed tasks into your codebase" />
-  <LinkCard title="Write technical documentation" href="/rover/guides/write-docs" description="Use Rover to create and maintain documentation" />
 </CardGrid>

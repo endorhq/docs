@@ -77,7 +77,11 @@ rover task [options] [description]
 
 **Options:**
 
-- `--from-github <issue>`: Fetch task description from a GitHub issue number
+- `-c, --context <uri>`: Add context from a URI. Can be repeated. Supported schemes: `github:issue/<n>`, `github:pr/<n>`, `github:<owner>/<repo>/issue/<n>`, `github:<owner>/<repo>/pr/<n>`, `file:<path>`, `https://<url>`
+- `--context-trust-authors <users>`: Comma-separated list of trusted authors for comment inclusion
+- `--context-trust-all-authors`: Trust all authors for comment inclusion (disables filtering)
+- `--from-github <issue>`: *(Deprecated. Use `--context github:issue/<number>`)* Fetch task description from a GitHub issue number
+- `--include-comments`: *(Deprecated. Use `--context-trust-all-authors`)* Include issue comments in the task description (requires `--from-github`)
 - `--workflow, -w <name>`: Use a specific workflow to complete this task
 - `-y, --yes`: Skip all confirmations and run non-interactively
 - `-s, --source-branch <branch>`: Base branch for git worktree creation
@@ -174,6 +178,9 @@ rover iterate [options] <taskId> [instructions]
 
 **Options:**
 
+- `-c, --context <uri>`: Add context from a URI. Can be repeated. Supported schemes: `github:issue/<n>`, `github:pr/<n>`, `github:<owner>/<repo>/issue/<n>`, `github:<owner>/<repo>/pr/<n>`, `file:<path>`, `https://<url>`
+- `--context-trust-authors <users>`: Comma-separated list of trusted authors for comment inclusion
+- `--context-trust-all-authors`: Trust all authors for comment inclusion (disables filtering)
 - `-i, --interactive`: Open an interactive command session to iterate on the task
 - `--json`: Output JSON and skip confirmation prompts
 

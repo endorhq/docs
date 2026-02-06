@@ -36,6 +36,31 @@ Following the fizzbuzz example from the task creation guide, you can ask for an 
   </StepItem>
 </StepList>
 
+## Provide context to iterations
+
+You can attach external context to an iteration using the `--context` flag. This lets you supply reference material such as GitHub issues, PRs, local files, or URLs that the agent can use alongside your instructions.
+
+<StepList title="Iterating with context">
+  <StepItem step={1}>
+    Add a GitHub PR as context to guide the iteration
+
+    ```sh
+    rover iterate 1 "Align the implementation with the reviewed approach" -c github:pr/50
+    ```
+  </StepItem>
+  <StepItem step={2}>
+    Combine multiple context sources
+
+    ```sh
+    rover iterate 1 "Update the API to match the spec" -c github:issue/20 -c file:./docs/api-spec.md
+    ```
+  </StepItem>
+</StepList>
+
+Context from previous iterations carries forward automatically. You don't need to repeat URIs already provided. New context is merged with inherited context. If you pass a URI that was used in a previous iteration, Rover re-fetches it to get the latest content.
+
+See the [Provide context to tasks](/rover/guides/provide-context) guide for full details on supported sources and comment trust settings.
+
 ## Review iteration changes
 
 After an iteration completes, you can inspect what changed compared to the previous iteration.
@@ -87,8 +112,8 @@ To get the best results from iterations:
 ## Related Guides
 
 <CardGrid>
+  <LinkCard title="Provide context to tasks" href="/rover/guides/provide-context" description="Supply external context from GitHub, local files, and URLs" />
   <LinkCard title="Implement a new feature" href="/rover/guides/assign-tasks" description="Create and assign tasks to AI coding agents" />
   <LinkCard title="Merge changes from tasks" href="/rover/guides/merge-tasks" description="Integrate completed tasks into your codebase" />
   <LinkCard title="Project Initialization" href="/rover/guides/project-initialization" description="Initialize Rover in your repository" />
-  <LinkCard title="Write technical documentation" href="/rover/guides/write-docs" description="Use Rover to create and maintain documentation" />
 </CardGrid>
