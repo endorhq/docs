@@ -44,12 +44,12 @@ Use the `agentImage` option to specify a custom Docker or Podman image instead o
 
 Rover resolves the agent image in this order:
 
-1. `AGENT_IMAGE` environment variable (highest priority)
+1. `ROVER_AGENT_IMAGE` environment variable (highest priority)
 2. Image stored in the task (from previous runs)
 3. `agentImage` from `rover.json`
 4. Default Rover agent image (based on CLI version)
 
-<Aside type="tip">Use the `AGENT_IMAGE` environment variable to temporarily override the configured image without modifying `rover.json`.</Aside>
+<Aside type="tip">Use the `ROVER_AGENT_IMAGE` environment variable to temporarily override the configured image without modifying `rover.json`.</Aside>
 
 ### Building Custom Images
 
