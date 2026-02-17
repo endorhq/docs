@@ -1,0 +1,76 @@
+---
+title: Container Image Caching
+description: How Rover caches container images to speed up subsequent task runs.
+sidebar:
+    order: 2
+---
+
+Every time Rover runs a task, it starts a container and performs a setup phase — installing languages, package managers, the AI agent CLI, MCP servers, and running your init script. This setup can be slow, especially for projects with many dependencies.
+
+Container image caching eliminates this overhead for repeated runs by saving the fully initialized container as a local image and reusing it for subsequent tasks that share the same setup configuration.
+
+## How It Works
+
+When a task starts, Rover computes a fingerprint of everything that affects the setup phase:
+
+- Base agent image
+- Configured languages and package managers
+- AI agent (Claude, Gemini, etc.)
+- MCP server definitions
+- Init script contents
+- Rover version
+
+If a cached image matching that fingerprint already exists locally, Rover starts the container directly from it, skipping the entire setup phase. If no match is found, Rover runs the setup phase in an init-only container, commits the result as a new cached image, and then starts the actual task container from it.
+
+Any change to the setup inputs — such as adding a language, updating the init script, or upgrading Rover — produces a new fingerprint, so a fresh image will be created on the next run.
+
+## Cache Invalidation
+
+The cache is content-addressed: two projects with identical setup configurations will share the same cached image. Conversely, any change to the inputs automatically invalidates the old cache because it produces a different fingerprint.
+
+You do not need to manually invalidate the cache in normal usage. Simply changing your project configuration or upgrading Rover is enough.
+
+## Managing Cache Images
+
+Over time, stale cache images can accumulate — for example, after upgrading Rover or changing your project configuration. The `rover cleanup` command helps manage them.
+
+### Listing What Would Be Removed
+
+Use `--dry-run` to preview the cleanup without deleting anything:
+
+```bash
+rover cleanup --dry-run
+```
+
+### Running Cleanup
+
+```bash
+rover cleanup
+```
+
+By default, cleanup keeps the most recent cache image per project and agent combination, and removes:
+
+- **Stale images**: older images superseded by a newer one for the same project and agent
+- **Orphaned images**: images whose project no longer exists on disk or is no longer registered with Rover
+- **Legacy images**: images created before metadata labels were introduced
+
+### Removing All Cache Images
+
+To remove every cache image, including current ones:
+
+```bash
+rover cleanup --all
+```
+
+### JSON Output
+
+For scripting and automation, use the `--json` flag:
+
+```bash
+rover cleanup --json
+rover cleanup --dry-run --json
+```
+
+## Container Backend Support
+
+Image caching works identically with both Docker and Podman. Rover auto-detects which backend is available and uses the same caching mechanism for either one, including support for remote container daemons via `DOCKER_HOST`.
