@@ -40,7 +40,7 @@ Workflows are defined using YAML files that specify:
 1. **Inputs**: The parameters required to start the workflow (e.g., description, audience, format)
 2. **Outputs**: The expected results of the workflow (e.g., documentation files)
 3. **Configuration**: Settings that control how the workflow operates (e.g., model settings, time limits)
-4. **Steps**: The sequence of actions the agent will take to complete the workflow (e.g., research, draft, review, finalize)
+4. **Steps**: The sequence of actions to complete the workflow. Steps can be **agent steps** that use AI coding agents (e.g., research, draft, review) or **command steps** that execute shell commands directly (e.g., build, test, lint)
 
 If you want to check a full workflow definition, checkout the Workflow File Reference.
 

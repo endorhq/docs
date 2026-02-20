@@ -5,7 +5,7 @@ sidebar:
   order: 5
 ---
 
-`workflow.yml` file format reference. You have more information about workflows on the [Workflow Concept](/rover/concepts/workflow) page.
+`workflow.yml` file format reference. For background on how workflows work, see the [Workflow concept](/rover/concepts/workflow) page.
 
 ## File Structure
 
@@ -162,7 +162,7 @@ Steps define the workflow's **execution sequence**. They are executed in the ord
 - Each step must have a **unique `id`**
 - Steps execute **sequentially** (one after another)
 - Later steps can **reference outputs** from earlier steps
-- Currently, only **`agent`** type steps are supported
+- Two step types are supported: **`agent`** (AI agent execution) and **`command`** (shell command execution)
 
 ```yaml
 steps:
@@ -172,8 +172,13 @@ steps:
     prompt: 'Do something...'
 
   - id: step_two
+    type: command
+    name: 'Run Tests'
+    command: npm run test
+
+  - id: step_three
     type: agent
-    name: 'Second Step'
+    name: 'Third Step'
     prompt: 'Do something else...'
 ```
 
@@ -230,13 +235,88 @@ Rover supports these AI tools:
 
 Specify the tool at the workflow level (in `defaults`) or override it per step.
 
+## Command Step Configuration
+
+Command steps execute **shell commands directly** without invoking an AI agent. They are useful for running build tools, test suites, linters, or any other CLI commands as part of a workflow.
+
+### Command Step Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | string | **Yes** | Unique step identifier (used for referencing outputs) |
+| `type` | literal | **Yes** | Must be `'command'` |
+| `name` | string | **Yes** | Human-readable step name |
+| `command` | string | **Yes** | The command to execute |
+| `args` | array | No | Command arguments as an array of strings |
+| `allow_failure` | boolean | No | Whether to continue the workflow if the command fails (default: `false`) |
+| `outputs` | array | No | Outputs this step produces |
+
+### Command Execution
+
+How the command runs depends on whether `args` is provided:
+
+- **With `args`**: The command is executed directly with the given arguments. No shell interpretation occurs, making this the safer option.
+- **Without `args`**: The command string is executed through the shell, allowing pipes, redirects, and other shell features.
+
+Command steps automatically capture **`stdout`** and **`stderr`** as step outputs. Reference them in subsequent steps with the template syntax `{{steps.step_id.outputs.stdout}}` or `{{steps.step_id.outputs.stderr}}`.
+
+### Command Step Examples
+
+**Simple command** (executed through the shell):
+```yaml
+steps:
+  - id: build
+    type: command
+    name: 'Build Project'
+    command: npm run build
+```
+
+**Command with arguments** (executed directly, no shell interpretation):
+```yaml
+steps:
+  - id: test
+    type: command
+    name: 'Run Tests'
+    command: npm
+    args:
+      - run
+      - test
+```
+
+**Allow failure** (workflow continues even if the command exits with a non-zero code):
+```yaml
+steps:
+  - id: lint
+    type: command
+    name: 'Lint Code'
+    command: npm run lint
+    allow_failure: true
+```
+
+**Mixed workflow** (combine command and agent steps):
+```yaml
+steps:
+  - id: build
+    type: command
+    name: 'Build Project'
+    command: npm run build
+
+  - id: analyze
+    type: agent
+    name: 'Analyze Build Output'
+    prompt: |
+      Review the build output and identify any warnings:
+      {{steps.build.outputs.stdout}}
+```
+
 ## Step Outputs
 
 Step outputs make **data available to subsequent steps**. They use the same structure as workflow outputs.
 
 **Key points**:
-- Define outputs in the step's `outputs` array
-- Reference them in later steps using **template syntax**
+- Agent steps define outputs in the step's `outputs` array
+- Command steps automatically produce `stdout` and `stderr` outputs
+- Reference outputs in later steps using **template syntax**
 - Output types: `string`, `number`, `boolean`, `file`
 - **File outputs require a `filename`**
 
@@ -313,7 +393,7 @@ prompt: |
 
 ## Defaults
 
-The `defaults` object sets **workflow-level configuration** that steps inherit. This avoids repetition when most steps use the same AI tool and model.
+The `defaults` object sets **workflow-level configuration** that agent steps inherit. This avoids repetition when most agent steps use the same AI tool and model. Command steps ignore these defaults.
 
 ### Default Properties
 
@@ -371,7 +451,7 @@ config:
 
 ## Step-Level Configuration
 
-Each step can override timeout and retry behavior using its own `config` object.
+Agent steps can override timeout and retry behavior using their own `config` object.
 
 ### Step Config Properties
 
@@ -407,7 +487,8 @@ Rover validates workflow files against these rules:
 
 ### Required Fields
 - **`version`, `name`, `description`, and `steps`** must be present
-- Each step must have **`id`, `type`, `name`, and `prompt`**
+- Each agent step must have **`id`, `type`, `name`, and `prompt`**
+- Each command step must have **`id`, `type`, `name`, and `command`**
 - Each input/output must have **`name`, `description`, and `type`**
 
 ### Unique Identifiers
@@ -417,7 +498,7 @@ Rover validates workflow files against these rules:
 ### Type Constraints
 - **Input types**: `string`, `number`, `boolean`
 - **Output types**: `string`, `number`, `boolean`, `file`
-- **Step types**: `agent` (other types not yet implemented)
+- **Step types**: `agent`, `command`
 - **AI tools**: `claude`, `gemini`, `codex`, `qwen`
 
 ### Conditional Requirements
@@ -456,6 +537,23 @@ steps:
     type: agent
     name: 'Second Analysis'
     prompt: '...'
+```
+
+❌ **Command step without `command` field**:
+```yaml
+steps:
+  - id: build
+    type: command  # Error: missing command
+    name: 'Build Project'
+```
+
+✅ **Command step with required fields**:
+```yaml
+steps:
+  - id: build
+    type: command
+    name: 'Build Project'
+    command: npm run build
 ```
 
 ❌ **File output without filename**:
