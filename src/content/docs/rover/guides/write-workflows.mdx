@@ -24,7 +24,7 @@ Workflows are defined in YAML and follow a pre-defined structure. Each file cont
 | `version` | **Yes** | Schema version (currently `'1.0'`) |
 | `name` | **Yes** | Unique workflow identifier |
 | `description` | **Yes** | Human-readable purpose of the workflow |
-| `steps` | **Yes** | Ordered list of agent steps to execute |
+| `steps` | **Yes** | Ordered list of steps to execute (agent or command) |
 | `inputs` | No | Parameters the user provides when running the workflow |
 | `outputs` | No | Files or values the workflow produces |
 | `defaults` | No | Default AI tool and model for all steps |
@@ -169,7 +169,7 @@ For full output properties, see the [Workflow YAML File reference](/rover/refere
 
 ### Define steps
 
-Steps are the sequential actions the agent executes. Each step has a unique `id`, a `type` (currently only `agent`), a `name`, and a `prompt` with instructions for the AI agent.
+Steps are the sequential actions the workflow executes. Each step has a unique `id`, a `type`, and a `name`. Agent steps (`type: agent`) include a `prompt` with instructions for the AI agent. Command steps (`type: command`) include a `command` to execute directly without an agent. See the [Workflow YAML File reference](/rover/reference/workflow-file#command-step-configuration) for full command step documentation.
 
 The `licensing-expert` workflow uses two steps:
 
@@ -427,6 +427,68 @@ After the task completes, inspect the generated report.
   </StepItem>
 </StepList>
 
+
+## Using command steps
+
+Not every step in a workflow needs an AI agent. Command steps let you run shell commands directly, which is useful for build tools, test suites, linters, or other CLI operations that don't require AI reasoning.
+
+A command step requires `type: command` and a `command` field instead of a `prompt`. You can optionally provide `args` as an array and set `allow_failure: true` to let the workflow continue even if the command fails.
+
+Here is an example workflow that builds a project, runs tests, and then uses an agent to analyze the results:
+
+```yaml
+version: '1.0'
+name: 'build-and-review'
+description: 'Build the project, run tests, and review the results'
+
+inputs:
+  - name: description
+    description: 'Describe what to focus on during the review'
+    type: string
+    required: true
+
+outputs:
+  - name: review_report
+    description: 'Review report with findings and recommendations'
+    type: file
+    filename: 'review_report.md'
+
+steps:
+  - id: build
+    type: command
+    name: 'Build Project'
+    command: npm run build
+
+  - id: test
+    type: command
+    name: 'Run Tests'
+    command: npm run test
+    allow_failure: true
+
+  - id: review
+    type: agent
+    name: 'Review Results'
+    prompt: |
+      Review the build and test output for this project.
+
+      Focus on: {{inputs.description}}
+
+      Build output:
+      {{steps.build.outputs.stdout}}
+
+      Test output:
+      {{steps.test.outputs.stdout}}
+      {{steps.test.outputs.stderr}}
+
+      Write a review report summarizing the results and any issues found.
+    outputs:
+      - name: review_report
+        description: 'Review report with findings and recommendations'
+        type: file
+        filename: 'review_report.md'
+```
+
+Command steps capture `stdout` and `stderr` automatically, making them available to later steps through the template syntax.
 
 By following this guide, you have created your own workflow. You can take existing workflows and adapt to your own needs, or create new workflows from scratch as we have done. Choose your own adventure!
 
