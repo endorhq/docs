@@ -253,16 +253,13 @@ Command steps execute **shell commands directly** without invoking an AI agent. 
 
 ### Command Execution
 
-How the command runs depends on whether `args` is provided:
-
-- **With `args`**: The command is executed directly with the given arguments. No shell interpretation occurs, making this the safer option.
-- **Without `args`**: The command string is executed through the shell, allowing pipes, redirects, and other shell features.
+The `command` field specifies the command to run. You can optionally provide `args` as a separate array for readability, or include all arguments directly in the `command` string — both forms are equivalent.
 
 Command steps automatically capture **`stdout`** and **`stderr`** as step outputs. Reference them in subsequent steps with the template syntax `{{steps.step_id.outputs.stdout}}` or `{{steps.step_id.outputs.stderr}}`.
 
 ### Command Step Examples
 
-**Simple command** (executed through the shell):
+**Command with inline arguments**:
 ```yaml
 steps:
   - id: build
@@ -271,7 +268,7 @@ steps:
     command: npm run build
 ```
 
-**Command with arguments** (executed directly, no shell interpretation):
+**Command with separate arguments**:
 ```yaml
 steps:
   - id: test
